@@ -1,0 +1,7 @@
+{
+  "name": "sonar-finance-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Yedek (export) ve geri yukleme (restore) araclari",
+  "dependencies": { "firebase-admin": "^12.0.0" }
+}

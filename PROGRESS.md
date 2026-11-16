@@ -1,6 +1,6 @@
 # PROGRESS — Görev Tahtası
 
-Son güncelleme: 2026-11-16 · Sözleşme: v1.0.0 · Branch'ler: `hesap1-cekirdek`, `hesap2-android`, `hesap3-windows`
+Son güncelleme: 2026-11-16 · Sözleşme: v1.0.1 · Branch'ler: `hesap1-cekirdek`, `hesap2-android`, `hesap3-windows`
 
 ## Çalışma kuralları (3 ajan için)
 1. Sohbet başında: `PROGRESS.md`, `CONTRACTS.md`, `docs/02`, `docs/04` oku. Kullanıcıya soru sorma, onay isteme; makul varsayımla ilerle, varsayımı bu dosyaya yaz.
@@ -36,9 +36,9 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.0 · Branch'ler: `hesap1-cekirde
 | W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 3 | — | |
 | W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 3 | — | |
 | W5 | Windows: stok ekranları ve işlemleri | Ajan 3 | — | |
-| C1 | Ajan 1: Firestore emülatör seed verisi (örnek şirket, kullanıcı, depo, ürün) | Ajan 1 | — | |
-| C2 | Ajan 1: `docs/05-senkron-cevrimdisi.md`, `07-ui-ekran-plani.md` | Ajan 1 | — | |
-| C3 | Ajan 1: Logo/ikon varlıkları (`shared/assets`) | Ajan 1 | — | |
+| C1 | Ajan 1: Firestore emülatör seed verisi (örnek şirket, kullanıcı, depo, ürün) | Ajan 1 | bitti | `scripts/seed_emulator.bat`; giriş admin@sonar.local / Test1234! |
+| C2 | Ajan 1: `docs/05`, `06`, `07` + `firebase/tools` export/restore | Ajan 1 | bitti | |
+| C3 | Ajan 1: Logo/ikon varlıkları (`shared/assets`) | Ajan 1 | bitti | svg + png + .ico |
 
 ## Talepler (Ajan 2/3 → Ajan 1)
 | Tarih | Kimden | Talep | Durum |

@@ -54,6 +54,7 @@ lines: [{ lineId, productId?, description, qtyMilli, unit, unitPriceMinor, disco
           warehouseId?, netMinor, discountMinor, vatMinor, totalMinor }],
 subtotalMinor, discountMinor, vatMinor, totalMinor,
 paidMinor, paymentStatus ('unpaid'|'partial'|'paid'),
+rev (taslak düzenleme sayacı, her kayıtta +1; bkz. 05),
 txId? (kesme işlemi), cancelTxId?, lastTxId, createdBy, createdAt, updatedAt
 ```
 Gösterim durumu (istemcide türetilir): `draft→Taslak`, `paid→Ödendi`, `partial→Kısmi Ödendi`, `unpaid` ve vade geçmişse `Gecikmiş`, aksi halde `Bekliyor`. İptal → `İptal`.

@@ -37,8 +37,8 @@ Başlık toplamları satırların toplamıdır (ayrıca yuvarlama yok):
 ## 3. Faturayı kes (`issueInvoice`)
 Girdi: taslak veya yeni fatura, `txId`.
 - Okunacaklar: cari, `counters/invoice_{type}`, her stok takipli satır için `products/{id}` ve `stock_levels/{pid}_{wh}`, `stats/summary`, `projects`/`project_stats` (varsa).
-- Doğrula: durum `draft`/yeni; en az 1 satır; toplamlar §2 ile yeniden hesaplanır (istemci değeri değil, **hesaplanan** yazılır); `dueDate >= issueDate`; stok takipli satırda `warehouseId` zorunlu; `allowNegativeStock=false` iken çıkış stoğu aşmamalı.
-- Numara: `counters.last += 1` → `"{prefix}-{yıl}-{last 6 hane}"`.
+- Doğrula: durum `draft`/yeni; taslaktan kesiliyorsa ekrandaki `rev` ile sunucudaki `rev` aynı olmalı (05); en az 1 satır; toplamlar §2 ile yeniden hesaplanır (istemci değeri değil, **hesaplanan** yazılır); `dueDate >= issueDate`; stok takipli satırda `warehouseId` zorunlu; `allowNegativeStock=false` iken çıkış stoğu aşmamalı.
+- Numara: `counters/invoice_{type}` yoksa `create` ile `last=1`, varsa `last += 1` (kurallar yalnız bu iki değere izin verir). Numara `counters.last` → `"{prefix}-{yıl}-{last 6 hane}"`.
 - Etki işareti `s`: `sales:+1, purchase:-1, sales_return:-1, purchase_return:+1` (cari bakiyeye).
   - `party.balanceMinor += s * totalMinor`; `ledger_entries/{txId}_{partyId}` (`deltaMinor = s*totalMinor`, `refType='invoice'`).
 - Stok yönü: `sales: çıkış, purchase: giriş, sales_return: giriş, purchase_return: çıkış`.

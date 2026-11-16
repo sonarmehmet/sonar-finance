@@ -1,6 +1,6 @@
 # CONTRACTS — Sözleşme Sürümü
 
-**Güncel: v1.0.0** (2026-11-16)
+**Güncel: v1.0.1** (2026-11-16)
 
 Sözleşme = `docs/02-firestore-modeli.md` + `docs/04-islem-akislari.md` + `firebase/firestore.rules` + `shared/*.json`.
 Yalnız **Ajan 1** değiştirir. Değişirse buraya kayıt düşülür; Android ve Windows uygulamaları bu sürüme uyar.
@@ -8,6 +8,7 @@ Yalnız **Ajan 1** değiştirir. Değişirse buraya kayıt düşülür; Android 
 ## Değişiklik kaydı
 | Sürüm | Tarih | Değişiklik | Etkilenen |
 |---|---|---|---|
+| 1.0.1 | 2026-11-16 | Faturaya `rev` alanı (taslak çakışma sayacı); sayaç ilk oluşturma kuralı (04 §3); yerel önbellek = Firestore kalıcı önbelleği (SQLite yok, 05) | invoices, issueInvoice |
 | 1.0.0 | 2026-11-16 | İlk sözleşme: parties, products, warehouses, stock_levels, invoices(lines gömülü), payments, accounts, expenses, projects, stats, txns; kural seti | tüm |
 
 ## Değişmez kurallar (uygulamalar uymak zorunda)
