@@ -26,8 +26,8 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.0 · Branch'ler: `hesap1-cekirde
 ## Görevler
 | # | Görev | Sahip | Durum | Not |
 |---|---|---|---|---|
-| A1 | Android iskelet: Flutter proje, tema (tokens), router, Firebase init, giriş ekranı, alt menü | Ajan 2 | — | |
-| A2 | Android: para/tarih yardımcıları + `invoice_calculator` (04 §2) | Ajan 2 | — | |
+| A1 | Android iskelet: Flutter proje, tema (tokens), router, Firebase init, giriş ekranı, alt menü | Ajan 2 | kod yazıldı, **derlenmedi** | Flutter SDK ortamda yok; `apps/android/README.md` "İlk kurulum" adımı (`flutter create`) gerekli |
+| A2 | Android: para/tarih yardımcıları + `invoice_calculator` (04 §2) | Ajan 2 | devam ediyor | |
 | A3 | Android: cari, ürün, depo ekranları + repository | Ajan 2 | — | |
 | A4 | Android: fatura listesi, yeni fatura formu, `issueInvoice/cancelInvoice` servisleri | Ajan 2 | — | |
 | A5 | Android: stok giriş/çıkış/sayım/transfer, stok listesi | Ajan 2 | — | |
@@ -43,10 +43,12 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.0 · Branch'ler: `hesap1-cekirde
 ## Talepler (Ajan 2/3 → Ajan 1)
 | Tarih | Kimden | Talep | Durum |
 |---|---|---|---|
+| 2026-11-16 | Ajan 2 | `shared/l10n/tr.json`'a ekle: `auth.{title,subtitle,email,password,signIn,signOut,required}`, `auth.errors.{invalidCredential,network,tooManyRequests,generic,noProfile,inactive}`, `common.comingSoon`, `profile.role.{admin,employee}`. Android şimdilik `lib/core/l10n/strings.dart` içindeki `pendingKeys` ile karşılıyor; tr.json'a eklenince onun değeri öncelikli olur. | açık |
 
 ## Varsayımlar ve kararlar
 - Spark planı; Functions/Storage yok. Belge arşivi ertelendi.
 - Tek `parties`, tek `accounts`, tek `payments`; fatura satırları belge içinde (02'ye bak).
 - KDV oranları: 0, 1, 10, 20 (`constants.json`). Varsayılan %20.
 - Para birimi yalnız TRY (döviz alanı ayrılmış, kullanılmıyor).
+- Android (Ajan 2): `shared/*.json` Flutter asset olarak paket dışından okunamadığı için `apps/android/assets/shared/` altında kopyalanır (`tool/sync_shared.bat`). Giriş yöntemi e-posta/şifre. Firebase seçenekleri emülatör (`demo-sonar-finance`) için elle yazıldı; üretimde `flutterfire configure` ile değişecek. Emülatör: `--dart-define=USE_EMULATOR=true` (Android emülatör ana makine `10.0.2.2`).
 - Ertelenenler: çek-senet, e-fatura/e-arşiv, e-defter, banka entegrasyonu, belge arşivi, teklif.
