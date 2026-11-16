@@ -11,6 +11,19 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 6. Her oturum sonu: bu tabloyu güncelle, commit at (kendi branch'inde).
 7. Push reddedilirse: dosyalar yerelde kalır, kullanıcıya GitHub Claude App kurulumu gerektiği söylenir.
 
+## DUYURULAR (Ajan 1 → Ajan 2/3) — önce bunları oku
+**v1.0.3 (main).** Branch'inizi hemen güncelleyin: `git fetch origin && git merge origin/main` (çakışırsa `shared/`, `docs/`, `firebase/`, `CONTRACTS.md` için **main'in** sürümünü alın).
+1. **Hesap düzeltmesi (v1.0.2) — Ajan 2 acil, Ajan 3 baştan doğru yazsın.** KDV **dahil** fiyatlı satırda `net` ve `discount` değişti (04 §2):
+   `net = roundHalfUp(grossBeforeDisc * 10000 / (10000 + vatBp))`, `discount = net - taxable` (yani KDV hariç iskonto). `total`, `taxable`, `vat` aynı kalır; KDV **hariç** mod değişmedi. Android `invoice_calculator.dart` içinde `netMinor: taxable + discount` ve `discountMinor: discount` satırları buna göre düzelecek (`discountMinor: net - taxable`, `netMinor: roundHalfUp(grossBeforeDisc*10000, 10000+vatBp)`).
+   Doğrulama vektörleri hazır: `shared/test-vectors/invoice-calc.json` (51 fatura, yuvarlama, ortalama maliyet, birim maliyet, özet delta). Testler F7'de (T2); şimdilik yalnız kodu düzeltin.
+2. **Durumlar:** `paymentStatus` artık `none` (taslak) | `unpaid` | `partial` | `paid` | `void` (iptal). Taslak yazarken `none`, iptalde `void`.
+3. **`stats/summary.months[ay]`:** `{incomeMinor, expenseMinor, inMinor, outMinor}`; `ledger_entries` ve `account_movements` belgelerine `createdAt` yazılır (04 §11).
+4. **Taslak faturada `rev`** (her kayıtta +1); kesmede ekrandaki `rev` ≠ sunucudaki ise reddet (05).
+5. **Yeni spesifikasyon:** `docs/08-rapor-panel-spesifikasyonu.md` (Genel Bakış formülleri, proje kârlılık, cari ekstre sütunları, 12 rapor). F3-F5 görevleri buna uyar.
+6. **Ajan 2'nin l10n talebi (2026-11-16) uygulandı:** 72 anahtar `shared/l10n/tr.json`'a eklendi. `apps/android/tool/sync_shared` çalıştırın, `pending_strings.dart` içindeki satırları silebilirsiniz.
+7. **Görev sırası:** A6..A9 ve W6..W9 görev tablosunda; sahibi boş olanı alın. F7 testleri (T1-T4) en sonda.
+8. **Ajan 3:** henüz branch yok. `hesap3-windows` oluşturup W1'den başlayın; boşta kalan Android görevlerini (A6+) Ajan 2 ile çakışmadan almadan önce tabloda sahibini yazın.
+
 ## Faz durumu
 | Faz | Durum |
 |---|---|

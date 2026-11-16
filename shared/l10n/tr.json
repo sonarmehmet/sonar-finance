@@ -1,5 +1,7 @@
 {
-  "app": { "name": "SONAR FINANCE" },
+  "app": {
+    "name": "SONAR FINANCE"
+  },
   "menu": {
     "overview": "Genel Bakış",
     "invoices": "Faturalar",
@@ -14,37 +16,219 @@
     "users": "Kullanıcı Yönetimi",
     "settings": "Ayarlar"
   },
-  "mobileNav": { "home": "Ana Sayfa", "transactions": "İşlemler", "projects": "Projeler", "reports": "Raporlar", "profile": "Profil" },
-  "quickActions": { "invoice": "Fatura", "collection": "Tahsilat", "expense": "Gider", "project": "Proje" },
-  "invoiceType": { "sales": "Satış Faturası", "purchase": "Alış Faturası", "sales_return": "Satış İade", "purchase_return": "Alış İade" },
-  "invoiceTabs": { "all": "Tüm Faturalar", "sales": "Satış Faturaları", "purchase": "Alış Faturaları", "returns": "İade Faturaları", "drafts": "Taslaklar" },
-  "status": { "paid": "Ödendi", "partial": "Kısmi Ödendi", "pending": "Bekliyor", "overdue": "Gecikmiş", "draft": "Taslak", "cancelled": "İptal" },
+  "mobileNav": {
+    "home": "Ana Sayfa",
+    "transactions": "İşlemler",
+    "projects": "Projeler",
+    "reports": "Raporlar",
+    "profile": "Profil"
+  },
+  "quickActions": {
+    "invoice": "Fatura",
+    "collection": "Tahsilat",
+    "expense": "Gider",
+    "project": "Proje"
+  },
+  "invoiceType": {
+    "sales": "Satış Faturası",
+    "purchase": "Alış Faturası",
+    "sales_return": "Satış İade",
+    "purchase_return": "Alış İade"
+  },
+  "invoiceTabs": {
+    "all": "Tüm Faturalar",
+    "sales": "Satış Faturaları",
+    "purchase": "Alış Faturaları",
+    "returns": "İade Faturaları",
+    "drafts": "Taslaklar"
+  },
+  "status": {
+    "paid": "Ödendi",
+    "partial": "Kısmi Ödendi",
+    "pending": "Bekliyor",
+    "overdue": "Gecikmiş",
+    "draft": "Taslak",
+    "cancelled": "İptal"
+  },
   "invoiceColumns": {
-    "number": "Fatura No", "date": "Tarih", "party": "Cari Hesap", "project": "Proje", "type": "Fatura Türü",
-    "total": "KDV Dahil Toplam", "paid": "Ödenen", "remaining": "Kalan", "due": "Vade Tarihi", "status": "Durum", "actions": "İşlemler"
+    "number": "Fatura No",
+    "date": "Tarih",
+    "party": "Cari Hesap",
+    "project": "Proje",
+    "type": "Fatura Türü",
+    "total": "KDV Dahil Toplam",
+    "paid": "Ödenen",
+    "remaining": "Kalan",
+    "due": "Vade Tarihi",
+    "status": "Durum",
+    "actions": "İşlemler"
   },
   "invoiceForm": {
-    "newInvoice": "Yeni Fatura Oluştur", "info": "Fatura Bilgileri", "lines": "Fatura Kalemleri", "totals": "Fatura Toplamları",
-    "addLine": "Satır Ekle", "product": "Ürün/Hizmet", "description": "Açıklama", "quantity": "Miktar", "unit": "Birim",
-    "unitPrice": "Birim Fiyat", "discount": "İskonto", "vat": "KDV Oranı", "lineTotal": "Satır Toplamı",
-    "subtotal": "Ara Toplam", "discountTotal": "İskonto Toplamı", "vatTotal": "KDV Toplamı", "grandTotal": "Genel Toplam",
-    "saveDraft": "Taslak Kaydet", "issue": "Faturayı Kaydet", "print": "Yazdır / PDF", "warehouse": "Depo",
-    "priceIncludesVat": "Fiyatlar KDV dahil", "invoiceDate": "Fatura Tarihi", "dueDate": "Vade Tarihi"
+    "newInvoice": "Yeni Fatura Oluştur",
+    "info": "Fatura Bilgileri",
+    "lines": "Fatura Kalemleri",
+    "totals": "Fatura Toplamları",
+    "addLine": "Satır Ekle",
+    "product": "Ürün/Hizmet",
+    "description": "Açıklama",
+    "quantity": "Miktar",
+    "unit": "Birim",
+    "unitPrice": "Birim Fiyat",
+    "discount": "İskonto",
+    "vat": "KDV Oranı",
+    "lineTotal": "Satır Toplamı",
+    "subtotal": "Ara Toplam",
+    "discountTotal": "İskonto Toplamı",
+    "vatTotal": "KDV Toplamı",
+    "grandTotal": "Genel Toplam",
+    "saveDraft": "Taslak Kaydet",
+    "issue": "Faturayı Kaydet",
+    "print": "Yazdır / PDF",
+    "warehouse": "Depo",
+    "priceIncludesVat": "Fiyatlar KDV dahil",
+    "invoiceDate": "Fatura Tarihi",
+    "dueDate": "Vade Tarihi"
   },
-  "party": { "name": "Firma Adı", "kind": "Firma Türü", "customer": "Müşteri", "supplier": "Tedarikçi", "phone": "Telefon", "debt": "Borç", "receivable": "Alacak", "net": "Net Bakiye", "newParty": "Yeni Cari Hesap", "statement": "Hesap Ekstresi", "tabs": { "overview": "Genel Bakış", "movements": "Hesap Hareketleri", "invoices": "Faturalar", "collections": "Tahsilatlar", "payments": "Ödemeler" } },
-  "stock": { "totalProducts": "Toplam Ürün", "totalValue": "Toplam Stok Değeri", "criticalStock": "Kritik Stok", "code": "Ürün Kodu", "name": "Ürün Adı", "category": "Kategori", "unit": "Birim", "quantity": "Stok Miktarı", "unitCost": "Birim Maliyet", "value": "Toplam Değer", "warehouse": "Depo", "minLevel": "Kritik Seviye", "stockIn": "Stok Girişi", "stockOut": "Stok Çıkışı", "adjust": "Sayım Düzeltme", "transfer": "Depolar Arası Transfer", "newProduct": "Yeni Ürün", "newWarehouse": "Yeni Depo" },
-  "cashBank": { "income": "Para Girişi", "outcome": "Para Çıkışı", "transfer": "Hesaplar Arası Transfer", "newCash": "Yeni Kasa", "newBank": "Yeni Banka Hesabı", "balance": "Güncel Bakiye", "lastMovement": "Son Hareket" },
-  "dashboard": { "totalCash": "Toplam Kasa", "totalBank": "Toplam Banka", "totalReceivable": "Toplam Alacak", "totalPayable": "Toplam Borç", "monthIncome": "Bu Ay Gelir", "monthExpense": "Bu Ay Gider", "recent": "Son Finansal İşlemler", "upcoming": "Yaklaşan Ödemeler", "upcomingCollections": "Yaklaşan Tahsilatlar", "overdue": "Gecikmiş Faturalar" },
+  "party": {
+    "name": "Firma Adı",
+    "kind": "Firma Türü",
+    "customer": "Müşteri",
+    "supplier": "Tedarikçi",
+    "phone": "Telefon",
+    "debt": "Borç",
+    "receivable": "Alacak",
+    "net": "Net Bakiye",
+    "newParty": "Yeni Cari Hesap",
+    "statement": "Hesap Ekstresi",
+    "tabs": {
+      "overview": "Genel Bakış",
+      "movements": "Hesap Hareketleri",
+      "invoices": "Faturalar",
+      "collections": "Tahsilatlar",
+      "payments": "Ödemeler"
+    },
+    "noMovements": "Hesap hareketi yok",
+    "contact": "İletişim",
+    "editParty": "Cariyi Düzenle",
+    "balanceReceivable": "Alacak",
+    "balanceDebt": "Borç",
+    "balanceZero": "Bakiye yok"
+  },
+  "stock": {
+    "totalProducts": "Toplam Ürün",
+    "totalValue": "Toplam Stok Değeri",
+    "criticalStock": "Kritik Stok",
+    "code": "Ürün Kodu",
+    "name": "Ürün Adı",
+    "category": "Kategori",
+    "unit": "Birim",
+    "quantity": "Stok Miktarı",
+    "unitCost": "Birim Maliyet",
+    "value": "Toplam Değer",
+    "warehouse": "Depo",
+    "minLevel": "Kritik Seviye",
+    "stockIn": "Stok Girişi",
+    "stockOut": "Stok Çıkışı",
+    "adjust": "Sayım Düzeltme",
+    "transfer": "Depolar Arası Transfer",
+    "newProduct": "Yeni Ürün",
+    "newWarehouse": "Yeni Depo",
+    "products": "Ürünler",
+    "warehouses": "Depolar",
+    "editProduct": "Ürünü Düzenle",
+    "editWarehouse": "Depoyu Düzenle",
+    "noLevels": "Bu ürün için depoda stok kaydı yok",
+    "byWarehouse": "Depo Bazında Stok",
+    "criticalBadge": "Kritik",
+    "trackingOff": "Stok takibi yok"
+  },
+  "cashBank": {
+    "income": "Para Girişi",
+    "outcome": "Para Çıkışı",
+    "transfer": "Hesaplar Arası Transfer",
+    "newCash": "Yeni Kasa",
+    "newBank": "Yeni Banka Hesabı",
+    "balance": "Güncel Bakiye",
+    "lastMovement": "Son Hareket"
+  },
+  "dashboard": {
+    "totalCash": "Toplam Kasa",
+    "totalBank": "Toplam Banka",
+    "totalReceivable": "Toplam Alacak",
+    "totalPayable": "Toplam Borç",
+    "monthIncome": "Bu Ay Gelir",
+    "monthExpense": "Bu Ay Gider",
+    "recent": "Son Finansal İşlemler",
+    "upcoming": "Yaklaşan Ödemeler",
+    "upcomingCollections": "Yaklaşan Tahsilatlar",
+    "overdue": "Gecikmiş Faturalar"
+  },
   "disciplines": {
-    "heating": "Isıtma", "cooling": "Soğutma", "ventilation": "Havalandırma", "fire_protection": "Yangın Tesisatı",
-    "plumbing": "Sıhhi Tesisat", "natural_gas": "Doğalgaz", "steam": "Buhar", "chiller": "Chiller",
-    "floor_heating": "Yerden Isıtma", "electrical_automation": "Elektrik ve Otomasyon", "labor": "İşçilik",
-    "transport": "Nakliye", "equipment": "Ekipman", "subcontractor": "Taşeron", "general": "Genel Gider"
+    "heating": "Isıtma",
+    "cooling": "Soğutma",
+    "ventilation": "Havalandırma",
+    "fire_protection": "Yangın Tesisatı",
+    "plumbing": "Sıhhi Tesisat",
+    "natural_gas": "Doğalgaz",
+    "steam": "Buhar",
+    "chiller": "Chiller",
+    "floor_heating": "Yerden Isıtma",
+    "electrical_automation": "Elektrik ve Otomasyon",
+    "labor": "İşçilik",
+    "transport": "Nakliye",
+    "equipment": "Ekipman",
+    "subcontractor": "Taşeron",
+    "general": "Genel Gider"
   },
-  "expenseCategory": { "material": "Malzeme", "labor": "İşçilik", "transport": "Nakliye", "subcontractor": "Taşeron", "fuel": "Yakıt", "rent": "Kira", "electricity": "Elektrik", "tax": "Vergi", "general": "Genel Gider", "other": "Diğer Giderler" },
-  "incomeCategory": { "material_sales": "Malzeme Satışı", "labor_income": "İşçilik Geliri", "project_collection": "Proje Tahsilatı", "service_income": "Hizmet Geliri", "other_income": "Diğer Gelirler" },
-  "common": { "save": "Kaydet", "cancel": "Vazgeç", "delete": "Sil", "edit": "Düzenle", "search": "Ara", "filter": "Filtrele", "export": "Dışa Aktar", "confirm": "Onayla", "yes": "Evet", "no": "Hayır", "loading": "Yükleniyor...", "empty": "Kayıt bulunamadı", "error": "Bir hata oluştu", "retry": "Tekrar Dene", "back": "Geri", "close": "Kapat" },
-  "connection": { "online": "Çevrimiçi", "offline": "Çevrimdışı", "syncing": "Senkronize ediliyor", "syncError": "Senkron hatası" },
+  "expenseCategory": {
+    "material": "Malzeme",
+    "labor": "İşçilik",
+    "transport": "Nakliye",
+    "subcontractor": "Taşeron",
+    "fuel": "Yakıt",
+    "rent": "Kira",
+    "electricity": "Elektrik",
+    "tax": "Vergi",
+    "general": "Genel Gider",
+    "other": "Diğer Giderler"
+  },
+  "incomeCategory": {
+    "material_sales": "Malzeme Satışı",
+    "labor_income": "İşçilik Geliri",
+    "project_collection": "Proje Tahsilatı",
+    "service_income": "Hizmet Geliri",
+    "other_income": "Diğer Gelirler"
+  },
+  "common": {
+    "save": "Kaydet",
+    "cancel": "Vazgeç",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "export": "Dışa Aktar",
+    "confirm": "Onayla",
+    "yes": "Evet",
+    "no": "Hayır",
+    "loading": "Yükleniyor...",
+    "empty": "Kayıt bulunamadı",
+    "error": "Bir hata oluştu",
+    "retry": "Tekrar Dene",
+    "back": "Geri",
+    "close": "Kapat",
+    "comingSoon": "Yakında",
+    "all": "Tümü",
+    "active": "Aktif",
+    "passive": "Pasif",
+    "noPermission": "Bu işlem için yetkiniz yok",
+    "modules": "Modüller"
+  },
+  "connection": {
+    "online": "Çevrimiçi",
+    "offline": "Çevrimdışı",
+    "syncing": "Senkronize ediliyor",
+    "syncError": "Senkron hatası"
+  },
   "messages": {
     "invoiceIssued": "Fatura kaydedildi: {number}",
     "invoiceCancelled": "Fatura iptal edildi",
@@ -53,6 +237,74 @@
     "insufficientStock": "Yetersiz stok: {product} ({warehouse}, kalan {qty})",
     "confirmCancelInvoice": "Bu faturayı iptal etmek istediğinize emin misiniz? Ters kayıtlar oluşturulacak.",
     "confirmCancelPayment": "Bu işlemi iptal etmek istediğinize emin misiniz?",
-    "cannotCancelPaid": "Ödemesi olan fatura iptal edilemez. Önce ödemeleri iptal edin."
+    "cannotCancelPaid": "Ödemesi olan fatura iptal edilemez. Önce ödemeleri iptal edin.",
+    "saved": "Kaydedildi",
+    "queued": "Çevrimdışı: kayıt kuyruğa alındı, bağlantı gelince gönderilecek",
+    "saveFailed": "Kaydedilemedi"
+  },
+  "auth": {
+    "title": "Giriş Yap",
+    "subtitle": "Hesabınızla devam edin",
+    "email": "E-posta",
+    "password": "Şifre",
+    "signIn": "Giriş Yap",
+    "signOut": "Çıkış Yap",
+    "required": "Bu alan zorunlu",
+    "errors": {
+      "invalidCredential": "E-posta veya şifre hatalı",
+      "network": "Bağlantı kurulamadı. İnternetinizi kontrol edin.",
+      "tooManyRequests": "Çok fazla deneme yapıldı. Lütfen biraz sonra tekrar deneyin.",
+      "generic": "Giriş yapılamadı",
+      "noProfile": "Kullanıcı kaydınız bulunamadı. Yöneticinize başvurun.",
+      "inactive": "Hesabınız pasif durumda. Yöneticinize başvurun."
+    }
+  },
+  "profile": {
+    "role": {
+      "admin": "Yönetici",
+      "employee": "Çalışan"
+    }
+  },
+  "fields": {
+    "taxOffice": "Vergi Dairesi",
+    "taxNo": "Vergi / TC No",
+    "email": "E-posta",
+    "address": "Adres",
+    "notes": "Notlar",
+    "location": "Konum",
+    "isDefault": "Varsayılan depo",
+    "buyPrice": "Alış Fiyatı",
+    "sellPrice": "Satış Fiyatı",
+    "vat": "KDV Oranı",
+    "trackStock": "Stok takibi yap",
+    "barcode": "Barkod",
+    "active": "Aktif",
+    "kindBoth": "Müşteri ve Tedarikçi"
+  },
+  "validation": {
+    "required": "Bu alan zorunlu",
+    "invalidAmount": "Geçersiz tutar",
+    "invalidQty": "Geçersiz miktar",
+    "invalidTaxNo": "Vergi / TC no 10 veya 11 haneli olmalı",
+    "duplicateCode": "Bu ürün kodu zaten kullanılıyor",
+    "kindRequired": "En az bir tür seçin"
+  },
+  "ledger": {
+    "invoice": "Fatura",
+    "payment": "Tahsilat / Ödeme",
+    "reversal": "Ters Kayıt",
+    "opening": "Açılış Bakiyesi"
+  },
+  "unit": {
+    "adet": "adet",
+    "metre": "metre",
+    "kg": "kg",
+    "lt": "lt",
+    "m2": "m²",
+    "m3": "m³",
+    "takim": "takım",
+    "paket": "paket",
+    "saat": "saat",
+    "gun": "gün"
   }
 }
