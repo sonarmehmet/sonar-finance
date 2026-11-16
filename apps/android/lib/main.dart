@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
+import 'core/constants.dart';
 import 'core/firebase/firebase_bootstrap.dart';
 import 'core/l10n/strings.dart';
 import 'core/providers.dart';
@@ -12,6 +13,7 @@ Future<void> main() async {
 
   final tokens = await SonarTokens.load();
   final strings = await Strings.load();
+  final constants = await SonarConstants.load();
   await bootstrapFirebase();
 
   runApp(
@@ -19,6 +21,7 @@ Future<void> main() async {
       overrides: [
         tokensProvider.overrideWithValue(tokens),
         stringsProvider.overrideWithValue(strings),
+        constantsProvider.overrideWithValue(constants),
       ],
       child: const SonarApp(),
     ),

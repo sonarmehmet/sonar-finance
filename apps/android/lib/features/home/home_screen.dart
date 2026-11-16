@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../core/auth/auth_providers.dart';
@@ -58,8 +59,67 @@ class HomeScreen extends ConsumerWidget {
                 _QuickAction(icon: a.$1, label: a.$2, onTap: soon),
             ],
           ),
+          SizedBox(height: t.spacing('xl')),
+          Text(
+            s('common.modules'),
+            style: TextStyle(
+              fontSize: t.fontSize('bodyLg'),
+              fontWeight: t.fontWeight('semibold'),
+            ),
+          ),
+          SizedBox(height: t.spacing('md')),
+          Card(
+            child: Column(
+              children: [
+                _ModuleTile(
+                  icon: LucideIcons.users,
+                  label: s('menu.parties'),
+                  onTap: () => context.push('/parties'),
+                ),
+                const Divider(),
+                _ModuleTile(
+                  icon: LucideIcons.package,
+                  label: s('menu.stock'),
+                  onTap: () => context.push('/products'),
+                ),
+                const Divider(),
+                _ModuleTile(
+                  icon: LucideIcons.warehouse,
+                  label: s('stock.warehouses'),
+                  onTap: () => context.push('/warehouses'),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _ModuleTile extends ConsumerWidget {
+  const _ModuleTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(tokensProvider);
+    return ListTile(
+      leading: Icon(icon, color: t.color('accent')),
+      title: Text(label),
+      trailing: Icon(
+        LucideIcons.chevronRight,
+        size: 18,
+        color: t.color('textSecondary'),
+      ),
+      onTap: onTap,
     );
   }
 }

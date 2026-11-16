@@ -15,6 +15,17 @@ int roundHalfUp(int a, int b) {
   return sign * ((2 * abs + b) ~/ (2 * b));
 }
 
+
+/// Noktalı ondalık girdiyi ("12.5", "1.25") Türkçe biçime çevirir: virgül yoksa ve
+/// tek bir nokta varsa, noktadan sonra 1-2 hane ondalık sayılır ("1.250" binliktir).
+String _normalizeDecimal(String s) {
+  if (s.contains(',')) return s;
+  final first = s.indexOf('.');
+  if (first == -1 || first != s.lastIndexOf('.')) return s;
+  final after = s.length - first - 1;
+  return (after == 1 || after == 2) ? s.replaceFirst('.', ',') : s;
+}
+
 String _group(String digits) {
   final buf = StringBuffer();
   for (var i = 0; i < digits.length; i++) {
@@ -40,7 +51,9 @@ String formatMinorTry(int minor) => '${formatMinor(minor)} ₺';
 /// "1.250,5" -> 125050, "1250" -> 125000, "0,07" -> 7.
 /// Geçersizse `null`. Kuruştan fazla hane (3+ ondalık) geçersizdir.
 int? parseMinor(String input) {
-  final s = input.trim().replaceAll(' ', '').replaceAll('₺', '');
+  final s = _normalizeDecimal(
+      input.trim().replaceAll(' ', '').replaceAll('₺', ''),
+  );
   if (s.isEmpty) return null;
   var neg = false;
   var body = s;
@@ -84,7 +97,7 @@ String formatMilli(int milli) {
 
 /// "2,5" -> 2500, "1.000" -> 1000000. En çok 3 ondalık. Geçersizse `null`.
 int? parseMilli(String input) {
-  final s = input.trim().replaceAll(' ', '');
+  final s = _normalizeDecimal(input.trim().replaceAll(' ', ''));
   if (s.isEmpty) return null;
   var neg = false;
   var body = s;

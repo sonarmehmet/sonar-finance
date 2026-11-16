@@ -6,7 +6,14 @@ import '../../features/auth/login_screen.dart';
 import '../../features/auth/no_access_screen.dart';
 import '../../features/auth/splash_screen.dart';
 import '../../features/home/home_screen.dart';
+import '../../features/parties/parties_list_screen.dart';
+import '../../features/parties/party_detail_screen.dart';
+import '../../features/parties/party_form_screen.dart';
 import '../../features/profile/profile_screen.dart';
+import '../../features/stock/product_detail_screen.dart';
+import '../../features/stock/product_form_screen.dart';
+import '../../features/stock/products_list_screen.dart';
+import '../../features/stock/warehouses_screen.dart';
 import '../../features/projects/projects_screen.dart';
 import '../../features/reports/reports_screen.dart';
 import '../../features/shell/main_shell.dart';
@@ -66,6 +73,49 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.noAccess,
         builder: (_, __) => const NoAccessScreen(),
+      ),
+      // Tam ekran (alt menusuz) ekranlar. Statik yollar (`new`) parametreli yoldan once.
+      GoRoute(
+        path: '/parties',
+        builder: (_, __) => const PartiesListScreen(),
+        routes: [
+          GoRoute(path: 'new', builder: (_, __) => const PartyFormScreen()),
+          GoRoute(
+            path: ':id',
+            builder: (_, st) =>
+                PartyDetailScreen(partyId: st.pathParameters['id']!),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, st) =>
+                    PartyFormScreen(partyId: st.pathParameters['id']),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/products',
+        builder: (_, __) => const ProductsListScreen(),
+        routes: [
+          GoRoute(path: 'new', builder: (_, __) => const ProductFormScreen()),
+          GoRoute(
+            path: ':id',
+            builder: (_, st) =>
+                ProductDetailScreen(productId: st.pathParameters['id']!),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, st) =>
+                    ProductFormScreen(productId: st.pathParameters['id']),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/warehouses',
+        builder: (_, __) => const WarehousesScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => MainShell(shell: shell),
