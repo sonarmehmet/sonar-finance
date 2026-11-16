@@ -1,0 +1,8 @@
+{
+  "name": "sonar-finance-seed",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Firebase Emulator icin ornek (demo) veri yukleyici. Uretim veritabanina YAZMAZ.",
+  "scripts": { "seed": "node seed.js" },
+  "dependencies": { "firebase-admin": "^12.0.0" }
+}

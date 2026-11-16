@@ -32,13 +32,13 @@ Yetki anahtarları: `invoice.write`, `party.write`, `stock.write`, `finance.writ
 | `invoices/{invoiceId}` | bkz. aşağı |
 | `payments/{paymentId}` | `companyId, txId, direction('in'\|'out'), partyId, accountId, amountMinor, date, method('cash'\|'bank_transfer'\|'cheque'\|'card'), allocations[{invoiceId, amountMinor}], unallocatedMinor, projectId?, note, status('active'\|'cancelled'), cancelTxId?, createdBy, createdAt` |
 | `accounts/{accountId}` (kasa+banka) | `companyId, type('cash'\|'bank'), name, bankName, iban, currency, balanceMinor, lastTxId, active` |
-| `account_movements/{txId}_{accountId}` | `companyId, txId, accountId, deltaMinor, kind('in'\|'out'\|'transfer_in'\|'transfer_out'\|'expense'), refType, refId, date` |
-| `ledger_entries/{txId}_{partyId}` | `companyId, txId, partyId, deltaMinor, refType('invoice'\|'payment'\|'reversal'), refId, description, date` |
+| `account_movements/{txId}_{accountId}` | `companyId, txId, accountId, deltaMinor, kind('in'\|'out'\|'transfer_in'\|'transfer_out'\|'expense'), refType, refId, date, createdAt` |
+| `ledger_entries/{txId}_{partyId}` | `companyId, txId, partyId, deltaMinor, refType('invoice'\|'payment'\|'reversal'\|'opening'), refId, description, date, createdAt` |
 | `expenses/{expenseId}` | `companyId, txId, categoryId, amountMinor (KDV dahil), vatMinor, accountId, partyId?, projectId?, discipline?, date, description, status('active'\|'cancelled')` |
 | `expense_categories/{id}`, `income_categories/{id}` | `companyId, name, kind, active` |
 | `projects/{projectId}` | `companyId, name, partyId (müşteri), location, startDate, endDate, contractMinor, status('active'\|'done'\|'paused'), budgets{<discipline>: minor}, notes` |
 | `project_stats/{projectId}` | `revenueMinor, costMinor, collectedMinor, paidOutMinor, byDiscipline{<discipline>: costMinor}, lastTxId` |
-| `stats/summary` | `receivableMinor, payableMinor, cashMinor, bankMinor, months{'YYYY-MM': {incomeMinor, expenseMinor}}, updatedAt` |
+| `stats/summary` | `receivableMinor, payableMinor, cashMinor, bankMinor, months{'YYYY-MM': {incomeMinor, expenseMinor, inMinor, outMinor}}, updatedAt` |
 | `counters/{name}` | `last` (int). Adlar: `invoice_sales, invoice_purchase, invoice_sales_return, invoice_purchase_return` |
 | `txns/{txId}` | `companyId, type, createdBy, createdAt, refs{}` — **idempotency + denetim çapası** |
 | `audit_logs/{id}` | `companyId, action, entityType, entityId, userId, at, summary` — yalnızca `create` |
@@ -53,10 +53,11 @@ priceIncludesVat (bool), note,
 lines: [{ lineId, productId?, description, qtyMilli, unit, unitPriceMinor, discountBp, vatBp,
           warehouseId?, netMinor, discountMinor, vatMinor, totalMinor }],
 subtotalMinor, discountMinor, vatMinor, totalMinor,
-paidMinor, paymentStatus ('unpaid'|'partial'|'paid'),
+paidMinor, paymentStatus ('none' taslak | 'unpaid' | 'partial' | 'paid' | 'void' iptal),
+rev (taslak düzenleme sayacı, her kayıtta +1; bkz. 05),
 txId? (kesme işlemi), cancelTxId?, lastTxId, createdBy, createdAt, updatedAt
 ```
-Gösterim durumu (istemcide türetilir): `draft→Taslak`, `paid→Ödendi`, `partial→Kısmi Ödendi`, `unpaid` ve vade geçmişse `Gecikmiş`, aksi halde `Bekliyor`. İptal → `İptal`.
+Gösterim durumu (istemcide türetilir): `draft→Taslak`, `paid→Ödendi`, `partial→Kısmi Ödendi` (vade geçmişse `Gecikmiş`), `unpaid` ve vade geçmişse `Gecikmiş`, aksi halde `Bekliyor`; `void→İptal`. Vadesi gelen sorgusu `paymentStatus in ['unpaid','partial']` taslak ve iptalleri kendiliğinden dışlar.
 
 ## Önerilen sorgular (indexler `firebase/firestore.indexes.json` içinde)
 - Fatura listesi: `type`, `issueDate desc`, `limit 25`.

@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "invoiceTypes": ["sales", "purchase", "sales_return", "purchase_return"],
   "invoiceStatuses": ["draft", "issued", "cancelled"],
-  "paymentStatuses": ["unpaid", "partial", "paid"],
+  "paymentStatuses": ["none", "unpaid", "partial", "paid", "void"],
   "paymentDirections": ["in", "out"],
   "paymentMethods": ["cash", "bank_transfer", "cheque", "card"],
   "accountTypes": ["cash", "bank"],
