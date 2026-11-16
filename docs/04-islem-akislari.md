@@ -24,12 +24,15 @@ total    = taxable + vat
 Satır (KDV dahil fiyat, `priceIncludesVat=true`):
 ```
 grossBeforeDisc = roundHalfUp(qtyMilli * unitPriceMinor / 1000)
-discount        = roundHalfUp(grossBeforeDisc * discountBp / 10000)
-total           = grossBeforeDisc - discount
+discIncl        = roundHalfUp(grossBeforeDisc * discountBp / 10000)
+total           = grossBeforeDisc - discIncl
 taxable         = roundHalfUp(total * 10000 / (10000 + vatBp))
 vat             = total - taxable
-net             = taxable + discount   // satır kayıtlarında net = iskonto öncesi KDV hariç
+net             = roundHalfUp(grossBeforeDisc * 10000 / (10000 + vatBp))   // KDV hariç, iskonto öncesi
+discount        = net - taxable                                            // KDV hariç iskonto
 ```
+Her iki modda da `net - discount = taxable` ve `taxable + vat = total` geçerlidir. Referans uygulama ve test vektörleri: `shared/reference/invoice_calc.py`, `shared/test-vectors/invoice-calc.json` (Dart ve TS çıktıları bunlarla birebir eşleşmeli).
+
 Başlık toplamları satırların toplamıdır (ayrıca yuvarlama yok):
 `subtotalMinor = Σ net`, `discountMinor = Σ discount`, `vatMinor = Σ vat`, `totalMinor = Σ total`.
 Örnek: 3 adet × 1.250,00 TL, iskonto %10, KDV %20 → `qtyMilli=3000, unitPriceMinor=125000` → net 375000, discount 37500, taxable 337500, vat 67500, total 405000.

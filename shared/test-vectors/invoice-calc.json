@@ -1,0 +1,2140 @@
+{
+ "version": "1.0.0",
+ "doc": "Uretici: shared/reference/invoice_calc.py. docs/04 §2-§3,§8 ile birebir.",
+ "roundHalfUp": [
+  {
+   "a": 1,
+   "b": 2,
+   "expected": 1
+  },
+  {
+   "a": 3,
+   "b": 2,
+   "expected": 2
+  },
+  {
+   "a": 5,
+   "b": 10,
+   "expected": 1
+  },
+  {
+   "a": 4,
+   "b": 10,
+   "expected": 0
+  },
+  {
+   "a": -1,
+   "b": 2,
+   "expected": -1
+  },
+  {
+   "a": -3,
+   "b": 2,
+   "expected": -2
+  },
+  {
+   "a": 0,
+   "b": 7,
+   "expected": 0
+  },
+  {
+   "a": 7,
+   "b": 3,
+   "expected": 2
+  },
+  {
+   "a": -7,
+   "b": 3,
+   "expected": -2
+  },
+  {
+   "a": 25,
+   "b": 50,
+   "expected": 1
+  },
+  {
+   "a": 10001,
+   "b": 10000,
+   "expected": 1
+  }
+ ],
+ "invoiceCalc": [
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 3000,
+     "unitPriceMinor": 125000,
+     "discountBp": 1000,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 375000,
+      "discountMinor": 37500,
+      "vatMinor": 67500,
+      "totalMinor": 405000
+     }
+    ],
+    "subtotalMinor": 375000,
+    "discountMinor": 37500,
+    "vatMinor": 67500,
+    "totalMinor": 405000,
+    "taxableMinor": 337500
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 3000,
+     "unitPriceMinor": 125000,
+     "discountBp": 1000,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 312500,
+      "discountMinor": 31250,
+      "vatMinor": 56250,
+      "totalMinor": 337500
+     }
+    ],
+    "subtotalMinor": 312500,
+    "discountMinor": 31250,
+    "vatMinor": 56250,
+    "totalMinor": 337500,
+    "taxableMinor": 281250
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 10000,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 10000,
+      "discountMinor": 0,
+      "vatMinor": 2000,
+      "totalMinor": 12000
+     }
+    ],
+    "subtotalMinor": 10000,
+    "discountMinor": 0,
+    "vatMinor": 2000,
+    "totalMinor": 12000,
+    "taxableMinor": 10000
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 12000,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 10000,
+      "discountMinor": 0,
+      "vatMinor": 2000,
+      "totalMinor": 12000
+     }
+    ],
+    "subtotalMinor": 10000,
+    "discountMinor": 0,
+    "vatMinor": 2000,
+    "totalMinor": 12000,
+    "taxableMinor": 10000
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1999,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 666,
+      "discountMinor": 0,
+      "vatMinor": 67,
+      "totalMinor": 733
+     }
+    ],
+    "subtotalMinor": 666,
+    "discountMinor": 0,
+    "vatMinor": 67,
+    "totalMinor": 733,
+    "taxableMinor": 666
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 4500,
+     "discountBp": 250,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 11139,
+      "discountMinor": 279,
+      "vatMinor": 109,
+      "totalMinor": 10969
+     }
+    ],
+    "subtotalMinor": 11139,
+    "discountMinor": 279,
+    "vatMinor": 109,
+    "totalMinor": 10969,
+    "taxableMinor": 10860
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 1,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     }
+    ],
+    "subtotalMinor": 0,
+    "discountMinor": 0,
+    "vatMinor": 0,
+    "totalMinor": 0,
+    "taxableMinor": 0
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 0,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     }
+    ],
+    "subtotalMinor": 0,
+    "discountMinor": 0,
+    "vatMinor": 0,
+    "totalMinor": 0,
+    "taxableMinor": 0
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 1000,
+     "discountBp": 0,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 1500,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 1500
+     }
+    ],
+    "subtotalMinor": 1500,
+    "discountMinor": 0,
+    "vatMinor": 0,
+    "totalMinor": 1500,
+    "taxableMinor": 1500
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 100000,
+     "discountBp": 10000,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 100000,
+      "discountMinor": 100000,
+      "vatMinor": 0,
+      "totalMinor": 0
+     }
+    ],
+    "subtotalMinor": 100000,
+    "discountMinor": 100000,
+    "vatMinor": 0,
+    "totalMinor": 0,
+    "taxableMinor": 0
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 40000,
+     "unitPriceMinor": 85000,
+     "discountBp": 0,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 500000,
+     "unitPriceMinor": 4500,
+     "discountBp": 500,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 6000,
+     "unitPriceMinor": 1250000,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 3400000,
+      "discountMinor": 0,
+      "vatMinor": 680000,
+      "totalMinor": 4080000
+     },
+     {
+      "netMinor": 2250000,
+      "discountMinor": 112500,
+      "vatMinor": 427500,
+      "totalMinor": 2565000
+     },
+     {
+      "netMinor": 7500000,
+      "discountMinor": 0,
+      "vatMinor": 750000,
+      "totalMinor": 8250000
+     }
+    ],
+    "subtotalMinor": 13150000,
+    "discountMinor": 112500,
+    "vatMinor": 1857500,
+    "totalMinor": 14895000,
+    "taxableMinor": 13037500
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 85000,
+     "discountBp": 1250,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 85000,
+     "discountBp": 1000,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 42500,
+      "discountMinor": 5313,
+      "vatMinor": 3719,
+      "totalMinor": 40906
+     },
+     {
+      "netMinor": 1049325,
+      "discountMinor": 104933,
+      "vatMinor": 0,
+      "totalMinor": 944392
+     }
+    ],
+    "subtotalMinor": 1091825,
+    "discountMinor": 110246,
+    "vatMinor": 3719,
+    "totalMinor": 985298,
+    "taxableMinor": 981579
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 12345,
+     "discountBp": 1000,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 152399,
+      "discountMinor": 15240,
+      "vatMinor": 1372,
+      "totalMinor": 138531
+     }
+    ],
+    "subtotalMinor": 152399,
+    "discountMinor": 15240,
+    "vatMinor": 1372,
+    "totalMinor": 138531,
+    "taxableMinor": 137159
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 1999,
+     "discountBp": 500,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 12345,
+     "discountBp": 1250,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 85000,
+     "discountBp": 0,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 99,
+     "discountBp": 250,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 24678,
+      "discountMinor": 1234,
+      "vatMinor": 0,
+      "totalMinor": 23444
+     },
+     {
+      "netMinor": 5144,
+      "discountMinor": 643,
+      "vatMinor": 900,
+      "totalMinor": 5401
+     },
+     {
+      "netMinor": 495833,
+      "discountMinor": 0,
+      "vatMinor": 99167,
+      "totalMinor": 595000
+     },
+     {
+      "netMinor": 50,
+      "discountMinor": 1,
+      "vatMinor": 0,
+      "totalMinor": 49
+     }
+    ],
+    "subtotalMinor": 525705,
+    "discountMinor": 1878,
+    "vatMinor": 100067,
+    "totalMinor": 623894,
+    "taxableMinor": 523827
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 4500,
+     "discountBp": 100,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 99,
+     "discountBp": 250,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 11139,
+      "discountMinor": 112,
+      "vatMinor": 110,
+      "totalMinor": 11137
+     },
+     {
+      "netMinor": 28,
+      "discountMinor": 1,
+      "vatMinor": 5,
+      "totalMinor": 32
+     }
+    ],
+    "subtotalMinor": 11167,
+    "discountMinor": 113,
+    "vatMinor": 115,
+    "totalMinor": 11169,
+    "taxableMinor": 11054
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 4500,
+     "discountBp": 250,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 2250,
+      "discountMinor": 56,
+      "vatMinor": 439,
+      "totalMinor": 2633
+     }
+    ],
+    "subtotalMinor": 2250,
+    "discountMinor": 56,
+    "vatMinor": 439,
+    "totalMinor": 2633,
+    "taxableMinor": 2194
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 99,
+     "discountBp": 1000,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 1250000,
+     "discountBp": 250,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 1250000,
+     "discountBp": 0,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 85000,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 23,
+      "discountMinor": 3,
+      "vatMinor": 2,
+      "totalMinor": 22
+     },
+     {
+      "netMinor": 2604167,
+      "discountMinor": 65104,
+      "vatMinor": 507812,
+      "totalMinor": 3046875
+     },
+     {
+      "netMinor": 2604167,
+      "discountMinor": 0,
+      "vatMinor": 520833,
+      "totalMinor": 3125000
+     },
+     {
+      "netMinor": 953932,
+      "discountMinor": 0,
+      "vatMinor": 95393,
+      "totalMinor": 1049325
+     }
+    ],
+    "subtotalMinor": 6162289,
+    "discountMinor": 65107,
+    "vatMinor": 1124040,
+    "totalMinor": 7221222,
+    "taxableMinor": 6097182
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 99,
+     "discountBp": 0,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 4500,
+     "discountBp": 250,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 693,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 693
+     },
+     {
+      "netMinor": 1125,
+      "discountMinor": 28,
+      "vatMinor": 0,
+      "totalMinor": 1097
+     }
+    ],
+    "subtotalMinor": 1818,
+    "discountMinor": 28,
+    "vatMinor": 0,
+    "totalMinor": 1790,
+    "taxableMinor": 1790
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 1999,
+     "discountBp": 250,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 1,
+     "discountBp": 1250,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 2726,
+      "discountMinor": 68,
+      "vatMinor": 266,
+      "totalMinor": 2924
+     },
+     {
+      "netMinor": 91,
+      "discountMinor": 12,
+      "vatMinor": 8,
+      "totalMinor": 87
+     }
+    ],
+    "subtotalMinor": 2817,
+    "discountMinor": 80,
+    "vatMinor": 274,
+    "totalMinor": 3011,
+    "taxableMinor": 2737
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 85000,
+     "discountBp": 500,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 85,
+      "discountMinor": 4,
+      "vatMinor": 0,
+      "totalMinor": 81
+     }
+    ],
+    "subtotalMinor": 85,
+    "discountMinor": 4,
+    "vatMinor": 0,
+    "totalMinor": 81,
+    "taxableMinor": 81
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 12345,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 2572,
+      "discountMinor": 0,
+      "vatMinor": 514,
+      "totalMinor": 3086
+     }
+    ],
+    "subtotalMinor": 2572,
+    "discountMinor": 0,
+    "vatMinor": 514,
+    "totalMinor": 3086,
+    "taxableMinor": 2572
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 1,
+     "discountBp": 0,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 85000,
+     "discountBp": 250,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 1999,
+     "discountBp": 0,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 12345,
+     "discountBp": 0,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 12,
+      "discountMinor": 0,
+      "vatMinor": 2,
+      "totalMinor": 14
+     },
+     {
+      "netMinor": 595000,
+      "discountMinor": 14875,
+      "vatMinor": 58013,
+      "totalMinor": 638138
+     },
+     {
+      "netMinor": 500,
+      "discountMinor": 0,
+      "vatMinor": 50,
+      "totalMinor": 550
+     },
+     {
+      "netMinor": 12345,
+      "discountMinor": 0,
+      "vatMinor": 123,
+      "totalMinor": 12468
+     }
+    ],
+    "subtotalMinor": 607857,
+    "discountMinor": 14875,
+    "vatMinor": 58188,
+    "totalMinor": 651170,
+    "taxableMinor": 592982
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 99,
+     "discountBp": 1000,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 686,
+      "discountMinor": 68,
+      "vatMinor": 6,
+      "totalMinor": 624
+     }
+    ],
+    "subtotalMinor": 686,
+    "discountMinor": 68,
+    "vatMinor": 6,
+    "totalMinor": 624,
+    "taxableMinor": 618
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 85000,
+     "discountBp": 250,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 1,
+     "discountBp": 1250,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 595000,
+      "discountMinor": 14875,
+      "vatMinor": 58013,
+      "totalMinor": 638138
+     },
+     {
+      "netMinor": 100,
+      "discountMinor": 13,
+      "vatMinor": 9,
+      "totalMinor": 96
+     }
+    ],
+    "subtotalMinor": 595100,
+    "discountMinor": 14888,
+    "vatMinor": 58022,
+    "totalMinor": 638234,
+    "taxableMinor": 580212
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 1,
+     "discountBp": 1000,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 1,
+     "discountBp": 1000,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 85000,
+     "discountBp": 100,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 7,
+      "discountMinor": 1,
+      "vatMinor": 1,
+      "totalMinor": 7
+     },
+     {
+      "netMinor": 2,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 2
+     },
+     {
+      "netMinor": 8500000,
+      "discountMinor": 85000,
+      "vatMinor": 841500,
+      "totalMinor": 9256500
+     }
+    ],
+    "subtotalMinor": 8500009,
+    "discountMinor": 85001,
+    "vatMinor": 841501,
+    "totalMinor": 9256509,
+    "taxableMinor": 8415008
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1250000,
+     "discountBp": 500,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 416250,
+      "discountMinor": 20813,
+      "vatMinor": 0,
+      "totalMinor": 395437
+     }
+    ],
+    "subtotalMinor": 416250,
+    "discountMinor": 20813,
+    "vatMinor": 0,
+    "totalMinor": 395437,
+    "taxableMinor": 395437
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 1,
+     "discountBp": 1250,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 85000,
+     "discountBp": 250,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 4500,
+     "discountBp": 100,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 1250000,
+     "discountBp": 3333,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     },
+     {
+      "netMinor": 126238,
+      "discountMinor": 3157,
+      "vatMinor": 1231,
+      "totalMinor": 124312
+     },
+     {
+      "netMinor": 1484,
+      "discountMinor": 15,
+      "vatMinor": 15,
+      "totalMinor": 1484
+     },
+     {
+      "netMinor": 1562500,
+      "discountMinor": 520782,
+      "vatMinor": 208344,
+      "totalMinor": 1250062
+     }
+    ],
+    "subtotalMinor": 1690222,
+    "discountMinor": 523954,
+    "vatMinor": 209590,
+    "totalMinor": 1375858,
+    "taxableMinor": 1166268
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 1999,
+     "discountBp": 250,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 4500,
+     "discountBp": 1000,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 2969,
+      "discountMinor": 74,
+      "vatMinor": 29,
+      "totalMinor": 2924
+     },
+     {
+      "netMinor": 5,
+      "discountMinor": 1,
+      "vatMinor": 0,
+      "totalMinor": 4
+     }
+    ],
+    "subtotalMinor": 2974,
+    "discountMinor": 75,
+    "vatMinor": 29,
+    "totalMinor": 2928,
+    "taxableMinor": 2899
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 4500,
+     "discountBp": 250,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 1,
+     "discountBp": 100,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 1,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 5,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 5
+     },
+     {
+      "netMinor": 1,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 1
+     },
+     {
+      "netMinor": 91,
+      "discountMinor": 0,
+      "vatMinor": 9,
+      "totalMinor": 100
+     }
+    ],
+    "subtotalMinor": 97,
+    "discountMinor": 0,
+    "vatMinor": 9,
+    "totalMinor": 106,
+    "taxableMinor": 97
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 12345,
+     "discountBp": 500,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1250000,
+     "discountBp": 500,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 4500,
+     "discountBp": 1250,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 6173,
+      "discountMinor": 309,
+      "vatMinor": 0,
+      "totalMinor": 5864
+     },
+     {
+      "netMinor": 416250,
+      "discountMinor": 20813,
+      "vatMinor": 3954,
+      "totalMinor": 399391
+     },
+     {
+      "netMinor": 2250,
+      "discountMinor": 281,
+      "vatMinor": 394,
+      "totalMinor": 2363
+     }
+    ],
+    "subtotalMinor": 424673,
+    "discountMinor": 21403,
+    "vatMinor": 4348,
+    "totalMinor": 407618,
+    "taxableMinor": 403270
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 1,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 1,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 1
+     }
+    ],
+    "subtotalMinor": 1,
+    "discountMinor": 0,
+    "vatMinor": 0,
+    "totalMinor": 1,
+    "taxableMinor": 1
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 4500,
+     "discountBp": 500,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 85000,
+     "discountBp": 1250,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 1,
+     "discountBp": 1000,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 4500,
+     "discountBp": 1250,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 1499,
+      "discountMinor": 75,
+      "vatMinor": 285,
+      "totalMinor": 1709
+     },
+     {
+      "netMinor": 212500,
+      "discountMinor": 26563,
+      "vatMinor": 1859,
+      "totalMinor": 187796
+     },
+     {
+      "netMinor": 2,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 2
+     },
+     {
+      "netMinor": 5,
+      "discountMinor": 1,
+      "vatMinor": 1,
+      "totalMinor": 5
+     }
+    ],
+    "subtotalMinor": 214006,
+    "discountMinor": 26639,
+    "vatMinor": 2145,
+    "totalMinor": 189512,
+    "taxableMinor": 187367
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 85000,
+     "discountBp": 250,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 21250,
+      "discountMinor": 531,
+      "vatMinor": 207,
+      "totalMinor": 20926
+     }
+    ],
+    "subtotalMinor": 21250,
+    "discountMinor": 531,
+    "vatMinor": 207,
+    "totalMinor": 20926,
+    "taxableMinor": 20719
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 1250000,
+     "discountBp": 1000,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 85000,
+     "discountBp": 500,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 15431250,
+      "discountMinor": 1543125,
+      "vatMinor": 1388813,
+      "totalMinor": 15276938
+     },
+     {
+      "netMinor": 1049325,
+      "discountMinor": 52466,
+      "vatMinor": 99686,
+      "totalMinor": 1096545
+     }
+    ],
+    "subtotalMinor": 16480575,
+    "discountMinor": 1595591,
+    "vatMinor": 1488499,
+    "totalMinor": 16373483,
+    "taxableMinor": 14884984
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 1999,
+     "discountBp": 1250,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 12345,
+     "discountBp": 250,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1999,
+     "discountBp": 500,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 4500,
+     "discountBp": 1000,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 500,
+      "discountMinor": 63,
+      "vatMinor": 0,
+      "totalMinor": 437
+     },
+     {
+      "netMinor": 12,
+      "discountMinor": 0,
+      "vatMinor": 1,
+      "totalMinor": 13
+     },
+     {
+      "netMinor": 666,
+      "discountMinor": 33,
+      "vatMinor": 63,
+      "totalMinor": 696
+     },
+     {
+      "netMinor": 31500,
+      "discountMinor": 3150,
+      "vatMinor": 0,
+      "totalMinor": 28350
+     }
+    ],
+    "subtotalMinor": 32678,
+    "discountMinor": 3246,
+    "vatMinor": 64,
+    "totalMinor": 29496,
+    "taxableMinor": 29432
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 99,
+     "discountBp": 1250,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 1999,
+     "discountBp": 1250,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 4500,
+     "discountBp": 500,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 1999,
+     "discountBp": 3333,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     },
+     {
+      "netMinor": 2,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 2
+     },
+     {
+      "netMinor": 11139,
+      "discountMinor": 558,
+      "vatMinor": 106,
+      "totalMinor": 10687
+     },
+     {
+      "netMinor": 4165,
+      "discountMinor": 1388,
+      "vatMinor": 555,
+      "totalMinor": 3332
+     }
+    ],
+    "subtotalMinor": 15306,
+    "discountMinor": 1946,
+    "vatMinor": 661,
+    "totalMinor": 14021,
+    "taxableMinor": 13360
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 4500,
+     "discountBp": 3333,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 4500,
+     "discountBp": 0,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 99,
+     "discountBp": 500,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 450000,
+      "discountMinor": 149985,
+      "vatMinor": 0,
+      "totalMinor": 300015
+     },
+     {
+      "netMinor": 55553,
+      "discountMinor": 0,
+      "vatMinor": 5555,
+      "totalMinor": 61108
+     },
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     }
+    ],
+    "subtotalMinor": 505553,
+    "discountMinor": 149985,
+    "vatMinor": 5555,
+    "totalMinor": 361123,
+    "taxableMinor": 355568
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1250000,
+     "discountBp": 500,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 416250,
+      "discountMinor": 20813,
+      "vatMinor": 79087,
+      "totalMinor": 474524
+     }
+    ],
+    "subtotalMinor": 416250,
+    "discountMinor": 20813,
+    "vatMinor": 79087,
+    "totalMinor": 474524,
+    "taxableMinor": 395437
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 12345,
+     "discountBp": 500,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 1999,
+     "discountBp": 100,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1,
+     "discountBp": 0,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 86415,
+      "discountMinor": 4321,
+      "vatMinor": 0,
+      "totalMinor": 82094
+     },
+     {
+      "netMinor": 500,
+      "discountMinor": 5,
+      "vatMinor": 0,
+      "totalMinor": 495
+     },
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     }
+    ],
+    "subtotalMinor": 86915,
+    "discountMinor": 4326,
+    "vatMinor": 0,
+    "totalMinor": 82589,
+    "taxableMinor": 82589
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 1250000,
+     "discountBp": 1250,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 85000,
+     "discountBp": 100,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 99,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 625000,
+      "discountMinor": 78125,
+      "vatMinor": 109375,
+      "totalMinor": 656250
+     },
+     {
+      "netMinor": 28305,
+      "discountMinor": 283,
+      "vatMinor": 5604,
+      "totalMinor": 33626
+     },
+     {
+      "netMinor": 0,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 0
+     }
+    ],
+    "subtotalMinor": 653305,
+    "discountMinor": 78408,
+    "vatMinor": 114979,
+    "totalMinor": 689876,
+    "taxableMinor": 574897
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 1250000,
+     "discountBp": 0,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 4500,
+     "discountBp": 0,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 1250000,
+     "discountBp": 3333,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 250,
+     "unitPriceMinor": 1999,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 1136,
+      "discountMinor": 0,
+      "vatMinor": 114,
+      "totalMinor": 1250
+     },
+     {
+      "netMinor": 31188,
+      "discountMinor": 0,
+      "vatMinor": 312,
+      "totalMinor": 31500
+     },
+     {
+      "netMinor": 260417,
+      "discountMinor": 86797,
+      "vatMinor": 34724,
+      "totalMinor": 208344
+     },
+     {
+      "netMinor": 417,
+      "discountMinor": 0,
+      "vatMinor": 83,
+      "totalMinor": 500
+     }
+    ],
+    "subtotalMinor": 293158,
+    "discountMinor": 86797,
+    "vatMinor": 35233,
+    "totalMinor": 241594,
+    "taxableMinor": 206361
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 85000,
+     "discountBp": 100,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 12345,
+     "discountBp": 0,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 99,
+     "discountBp": 100,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 193182,
+      "discountMinor": 1932,
+      "vatMinor": 19125,
+      "totalMinor": 210375
+     },
+     {
+      "netMinor": 30863,
+      "discountMinor": 0,
+      "vatMinor": 0,
+      "totalMinor": 30863
+     },
+     {
+      "netMinor": 50,
+      "discountMinor": 1,
+      "vatMinor": 0,
+      "totalMinor": 49
+     }
+    ],
+    "subtotalMinor": 224095,
+    "discountMinor": 1933,
+    "vatMinor": 19125,
+    "totalMinor": 241287,
+    "taxableMinor": 222162
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 1999,
+     "discountBp": 100,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 1000,
+     "unitPriceMinor": 1999,
+     "discountBp": 3333,
+     "vatBp": 2000
+    },
+    {
+     "qtyMilli": 7000,
+     "unitPriceMinor": 1250000,
+     "discountBp": 500,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 1999,
+     "discountBp": 3333,
+     "vatBp": 100
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 181727,
+      "discountMinor": 1817,
+      "vatMinor": 17991,
+      "totalMinor": 197901
+     },
+     {
+      "netMinor": 1666,
+      "discountMinor": 555,
+      "vatMinor": 222,
+      "totalMinor": 1333
+     },
+     {
+      "netMinor": 8750000,
+      "discountMinor": 437500,
+      "vatMinor": 0,
+      "totalMinor": 8312500
+     },
+     {
+      "netMinor": 4949,
+      "discountMinor": 1650,
+      "vatMinor": 33,
+      "totalMinor": 3332
+     }
+    ],
+    "subtotalMinor": 8938342,
+    "discountMinor": 441522,
+    "vatMinor": 18246,
+    "totalMinor": 8515066,
+    "taxableMinor": 8496820
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 333,
+     "unitPriceMinor": 1250000,
+     "discountBp": 500,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 85000,
+     "discountBp": 3333,
+     "vatBp": 1000
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 12345,
+     "discountBp": 1250,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 412129,
+      "discountMinor": 20607,
+      "vatMinor": 3915,
+      "totalMinor": 395437
+     },
+     {
+      "netMinor": 7727273,
+      "discountMinor": 2575500,
+      "vatMinor": 515177,
+      "totalMinor": 5666950
+     },
+     {
+      "netMinor": 30863,
+      "discountMinor": 3858,
+      "vatMinor": 0,
+      "totalMinor": 27005
+     }
+    ],
+    "subtotalMinor": 8170265,
+    "discountMinor": 2599965,
+    "vatMinor": 519092,
+    "totalMinor": 6089392,
+    "taxableMinor": 5570300
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 1999,
+     "discountBp": 250,
+     "vatBp": 100
+    },
+    {
+     "qtyMilli": 1500,
+     "unitPriceMinor": 85000,
+     "discountBp": 3333,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 1,
+     "unitPriceMinor": 4500,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 24434,
+      "discountMinor": 611,
+      "vatMinor": 238,
+      "totalMinor": 24061
+     },
+     {
+      "netMinor": 127500,
+      "discountMinor": 42496,
+      "vatMinor": 0,
+      "totalMinor": 85004
+     },
+     {
+      "netMinor": 4,
+      "discountMinor": 0,
+      "vatMinor": 1,
+      "totalMinor": 5
+     }
+    ],
+    "subtotalMinor": 151938,
+    "discountMinor": 43107,
+    "vatMinor": 239,
+    "totalMinor": 109070,
+    "taxableMinor": 108831
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 1250000,
+     "discountBp": 250,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 3125000,
+      "discountMinor": 78125,
+      "vatMinor": 609375,
+      "totalMinor": 3656250
+     }
+    ],
+    "subtotalMinor": 3125000,
+    "discountMinor": 78125,
+    "vatMinor": 609375,
+    "totalMinor": 3656250,
+    "taxableMinor": 3046875
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 12345,
+     "unitPriceMinor": 1250000,
+     "discountBp": 0,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 15431250,
+      "discountMinor": 0,
+      "vatMinor": 1543125,
+      "totalMinor": 16974375
+     }
+    ],
+    "subtotalMinor": 15431250,
+    "discountMinor": 0,
+    "vatMinor": 1543125,
+    "totalMinor": 16974375,
+    "taxableMinor": 15431250
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 1250000,
+     "discountBp": 1000,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 625000,
+      "discountMinor": 62500,
+      "vatMinor": 0,
+      "totalMinor": 562500
+     }
+    ],
+    "subtotalMinor": 625000,
+    "discountMinor": 62500,
+    "vatMinor": 0,
+    "totalMinor": 562500,
+    "taxableMinor": 562500
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 500,
+     "unitPriceMinor": 12345,
+     "discountBp": 250,
+     "vatBp": 0
+    },
+    {
+     "qtyMilli": 2500,
+     "unitPriceMinor": 4500,
+     "discountBp": 500,
+     "vatBp": 0
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 6173,
+      "discountMinor": 154,
+      "vatMinor": 0,
+      "totalMinor": 6019
+     },
+     {
+      "netMinor": 11250,
+      "discountMinor": 563,
+      "vatMinor": 0,
+      "totalMinor": 10687
+     }
+    ],
+    "subtotalMinor": 17423,
+    "discountMinor": 717,
+    "vatMinor": 0,
+    "totalMinor": 16706,
+    "taxableMinor": 16706
+   }
+  },
+  {
+   "priceIncludesVat": false,
+   "lines": [
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 85000,
+     "discountBp": 500,
+     "vatBp": 1000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 8500000,
+      "discountMinor": 425000,
+      "vatMinor": 807500,
+      "totalMinor": 8882500
+     }
+    ],
+    "subtotalMinor": 8500000,
+    "discountMinor": 425000,
+    "vatMinor": 807500,
+    "totalMinor": 8882500,
+    "taxableMinor": 8075000
+   }
+  },
+  {
+   "priceIncludesVat": true,
+   "lines": [
+    {
+     "qtyMilli": 100000,
+     "unitPriceMinor": 4500,
+     "discountBp": 0,
+     "vatBp": 2000
+    }
+   ],
+   "expected": {
+    "lines": [
+     {
+      "netMinor": 375000,
+      "discountMinor": 0,
+      "vatMinor": 75000,
+      "totalMinor": 450000
+     }
+    ],
+    "subtotalMinor": 375000,
+    "discountMinor": 0,
+    "vatMinor": 75000,
+    "totalMinor": 450000,
+    "taxableMinor": 375000
+   }
+  }
+ ],
+ "averageCost": [
+  {
+   "oldQtyMilli": 0,
+   "oldAvgMinor": 0,
+   "inQtyMilli": 10000,
+   "unitCostMinor": 85000,
+   "expectedAvgMinor": 85000
+  },
+  {
+   "oldQtyMilli": 40000,
+   "oldAvgMinor": 85000,
+   "inQtyMilli": 10000,
+   "unitCostMinor": 90000,
+   "expectedAvgMinor": 86000
+  },
+  {
+   "oldQtyMilli": 500000,
+   "oldAvgMinor": 4500,
+   "inQtyMilli": 100000,
+   "unitCostMinor": 4700,
+   "expectedAvgMinor": 4533
+  },
+  {
+   "oldQtyMilli": 1000,
+   "oldAvgMinor": 3333,
+   "inQtyMilli": 1000,
+   "unitCostMinor": 3334,
+   "expectedAvgMinor": 3334
+  },
+  {
+   "oldQtyMilli": 6000,
+   "oldAvgMinor": 1250000,
+   "inQtyMilli": 0,
+   "unitCostMinor": 1300000,
+   "expectedAvgMinor": 1250000
+  }
+ ],
+ "unitCostFromLine": [
+  {
+   "taxableMinor": 337500,
+   "qtyMilli": 3000,
+   "expectedUnitCostMinor": 112500
+  },
+  {
+   "taxableMinor": 100,
+   "qtyMilli": 3,
+   "expectedUnitCostMinor": 33333
+  },
+  {
+   "taxableMinor": 85000,
+   "qtyMilli": 1000,
+   "expectedUnitCostMinor": 85000
+  },
+  {
+   "taxableMinor": 999,
+   "qtyMilli": 1000,
+   "expectedUnitCostMinor": 999
+  }
+ ],
+ "summaryDelta": [
+  {
+   "oldBalanceMinor": 0,
+   "newBalanceMinor": 100000,
+   "receivableDelta": 100000,
+   "payableDelta": 0
+  },
+  {
+   "oldBalanceMinor": 100000,
+   "newBalanceMinor": -50000,
+   "receivableDelta": -100000,
+   "payableDelta": 50000
+  },
+  {
+   "oldBalanceMinor": -30000,
+   "newBalanceMinor": 0,
+   "receivableDelta": 0,
+   "payableDelta": -30000
+  },
+  {
+   "oldBalanceMinor": -30000,
+   "newBalanceMinor": -10000,
+   "receivableDelta": 0,
+   "payableDelta": -20000
+  },
+  {
+   "oldBalanceMinor": 50000,
+   "newBalanceMinor": 50000,
+   "receivableDelta": 0,
+   "payableDelta": 0
+  }
+ ]
+}
