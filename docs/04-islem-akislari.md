@@ -47,14 +47,14 @@ Girdi: taslak veya yeni fatura, `txId`.
 - Stok yönü: `sales: çıkış, purchase: giriş, sales_return: giriş, purchase_return: çıkış`.
   - Her stok takipli satır için `stock_levels.qtyMilli ±= qtyMilli`, `products.totalQtyMilli` aynı, `stock_movements/{txId}_{levelId}` (aynı ürün+depo birden çok satırda ise **tek harekette birleştir**).
   - Ortalama maliyet (yalnız `purchase` girişi): `newAvg = roundHalfUp((oldQty*oldAvg + inQty*unitCost) / (oldQty+inQty))` (KDV hariç birim maliyet = `taxable*1000/qtyMilli` yuvarlı). Satış çıkışında `unitCostMinor = avgCostMinor` (hareket kaydına yazılır, avg değişmez).
-- `invoices`: `status='issued'`, `number`, `paidMinor=0`, `paymentStatus='unpaid'`, `txId`, `lastTxId`.
+- `invoices`: `status='issued'`, `number`, `paidMinor=0`, `paymentStatus='unpaid'` (taslakta `'none'`), `txId`, `lastTxId`.
 - Proje: `projectId` varsa `project_stats`: `sales → revenueMinor += taxable`, `purchase → costMinor += taxable` ve `byDiscipline[costCategory] += taxable` (iadeler tersi).
 - `stats/summary`: alacak/borç toplamı, eski ve yeni cari bakiyenin pozitif/negatif katkısı farkıyla güncellenir (§8).
 
 ## 4. Faturayı iptal et (`cancelInvoice`)
 - Şart: `status=='issued'` ve `paidMinor == 0` (önce ödemeler iptal edilmeli).
 - Kes işleminin **tam tersi**: cari `−s*total`, ledger ters kayıt (`refType='reversal'`), stok ters hareket, proje istatistiği ters.
-- `status='cancelled'`, `cancelTxId`. Eski kayıtlar silinmez/değişmez.
+- `status='cancelled'`, `paymentStatus='void'`, `cancelTxId`. Eski kayıtlar silinmez/değişmez.
 - Stok geri alımında yeterlilik: kesilmiş alış faturası iptali çıkış yaratır → stok yetersizse reddet.
 
 ## 5. Tahsilat / ödeme (`recordPayment`)
@@ -65,14 +65,14 @@ Girdi: `direction ('in' tahsilat | 'out' ödeme)`, `partyId`, `accountId`, `amou
 - Cari: `in → party.balanceMinor -= amount`; `out → += amount`; `ledger_entries/{txId}_{partyId}`.
 - Faturalar: `paidMinor += allocation`; `paymentStatus = paid` (paid==total) / `partial` / `unpaid`; `lastTxId`.
 - Proje: faturanın `projectId`'si için `collectedMinor` (in) / `paidOutMinor` (out) artar.
-- `stats/summary`: `cashMinor`/`bankMinor`, alacak/borç.
+- `stats/summary`: `cashMinor`/`bankMinor`, alacak/borç; `months[ödeme ayı].inMinor += amount` (tahsilat) veya `.outMinor += amount` (ödeme).
 
 ## 6. Ödemeyi iptal et (`cancelPayment`)
 `status='cancelled'`, `cancelTxId`; hesap, cari, fatura `paidMinor/paymentStatus`, proje istatistiği ters; ters hareket belgeleri (`refType='reversal'`). Hesap bakiyesi eksiye düşecekse reddetme **zorunlu değil**, uyarı göster.
 
 ## 7. Diğer işlemler
 - **Hesaplar arası transfer**: iki `account_movements` (`transfer_out`/`transfer_in`), iki hesap bakiyesi, gelir/gider **değil**. Hesap ID'leri farklı olmalı.
-- **Gider (`recordExpense`)**: `expenses` + hesap azalır (`kind='expense'`) + `stats.months[ay].expenseMinor += amount` + proje varsa `costMinor += amount - vat`, `byDiscipline[discipline]`.
+- **Gider (`recordExpense`)**: `expenses` + hesap azalır (`kind='expense'`) + `stats.months[ay].expenseMinor += amount - vat` ve `.outMinor += amount` + proje varsa `costMinor += amount - vat`, `byDiscipline[discipline]`.
 - **Gelir kaydı (cari dışı)**: ileride; ilk sürümde gelir = satış faturası + tahsilat.
 - **Stok sayımı/düzeltme (`adjustStock`)**: `adjust` hareketi, fark kadar; neden zorunlu.
 - **Depolar arası transfer**: `transfer_out` + `transfer_in`, ortalama maliyet değişmez.
@@ -89,3 +89,8 @@ Başarı: yeşil bildirim + belge numarası. Hata: nedenle birlikte kırmızı b
 
 ## 10. Yetki eşlemesi
 `issueInvoice/cancelInvoice → invoice.write` · `recordPayment/cancelPayment/transfer/expense → finance.write` · `adjustStock/transfer/opening → stock.write` · cari/ürün/depo/proje ana verisi → `party.write`/`stock.write`/`project.write`.
+
+## 11. Alan eklemeleri (v1.0.3)
+- `ledger_entries` ve `account_movements` belgelerine `createdAt` (Timestamp) yazılır (ekstre sıralaması için).
+- Ay istatistikleri ve panel/rapor tanımları: `docs/08-rapor-panel-spesifikasyonu.md` (bağlayıcıdır).
+- İptalde `months[...]` düzeltmesi orijinal belgenin ayına yapılır (08 §1).

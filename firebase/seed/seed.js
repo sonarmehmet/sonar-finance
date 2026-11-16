@@ -124,7 +124,7 @@ async function main() {
   for (const a of accounts) {
     set(col('accounts', a.id), base({ type: a.type, name: a.name, bankName: a.bankName, iban: a.iban, currency: 'TRY', balanceMinor: a.opening, lastTxId: a.opening ? OPEN_CASH_TX : '', active: true }));
     if (a.opening) {
-      set(col('account_movements', `${OPEN_CASH_TX}_${a.id}`), base({ txId: OPEN_CASH_TX, accountId: a.id, deltaMinor: a.opening, kind: 'in', refType: 'opening', refId: OPEN_CASH_TX, date: TODAY }));
+      set(col('account_movements', `${OPEN_CASH_TX}_${a.id}`), base({ txId: OPEN_CASH_TX, accountId: a.id, deltaMinor: a.opening, kind: 'in', refType: 'opening', refId: OPEN_CASH_TX, date: TODAY, createdAt: now }));
     }
     if (a.type === 'cash') cash += a.opening; else bank += a.opening;
   }
