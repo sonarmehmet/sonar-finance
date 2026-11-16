@@ -27,7 +27,7 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.0 · Branch'ler: `hesap1-cekirde
 | # | Görev | Sahip | Durum | Not |
 |---|---|---|---|---|
 | A1 | Android iskelet: Flutter proje, tema (tokens), router, Firebase init, giriş ekranı, alt menü | Ajan 2 | kod yazıldı, **derlenmedi** | Flutter SDK ortamda yok; `apps/android/README.md` "İlk kurulum" adımı (`flutter create`) gerekli |
-| A2 | Android: para/tarih yardımcıları + `invoice_calculator` (04 §2) | Ajan 2 | devam ediyor | |
+| A2 | Android: para/tarih yardımcıları + `invoice_calculator` (04 §2) | Ajan 2 | kod yazıldı, **derlenmedi** | Algoritma Node'da BigInt aynasıyla `docs/04` örneğine karşı doğrulandı (405000). Dart testleri F7'de |
 | A3 | Android: cari, ürün, depo ekranları + repository | Ajan 2 | — | |
 | A4 | Android: fatura listesi, yeni fatura formu, `issueInvoice/cancelInvoice` servisleri | Ajan 2 | — | |
 | A5 | Android: stok giriş/çıkış/sayım/transfer, stok listesi | Ajan 2 | — | |
@@ -51,4 +51,6 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.0 · Branch'ler: `hesap1-cekirde
 - KDV oranları: 0, 1, 10, 20 (`constants.json`). Varsayılan %20.
 - Para birimi yalnız TRY (döviz alanı ayrılmış, kullanılmıyor).
 - Android (Ajan 2): `shared/*.json` Flutter asset olarak paket dışından okunamadığı için `apps/android/assets/shared/` altında kopyalanır (`tool/sync_shared.bat`). Giriş yöntemi e-posta/şifre. Firebase seçenekleri emülatör (`demo-sonar-finance`) için elle yazıldı; üretimde `flutterfire configure` ile değişecek. Emülatör: `--dart-define=USE_EMULATOR=true` (Android emülatör ana makine `10.0.2.2`).
+- Ortalama maliyet (04 §3) — **Ajan 3 de aynısını uygulamalı**: `oldQty < 0` ise ağırlıkta 0 sayılır; `oldQty+inQty <= 0` ise yeni maliyet = giriş birim maliyeti. Birim maliyet = `roundHalfUp(taxable*1000 / qtyMilli)`. Dart: `apps/android/lib/data/invoice_calculator.dart` (`weightedAverageCost`, `unitCostMinorFromTaxable`).
+- Para girdisi Türkçe biçimde ayrıştırılır: nokta binlik, virgül ondalık (`parseMinor`, en çok 2 ondalık; `parseMilli`, en çok 3).
 - Ertelenenler: çek-senet, e-fatura/e-arşiv, e-defter, banka entegrasyonu, belge arşivi, teklif.
