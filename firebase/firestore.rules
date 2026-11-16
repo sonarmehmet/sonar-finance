@@ -1,0 +1,258 @@
+rules_version = '2';
+
+// SONAR FINANCE — Firestore Security Rules (Sözleşme v1.0.0)
+// Cloud Functions yok: bakiye değişimleri aynı batch'teki hareket belgesiyle
+// getAfter() üzerinden çapraz doğrulanır. Bkz. docs/03-guvenlik-kurallari.md
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Yardımcılar ----------
+    function signedIn() {
+      return request.auth != null;
+    }
+    function profilePath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+    function hasProfile() {
+      return signedIn() && exists(profilePath());
+    }
+    function me() {
+      return get(profilePath()).data;
+    }
+    function member(cid) {
+      return hasProfile() && me().companyId == cid && me().active == true;
+    }
+    function isAdmin(cid) {
+      return member(cid) && me().role == 'admin';
+    }
+    function can(cid, perm) {
+      return isAdmin(cid) || (member(cid) && me().permissions.get(perm, false) == true);
+    }
+    function ownsCompany(cid) {
+      return request.resource.data.companyId == cid;
+    }
+    function changedOnly(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+    function isTxId(v) {
+      return v is string && v.size() >= 8;
+    }
+
+    // txns/{txId} aynı batch'te oluşturuluyor mu (ve daha önce yoktu mu)?
+    function newTx(cid, txId) {
+      let p = /databases/$(database)/documents/companies/$(cid)/txns/$(txId);
+      return isTxId(txId) && !exists(p) && existsAfter(p);
+    }
+
+    // Bakiye alanı değişimi: aynı batch'te {lastTxId}_{id} hareket belgesi olmalı
+    // ve belgedeki delta, bakiye farkına eşit olmalı.
+    function backedUpdate(cid, coll, id, field, deltaField) {
+      let key = request.resource.data.lastTxId + '_' + id;
+      let p = /databases/$(database)/documents/companies/$(cid)/$(coll)/$(key);
+      return isTxId(request.resource.data.lastTxId)
+        && request.resource.data.lastTxId != resource.data.lastTxId
+        && !exists(p) && existsAfter(p)
+        && getAfter(p).data[deltaField] == request.resource.data[field] - resource.data[field];
+    }
+    // Yeni belge: bakiye 0 + lastTxId '' ya da hareket belgesiyle desteklenen açılış değeri
+    function backedCreate(cid, coll, id, field, deltaField) {
+      let key = request.resource.data.lastTxId + '_' + id;
+      let p = /databases/$(database)/documents/companies/$(cid)/$(coll)/$(key);
+      return (request.resource.data[field] == 0 && request.resource.data.lastTxId == '')
+        || (isTxId(request.resource.data.lastTxId)
+            && !exists(p) && existsAfter(p)
+            && getAfter(p).data[deltaField] == request.resource.data[field]);
+    }
+
+    // ---------- Kullanıcı profilleri ----------
+    match /users/{uid} {
+      allow read: if signedIn() && (
+        request.auth.uid == uid ||
+        (hasProfile() && me().role == 'admin' && me().companyId == resource.data.companyId));
+      allow create, update: if hasProfile() && me().role == 'admin'
+        && me().companyId == request.resource.data.companyId;
+      allow delete: if false;
+    }
+
+    // ---------- Şirket ----------
+    match /companies/{cid} {
+      allow read: if member(cid);
+      allow write: if isAdmin(cid);
+
+      // Cari hesaplar
+      match /parties/{id} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'party.write') && ownsCompany(cid)
+          && request.resource.data.balanceMinor == 0 && request.resource.data.lastTxId == '';
+        allow update: if ownsCompany(cid) && (
+          (can(cid, 'party.write')
+            && request.resource.data.balanceMinor == resource.data.balanceMinor
+            && request.resource.data.lastTxId == resource.data.lastTxId)
+          || ((can(cid, 'invoice.write') || can(cid, 'finance.write'))
+            && backedUpdate(cid, 'ledger_entries', id, 'balanceMinor', 'deltaMinor')));
+        allow delete: if false;
+      }
+
+      // Kasa / banka hesapları
+      match /accounts/{id} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'finance.write') && ownsCompany(cid)
+          && backedCreate(cid, 'account_movements', id, 'balanceMinor', 'deltaMinor');
+        allow update: if can(cid, 'finance.write') && ownsCompany(cid) && (
+          (request.resource.data.balanceMinor == resource.data.balanceMinor
+            && request.resource.data.lastTxId == resource.data.lastTxId)
+          || backedUpdate(cid, 'account_movements', id, 'balanceMinor', 'deltaMinor'));
+        allow delete: if false;
+      }
+
+      // Ürünler (toplam stok ve ortalama maliyet işlemle birlikte güncellenir)
+      match /products/{id} {
+        allow read: if member(cid);
+        allow create: if (can(cid, 'stock.write') || can(cid, 'invoice.write')) && ownsCompany(cid);
+        allow update: if (can(cid, 'stock.write') || can(cid, 'invoice.write')) && ownsCompany(cid);
+        allow delete: if false;
+      }
+
+      match /warehouses/{id} {
+        allow read: if member(cid);
+        allow create, update: if can(cid, 'stock.write') && ownsCompany(cid);
+        allow delete: if false;
+      }
+
+      // Stok seviyesi: yalnız hareket belgesiyle birlikte değişir
+      match /stock_levels/{id} {
+        allow read: if member(cid);
+        allow create: if (can(cid, 'stock.write') || can(cid, 'invoice.write')) && ownsCompany(cid)
+          && backedCreate(cid, 'stock_movements', id, 'qtyMilli', 'deltaMilli');
+        allow update: if (can(cid, 'stock.write') || can(cid, 'invoice.write')) && ownsCompany(cid)
+          && backedUpdate(cid, 'stock_movements', id, 'qtyMilli', 'deltaMilli');
+        allow delete: if false;
+      }
+
+      // Faturalar
+      match /invoices/{id} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'invoice.write') && ownsCompany(cid)
+          && request.resource.data.createdBy == request.auth.uid
+          && request.resource.data.type in ['sales', 'purchase', 'sales_return', 'purchase_return']
+          && request.resource.data.totalMinor is int
+          && (
+            request.resource.data.status == 'draft'
+            || (request.resource.data.status == 'issued' && newTx(cid, request.resource.data.txId)));
+        allow update: if ownsCompany(cid)
+          && (can(cid, 'invoice.write') || can(cid, 'finance.write'))
+          && resource.data.status != 'cancelled'
+          && (
+            // Taslak serbest düzenlenir; kesme işlemi txns ile desteklenir
+            (resource.data.status == 'draft' && (
+              request.resource.data.status == 'draft'
+              || (request.resource.data.status == 'issued' && newTx(cid, request.resource.data.txId))))
+            // Kesilmiş fatura: yalnız durum/ödeme alanları, her zaman yeni bir işlemle
+            || (resource.data.status == 'issued'
+              && request.resource.data.status in ['issued', 'cancelled']
+              && changedOnly(['status', 'cancelTxId', 'paidMinor', 'paymentStatus', 'lastTxId', 'updatedAt'])
+              && newTx(cid, request.resource.data.lastTxId)));
+        allow delete: if can(cid, 'invoice.write') && resource.data.status == 'draft';
+      }
+
+      // Tahsilat / ödemeler (silinmez, iptal edilir)
+      match /payments/{id} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'finance.write') && ownsCompany(cid)
+          && request.resource.data.createdBy == request.auth.uid
+          && request.resource.data.amountMinor is int && request.resource.data.amountMinor > 0
+          && newTx(cid, request.resource.data.txId);
+        allow update: if can(cid, 'finance.write') && ownsCompany(cid)
+          && resource.data.status == 'active' && request.resource.data.status == 'cancelled'
+          && changedOnly(['status', 'cancelTxId', 'updatedAt'])
+          && newTx(cid, request.resource.data.cancelTxId);
+        allow delete: if false;
+      }
+
+      // Giderler
+      match /expenses/{id} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'finance.write') && ownsCompany(cid)
+          && request.resource.data.amountMinor is int && request.resource.data.amountMinor > 0
+          && newTx(cid, request.resource.data.txId);
+        allow update: if can(cid, 'finance.write') && ownsCompany(cid)
+          && changedOnly(['status', 'cancelTxId', 'updatedAt']);
+        allow delete: if false;
+      }
+
+      match /expense_categories/{id} {
+        allow read: if member(cid);
+        allow create, update: if isAdmin(cid) && ownsCompany(cid);
+        allow delete: if false;
+      }
+      match /income_categories/{id} {
+        allow read: if member(cid);
+        allow create, update: if isAdmin(cid) && ownsCompany(cid);
+        allow delete: if false;
+      }
+
+      // Projeler
+      match /projects/{id} {
+        allow read: if member(cid);
+        allow create, update: if can(cid, 'project.write') && ownsCompany(cid);
+        allow delete: if false;
+      }
+      match /project_stats/{id} {
+        allow read: if member(cid);
+        allow create, update: if (can(cid, 'invoice.write') || can(cid, 'finance.write') || can(cid, 'project.write'))
+          && ownsCompany(cid);
+        allow delete: if false;
+      }
+
+      // Özet istatistik ve sayaçlar
+      match /stats/{id} {
+        allow read: if member(cid);
+        allow create, update: if (can(cid, 'invoice.write') || can(cid, 'finance.write')) && ownsCompany(cid);
+        allow delete: if false;
+      }
+      match /counters/{name} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'invoice.write') && request.resource.data.last == 1;
+        allow update: if can(cid, 'invoice.write') && request.resource.data.last == resource.data.last + 1;
+        allow delete: if false;
+      }
+
+      // Değiştirilemez kayıtlar (yalnız create)
+      match /txns/{txId} {
+        allow read: if member(cid);
+        allow create: if (can(cid, 'invoice.write') || can(cid, 'finance.write') || can(cid, 'stock.write') || can(cid, 'project.write'))
+          && ownsCompany(cid) && request.resource.data.createdBy == request.auth.uid;
+        allow update, delete: if false;
+      }
+      match /ledger_entries/{id} {
+        allow read: if member(cid);
+        allow create: if (can(cid, 'invoice.write') || can(cid, 'finance.write')) && ownsCompany(cid)
+          && request.resource.data.deltaMinor is int;
+        allow update, delete: if false;
+      }
+      match /account_movements/{id} {
+        allow read: if member(cid);
+        allow create: if can(cid, 'finance.write') && ownsCompany(cid)
+          && request.resource.data.deltaMinor is int;
+        allow update, delete: if false;
+      }
+      match /stock_movements/{id} {
+        allow read: if member(cid);
+        allow create: if (can(cid, 'stock.write') || can(cid, 'invoice.write')) && ownsCompany(cid)
+          && request.resource.data.deltaMilli is int;
+        allow update, delete: if false;
+      }
+      match /audit_logs/{id} {
+        allow read: if isAdmin(cid);
+        allow create: if member(cid) && ownsCompany(cid) && request.resource.data.userId == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+
+    // Varsayılan: kapalı
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+build/
+node_modules/
+dist/
+.dart_tool/
+.flutter-plugins*
+*.log
+*.local
+.env
+.env.*
+google-services.json
+GoogleService-Info.plist
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+src-tauri/target/
+.idea/
+.vscode/
