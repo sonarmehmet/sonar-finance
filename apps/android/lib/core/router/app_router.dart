@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/accounts/account_detail_screen.dart';
+import '../../features/accounts/accounts_screen.dart';
 import '../../features/auth/login_screen.dart';
+import '../../features/invoices/invoices_list_screen.dart';
+import '../../features/payments/payment_detail_screen.dart';
+import '../../features/payments/payment_form_screen.dart';
+import '../../features/payments/payments_list_screen.dart';
 import '../../features/auth/no_access_screen.dart';
 import '../../features/auth/splash_screen.dart';
 import '../../features/home/home_screen.dart';
@@ -21,6 +27,7 @@ import '../../features/reports/reports_screen.dart';
 import '../../features/shell/main_shell.dart';
 import '../../features/transactions/transactions_screen.dart';
 import '../auth/auth_providers.dart';
+import '../providers.dart';
 
 abstract final class AppRoutes {
   static const splash = '/splash';
@@ -118,7 +125,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/invoices',
         // Ust rotaya `redirect` konmaz: alt rotalari (new, :id) da yonlendirirdi.
-        builder: (_, __) => const TransactionsScreen(),
+        builder: (ctx, __) => InvoicesListScreen(title: ProviderScope.containerOf(ctx).read(stringsProvider)('mobileNav.transactions')),
         routes: [
           GoRoute(
             path: 'new',
@@ -136,6 +143,33 @@ final routerProvider = Provider<GoRouter>((ref) {
                     InvoiceFormScreen(invoiceId: st.pathParameters['id']),
               ),
             ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/accounts',
+        builder: (_, __) => const AccountsScreen(),
+        routes: [
+          GoRoute(
+            path: ':id',
+            builder: (_, st) => AccountDetailScreen(accountId: st.pathParameters['id']!),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/payments',
+        builder: (_, __) => const PaymentsListScreen(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            builder: (_, st) => PaymentFormScreen(
+              direction: st.uri.queryParameters['direction'] ?? 'in',
+              partyId: st.uri.queryParameters['partyId'],
+            ),
+          ),
+          GoRoute(
+            path: ':id',
+            builder: (_, st) => PaymentDetailScreen(paymentId: st.pathParameters['id']!),
           ),
         ],
       ),

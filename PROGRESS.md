@@ -49,7 +49,7 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 | W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 1 (yardım) | bitti (derlenmedi) | Cari (liste+detay+ekstre, 08 §5), ürün, depo ekranları; `src/data/{models,repositories}.ts`, `core/hooks/useSnapshot.ts`, ortak bileşenler (`components/`). Tip kontrolü yalnız stub ile yapıldı; gerçek `npm run typecheck` Windows makinede çalıştırılmalı. |
 | W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 3 | — | |
 | W5 | Windows: stok ekranları ve işlemleri | Ajan 3 | — | |
-| A6 | Android: tahsilat/ödeme, kasa/banka hesapları, transfer, cari ekstre (04 §5-§7, 08 §5) | — | — | |
+| A6 | Android: tahsilat/ödeme, kasa/banka hesapları, transfer, cari ekstre (04 §5-§7, 08 §5) | Ajan 2 | kod yazıldı, **derlenmedi** | Servis + ekranlar: hesaplar, transfer, tahsilat/ödeme formu (otomatik/elle dağıtım), liste/detay/iptal, cari sekmeleri, İşlemler merkezi |
 | A7 | Android: gider, projeler, proje detay/disiplin bütçesi (08 §4) | — | — | |
 | A8 | Android: Ana Sayfa paneli, raporlar (08 §1-§3,§6), PDF paylaş | — | — | |
 | A9 | Android: çevrimdışı/senkron durumu, kuyruk ekranı (05) | — | — | |

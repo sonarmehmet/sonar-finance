@@ -186,6 +186,7 @@ const Map<String, String> kPendingStrings = {
   'payment.save': 'Kaydet',
   'payment.cancel': 'İşlemi İptal Et',
   'payment.cancelled': 'İşlem iptal edildi',
+  'payment.note': 'Not',
   'payment.saved': 'İşlem kaydedildi',
   'payment.invoices': 'Dağıtılan Faturalar',
   'payment.noPayments': 'Henüz tahsilat/ödeme yok',

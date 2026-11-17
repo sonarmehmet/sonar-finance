@@ -32,7 +32,13 @@ class HomeScreen extends ConsumerWidget {
         s('quickActions.invoice'),
         canInvoice ? () => showNewInvoiceTypeSheet(context, ref) : soon,
       ),
-      (LucideIcons.banknote, s('quickActions.collection'), soon),
+      (
+        LucideIcons.banknote,
+        s('quickActions.collection'),
+        (profile?.can('finance.write') ?? false)
+            ? () => context.push('/payments/new?direction=in')
+            : soon,
+      ),
       (LucideIcons.receipt, s('quickActions.expense'), soon),
       (LucideIcons.folderPlus, s('quickActions.project'), soon),
     ];
@@ -87,6 +93,12 @@ class HomeScreen extends ConsumerWidget {
                   icon: LucideIcons.package,
                   label: s('menu.stock'),
                   onTap: () => context.push('/products'),
+                ),
+                const Divider(),
+                _ModuleTile(
+                  icon: LucideIcons.landmark,
+                  label: s('menu.cashBank'),
+                  onTap: () => context.push('/accounts'),
                 ),
                 const Divider(),
                 _ModuleTile(

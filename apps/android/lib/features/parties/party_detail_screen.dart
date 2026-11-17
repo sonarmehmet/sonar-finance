@@ -9,7 +9,12 @@ import '../../core/providers.dart';
 import '../../core/widgets/common.dart';
 import '../../data/models/ledger_entry.dart';
 import '../../data/models/party.dart';
+import '../../data/models/invoice.dart';
+import '../../data/models/payment.dart';
+import '../../data/repositories/invoice_repository.dart';
 import '../../data/repositories/party_repository.dart';
+import '../../data/repositories/payment_repository.dart';
+import '../payments/payments_list_screen.dart' show PaymentTile;
 
 /// Cari detay: ozet kart + sekmeler (Genel Bakis, Hesap Hareketleri).
 /// Faturalar/Tahsilatlar/Odemeler sekmeleri A4 / F3 ile eklenecek.
@@ -26,11 +31,23 @@ class PartyDetailScreen extends ConsumerWidget {
     final party = ref.watch(partyProvider(partyId));
 
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text(party.valueOrNull?.name ?? ''),
           actions: [
+            if ((ref.watch(userProfileProvider).valueOrNull?.can('finance.write') ?? false) &&
+                party.valueOrNull != null)
+              IconButton(
+                tooltip: s('payment.list'),
+                icon: const Icon(LucideIcons.banknote),
+                onPressed: () {
+                  final isSupplier = party.valueOrNull!.kinds.contains('supplier') &&
+                      !party.valueOrNull!.kinds.contains('customer');
+                  context.push(
+                      '/payments/new?direction=${isSupplier ? 'out' : 'in'}&partyId=$partyId');
+                },
+              ),
             if (canWrite && party.valueOrNull != null)
               IconButton(
                 tooltip: s('common.edit'),
@@ -42,6 +59,8 @@ class PartyDetailScreen extends ConsumerWidget {
             tabs: [
               Tab(text: s('party.tabs.overview')),
               Tab(text: s('party.tabs.movements')),
+              Tab(text: s('party.tabs.invoices')),
+              Tab(text: s('payment.list')),
             ],
           ),
         ),
@@ -54,6 +73,8 @@ class PartyDetailScreen extends ConsumerWidget {
               children: [
                 _Overview(party: p),
                 _Movements(partyId: p.id),
+                _PartyInvoices(partyId: p.id),
+                _PartyPayments(partyId: p.id),
               ],
             );
           },
@@ -225,6 +246,55 @@ class _Movements extends ConsumerWidget {
             );
           },
         );
+      },
+    );
+  }
+}
+
+
+class _PartyInvoices extends ConsumerWidget {
+  const _PartyInvoices({required this.partyId});
+  final String partyId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(tokensProvider);
+    final s = ref.watch(stringsProvider);
+    return AsyncBody<List<Invoice>>(
+      value: ref.watch(partyInvoicesProvider(partyId)),
+      builder: (list) {
+        if (list.isEmpty) return EmptyView(message: s('common.empty'));
+        return ListView(padding: EdgeInsets.all(t.screenPadding), children: [
+          for (final i in list)
+            Card(
+              child: ListTile(
+                title: Text(i.number ?? s('status.draft')),
+                subtitle: Text(i.issueDate),
+                trailing: MoneyText(i.totalMinor),
+                onTap: () => context.push('/invoices/${i.id}'),
+              ),
+            ),
+        ]);
+      },
+    );
+  }
+}
+
+class _PartyPayments extends ConsumerWidget {
+  const _PartyPayments({required this.partyId});
+  final String partyId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(tokensProvider);
+    final s = ref.watch(stringsProvider);
+    return AsyncBody<List<Payment>>(
+      value: ref.watch(partyPaymentsProvider(partyId)),
+      builder: (list) {
+        if (list.isEmpty) return EmptyView(message: s('payment.noPayments'));
+        return ListView(padding: EdgeInsets.all(t.screenPadding), children: [
+          for (final p in list) PaymentTile(p: p),
+        ]);
       },
     );
   }
