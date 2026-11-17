@@ -44,8 +44,8 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 | A3 | Android: cari, ürün, depo ekranları + repository | Ajan 2 | — | |
 | A4 | Android: fatura listesi, yeni fatura formu, `issueInvoice/cancelInvoice` servisleri | Ajan 2 | — | |
 | A5 | Android: stok giriş/çıkış/sayım/transfer, stok listesi | Ajan 2 | — | |
-| W1 | Windows iskelet: Vite+React+TS, Tauri 2, tema (tokens), router, sidebar+topbar, giriş | Ajan 3 | — | |
-| W2 | Windows: para/tarih yardımcıları + `invoiceCalculator` (04 §2) | Ajan 3 | — | |
+| W1 | Windows iskelet: Vite+React+TS, Tauri 2, tema (tokens), router, sidebar+topbar, giriş | Ajan 1 (yardım) | bitti (derlenmedi) | `hesap3-windows` branch. Vite+React+TS+Tauri 2 iskeleti, tema (tokens→CSS değişkenleri), HashRouter, sidebar+topbar, giriş, bağlantı rozeti. Ağ yok: `npm install`/`tauri build` bu ortamda çalıştırılamadı, ilk derleme Windows makinede denenmeli. |
+| W2 | Windows: para/tarih yardımcıları + `invoiceCalculator` (04 §2) | Ajan 1 (yardım) | bitti (doğrulandı) | `src/core/money.ts`, `src/core/calc/invoiceCalculator.ts`; `npm test` 51 vektörün hepsini geçiyor (v1.0.2 KDV dahil iskonto dahil). |
 | W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 3 | — | |
 | W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 3 | — | |
 | W5 | Windows: stok ekranları ve işlemleri | Ajan 3 | — | |
