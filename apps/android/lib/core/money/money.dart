@@ -135,3 +135,13 @@ String formatBp(int bp) {
       );
   return '%$whole${frac.isEmpty ? '' : ',$frac'}';
 }
+
+/// 1250 -> "12,5"; 2000 -> "20". Yüzde girişi için (`%` işareti yok).
+String formatBpPlain(int bp) => formatBp(bp).substring(1);
+
+/// "12,5" -> 1250; "20" -> 2000. 0..10000 dışı veya geçersizse `null`.
+/// (Yüzde × 100 = baz puan; `parseMinor` ile aynı ondalık kuralları.)
+int? parseBp(String input) {
+  final v = parseMinor(input);
+  return (v == null || v < 0 || v > 10000) ? null : v;
+}

@@ -129,15 +129,16 @@ LineAmounts calculateLine(LineInput l, {required bool priceIncludesVat}) {
     );
   }
 
+  // docs/04 §2 (v1.0.2): KDV dahil fiyatta iskonto/net KDV HARİÇ tanımlıdır.
   final grossBeforeDisc = roundHalfUp(l.qtyMilli * l.unitPriceMinor, 1000);
-  final discount = roundHalfUp(grossBeforeDisc * l.discountBp, 10000);
-  final total = grossBeforeDisc - discount;
+  final discIncl = roundHalfUp(grossBeforeDisc * l.discountBp, 10000);
+  final total = grossBeforeDisc - discIncl;
   final taxable = roundHalfUp(total * 10000, 10000 + l.vatBp);
   final vat = total - taxable;
+  final net = roundHalfUp(grossBeforeDisc * 10000, 10000 + l.vatBp);
   return LineAmounts(
-    // Satır kayıtlarında net = iskonto öncesi KDV hariç.
-    netMinor: taxable + discount,
-    discountMinor: discount,
+    netMinor: net, // KDV hariç, iskonto öncesi
+    discountMinor: net - taxable, // KDV hariç iskonto
     taxableMinor: taxable,
     vatMinor: vat,
     totalMinor: total,
@@ -183,17 +184,19 @@ int unitCostMinorFromTaxable(int taxableMinor, int qtyMilli) {
 
 /// `newAvg = roundHalfUp((oldQty*oldAvg + inQty*unitCost) / (oldQty+inQty))`.
 ///
-/// Varsayım (PROGRESS.md'de kayıtlı): `oldQtyMilli < 0` (negatif stok) ağırlıkta
-/// 0 sayılır; toplam miktar <= 0 ise yeni maliyet = [unitCostMinor].
+/// Referans (`shared/reference/invoice_calc.py`, `new_avg_cost`) ile BİREBİR:
+/// toplam miktar <= 0 ise yeni maliyet = [unitCostMinor]. Negatif eski stok için
+/// ayrıca bir kırpma YOKTUR (sözleşme böyle; Windows da aynısını yapar).
 int weightedAverageCost({
   required int oldQtyMilli,
   required int oldAvgMinor,
   required int inQtyMilli,
   required int unitCostMinor,
 }) {
-  final oldQty = oldQtyMilli < 0 ? 0 : oldQtyMilli;
-  final totalQty = oldQty + inQtyMilli;
+  final totalQty = oldQtyMilli + inQtyMilli;
   if (totalQty <= 0) return unitCostMinor;
-  // oldQty*oldAvg birimi: milli*kuruş; bölen milli -> kuruş.
-  return roundHalfUp(oldQty * oldAvgMinor + inQtyMilli * unitCostMinor, totalQty);
+  return roundHalfUp(
+    oldQtyMilli * oldAvgMinor + inQtyMilli * unitCostMinor,
+    totalQty,
+  );
 }
