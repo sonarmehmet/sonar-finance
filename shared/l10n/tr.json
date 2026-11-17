@@ -140,7 +140,8 @@
     "noLevels": "Bu ürün için depoda stok kaydı yok",
     "byWarehouse": "Depo Bazında Stok",
     "criticalBadge": "Kritik",
-    "trackingOff": "Stok takibi yok"
+    "trackingOff": "Stok takibi yok",
+    "movements": "Hareketler"
   },
   "cashBank": {
     "income": "Para Girişi",

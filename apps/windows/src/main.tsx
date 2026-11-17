@@ -5,6 +5,7 @@ import '@fontsource-variable/inter';
 import './styles/global.css';
 import { applyTokens } from './core/tokens';
 import { AuthProvider } from './core/auth/AuthProvider';
+import { ToastProvider } from './components/Toast';
 import { App } from './app/App';
 
 applyTokens();
@@ -13,7 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
       <AuthProvider>
-        <App />
+        <ToastProvider><App /></ToastProvider>
       </AuthProvider>
     </HashRouter>
   </React.StrictMode>,

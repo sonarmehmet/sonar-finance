@@ -6,6 +6,8 @@ import { AppShell } from './AppShell';
 import { NAV } from './nav';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { ComingSoon } from '@/features/placeholder/ComingSoon';
+import { PartiesPage } from '@/features/parties/PartiesPage';
+import { StockPage } from '@/features/stock/StockPage';
 
 export function App() {
   const { state, signOut } = useAuth();
@@ -25,7 +27,9 @@ export function App() {
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<Navigate to="/overview" replace />} />
-        {NAV.filter((n) => !n.disabled).map((n) => (
+        <Route path="/parties/:id?" element={<PartiesPage />} />
+        <Route path="/stock/*" element={<StockPage />} />
+        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock').map((n) => (
           <Route key={n.key} path={`${n.path}/*`} element={<ComingSoon menuKey={n.key} />} />
         ))}
         <Route path="*" element={<Navigate to="/overview" replace />} />

@@ -1,0 +1,74 @@
+import {
+  collection, doc, orderBy, query, limit, where, setDoc, updateDoc, writeBatch, serverTimestamp,
+  type DocumentData, type Query,
+} from 'firebase/firestore';
+import { db } from '@/core/firebase';
+import { newId } from '@/core/id';
+import type { PartyMaster, ProductMaster, WarehouseMaster } from './models';
+
+const col = (cid: string, name: string) => collection(db, 'companies', cid, name);
+const ref = (cid: string, name: string, id: string) => doc(db, 'companies', cid, name, id);
+
+/** Ana veri yazımı (cari/ürün/depo): çevrimdışıyken yazma yerel kuyruğa alınır, sunucu onayı beklenmez.
+ * Dönüş: true = sunucu onayladı, false = süre doldu, kuyrukta bekliyor. Kural reddi gibi gerçek hatalar fırlatılır.
+ * Finansal işlemler (04) bunu KULLANMAZ; onlar runTransaction ile çevrimdışıyken reddedilir. */
+export async function writeOrQueue(write: Promise<unknown>, waitMs = 6000): Promise<boolean> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<'timeout'>((resolve) => { timer = setTimeout(() => resolve('timeout'), waitMs); });
+  try {
+    const r = await Promise.race([write.then(() => 'ok' as const), timeout]);
+    return r === 'ok';
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ---- Sorgular ----
+export const partiesQuery = (cid: string): Query<DocumentData> => query(col(cid, 'parties'), orderBy('name'), limit(1000));
+export const productsQuery = (cid: string): Query<DocumentData> => query(col(cid, 'products'), orderBy('name'), limit(1000));
+export const warehousesQuery = (cid: string): Query<DocumentData> => query(col(cid, 'warehouses'), orderBy('name'), limit(200));
+export const stockLevelsQuery = (cid: string): Query<DocumentData> => query(col(cid, 'stock_levels'), limit(5000));
+/** Cari ekstre: (partyId, date) index'i var (firestore.indexes.json). */
+export const ledgerQuery = (cid: string, partyId: string): Query<DocumentData> =>
+  query(col(cid, 'ledger_entries'), where('partyId', '==', partyId), orderBy('date', 'asc'), limit(1000));
+
+// ---- Yazımlar ----
+export const partyRepo = {
+  create(cid: string, m: PartyMaster) {
+    const id = newId();
+    // Kural: yeni cari bakiye 0 ve lastTxId '' ile açılır.
+    const p = setDoc(ref(cid, 'parties', id), {
+      ...m, companyId: cid, balanceMinor: 0, lastTxId: '', createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+    });
+    return writeOrQueue(p).then((synced) => ({ id, synced }));
+  },
+  update(cid: string, id: string, m: PartyMaster) {
+    return writeOrQueue(updateDoc(ref(cid, 'parties', id), { ...m, updatedAt: serverTimestamp() }));
+  },
+};
+
+export const productRepo = {
+  create(cid: string, m: ProductMaster) {
+    const id = newId();
+    const p = setDoc(ref(cid, 'products', id), {
+      ...m, companyId: cid, avgCostMinor: 0, totalQtyMilli: 0, createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+    });
+    return writeOrQueue(p).then((synced) => ({ id, synced }));
+  },
+  update(cid: string, id: string, m: ProductMaster) {
+    return writeOrQueue(updateDoc(ref(cid, 'products', id), { ...m, updatedAt: serverTimestamp() }));
+  },
+};
+
+export const warehouseRepo = {
+  /** `isDefault` true ise diğer depoların varsayılanı kaldırılır (tek batch). */
+  async save(cid: string, id: string | null, m: WarehouseMaster, otherDefaultIds: string[]) {
+    const wid = id ?? newId();
+    const batch = writeBatch(db);
+    if (id) batch.update(ref(cid, 'warehouses', id), { ...m });
+    else batch.set(ref(cid, 'warehouses', wid), { ...m, companyId: cid });
+    if (m.isDefault) for (const other of otherDefaultIds) if (other !== wid) batch.update(ref(cid, 'warehouses', other), { isDefault: false });
+    const synced = await writeOrQueue(batch.commit());
+    return { id: wid, synced };
+  },
+};
