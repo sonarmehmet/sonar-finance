@@ -11,6 +11,19 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 6. Her oturum sonu: bu tabloyu güncelle, commit at (kendi branch'inde).
 7. Push reddedilirse: dosyalar yerelde kalır, kullanıcıya GitHub Claude App kurulumu gerektiği söylenir.
 
+## DUYURULAR (Ajan 1 → Ajan 2/3) — önce bunları oku
+**v1.0.3 (main).** Branch'inizi hemen güncelleyin: `git fetch origin && git merge origin/main` (çakışırsa `shared/`, `docs/`, `firebase/`, `CONTRACTS.md` için **main'in** sürümünü alın).
+1. **Hesap düzeltmesi (v1.0.2) — Ajan 2 acil, Ajan 3 baştan doğru yazsın.** KDV **dahil** fiyatlı satırda `net` ve `discount` değişti (04 §2):
+   `net = roundHalfUp(grossBeforeDisc * 10000 / (10000 + vatBp))`, `discount = net - taxable` (yani KDV hariç iskonto). `total`, `taxable`, `vat` aynı kalır; KDV **hariç** mod değişmedi. Android `invoice_calculator.dart` içinde `netMinor: taxable + discount` ve `discountMinor: discount` satırları buna göre düzelecek (`discountMinor: net - taxable`, `netMinor: roundHalfUp(grossBeforeDisc*10000, 10000+vatBp)`).
+   Doğrulama vektörleri hazır: `shared/test-vectors/invoice-calc.json` (51 fatura, yuvarlama, ortalama maliyet, birim maliyet, özet delta). Testler F7'de (T2); şimdilik yalnız kodu düzeltin.
+2. **Durumlar:** `paymentStatus` artık `none` (taslak) | `unpaid` | `partial` | `paid` | `void` (iptal). Taslak yazarken `none`, iptalde `void`.
+3. **`stats/summary.months[ay]`:** `{incomeMinor, expenseMinor, inMinor, outMinor}`; `ledger_entries` ve `account_movements` belgelerine `createdAt` yazılır (04 §11).
+4. **Taslak faturada `rev`** (her kayıtta +1); kesmede ekrandaki `rev` ≠ sunucudaki ise reddet (05).
+5. **Yeni spesifikasyon:** `docs/08-rapor-panel-spesifikasyonu.md` (Genel Bakış formülleri, proje kârlılık, cari ekstre sütunları, 12 rapor). F3-F5 görevleri buna uyar.
+6. **Ajan 2'nin l10n talebi (2026-11-16) uygulandı:** 72 anahtar `shared/l10n/tr.json`'a eklendi. `apps/android/tool/sync_shared` çalıştırın, `pending_strings.dart` içindeki satırları silebilirsiniz.
+7. **Görev sırası:** A6..A9 ve W6..W9 görev tablosunda; sahibi boş olanı alın. F7 testleri (T1-T4) en sonda.
+8. **Ajan 3:** henüz branch yok. `hesap3-windows` oluşturup W1'den başlayın; boşta kalan Android görevlerini (A6+) Ajan 2 ile çakışmadan almadan önce tabloda sahibini yazın.
+
 ## Faz durumu
 | Faz | Durum |
 |---|---|
@@ -31,9 +44,9 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 | A3 | Android: cari, ürün, depo ekranları + repository | Ajan 2 | kod yazıldı, **derlenmedi** | Cari liste/form/detay(+ekstre), ürün liste/form/detay(+depo bazlı stok), depolar. Ana veri yazımı kurallara uygun (bakiye/ortalama maliyet/toplam miktar yazılmaz). Çevrimdışı yazma: `writeOrQueue` |
 | A4 | Android: fatura listesi, yeni fatura formu, `issueInvoice/cancelInvoice` servisleri | Ajan 2 | kod yazıldı, **derlenmedi** | Liste (sekme/arama/sayfalama), form (cari/kalem seçici, canlı toplam, taslak kaydet/kes, `rev` çakışma penceresi), detay (kes/düzenle/sil/iptal). `lib/data/islem_servisleri/invoice_service.dart` docs/04 §3-§4'e birebir. Proje seçimi F4'te (A7) forma eklenecek |
 | A5 | Android: stok giriş/çıkış/sayım/transfer, stok listesi | Ajan 2 | kod yazıldı, **derlenmedi** | `stock_service.dart` (04 §7): giriş=`opening` (ağırlıklı ort. maliyet), çıkış/sayım=`adjust` (neden zorunlu), transfer=`transfer_out/in`. Ürün detayında işlem düğmeleri + hareket geçmişi. Stok listesi A3'te |
-| W1 | Windows iskelet: Vite+React+TS, Tauri 2, tema (tokens), router, sidebar+topbar, giriş | Ajan 3 | — | |
-| W2 | Windows: para/tarih yardımcıları + `invoiceCalculator` (04 §2) | Ajan 3 | — | |
-| W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 3 | — | |
+| W1 | Windows iskelet: Vite+React+TS, Tauri 2, tema (tokens), router, sidebar+topbar, giriş | Ajan 1 (yardım) | bitti (derlenmedi) | `hesap3-windows` branch. Vite+React+TS+Tauri 2 iskeleti, tema (tokens→CSS değişkenleri), HashRouter, sidebar+topbar, giriş, bağlantı rozeti. Ağ yok: `npm install`/`tauri build` bu ortamda çalıştırılamadı, ilk derleme Windows makinede denenmeli. |
+| W2 | Windows: para/tarih yardımcıları + `invoiceCalculator` (04 §2) | Ajan 1 (yardım) | bitti (doğrulandı) | `src/core/money.ts`, `src/core/calc/invoiceCalculator.ts`; `npm test` 51 vektörün hepsini geçiyor (v1.0.2 KDV dahil iskonto dahil). |
+| W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 1 (yardım) | bitti (derlenmedi) | Cari (liste+detay+ekstre, 08 §5), ürün, depo ekranları; `src/data/{models,repositories}.ts`, `core/hooks/useSnapshot.ts`, ortak bileşenler (`components/`). Tip kontrolü yalnız stub ile yapıldı; gerçek `npm run typecheck` Windows makinede çalıştırılmalı. |
 | W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 3 | — | |
 | W5 | Windows: stok ekranları ve işlemleri | Ajan 3 | — | |
 | A6 | Android: tahsilat/ödeme, kasa/banka hesapları, transfer, cari ekstre (04 §5-§7, 08 §5) | — | — | |
