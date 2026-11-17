@@ -6,6 +6,8 @@ import '../../features/auth/login_screen.dart';
 import '../../features/auth/no_access_screen.dart';
 import '../../features/auth/splash_screen.dart';
 import '../../features/home/home_screen.dart';
+import '../../features/invoices/invoice_detail_screen.dart';
+import '../../features/invoices/invoice_form_screen.dart';
 import '../../features/parties/parties_list_screen.dart';
 import '../../features/parties/party_detail_screen.dart';
 import '../../features/parties/party_form_screen.dart';
@@ -108,6 +110,30 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: 'edit',
                 builder: (_, st) =>
                     ProductFormScreen(productId: st.pathParameters['id']),
+              ),
+            ],
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/invoices',
+        // Ust rotaya `redirect` konmaz: alt rotalari (new, :id) da yonlendirirdi.
+        builder: (_, __) => const TransactionsScreen(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            builder: (_, st) =>
+                InvoiceFormScreen(type: st.uri.queryParameters['type']),
+          ),
+          GoRoute(
+            path: ':id',
+            builder: (_, st) =>
+                InvoiceDetailScreen(invoiceId: st.pathParameters['id']!),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, st) =>
+                    InvoiceFormScreen(invoiceId: st.pathParameters['id']),
               ),
             ],
           ),

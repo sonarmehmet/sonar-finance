@@ -5,6 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../core/auth/auth_providers.dart';
 import '../../core/providers.dart';
+import '../invoices/invoice_widgets.dart';
 
 /// Ana Sayfa. Ozet kartlari (stats/summary) F5'te eklenecek;
 /// simdilik hizli islem kisayollari.
@@ -24,11 +25,16 @@ class HomeScreen extends ConsumerWidget {
         ..showSnackBar(SnackBar(content: Text(s('common.comingSoon'))));
     }
 
-    final actions = <(IconData, String)>[
-      (LucideIcons.fileText, s('quickActions.invoice')),
-      (LucideIcons.banknote, s('quickActions.collection')),
-      (LucideIcons.receipt, s('quickActions.expense')),
-      (LucideIcons.folderPlus, s('quickActions.project')),
+    final canInvoice = profile?.can('invoice.write') ?? false;
+    final actions = <(IconData, String, VoidCallback)>[
+      (
+        LucideIcons.fileText,
+        s('quickActions.invoice'),
+        canInvoice ? () => showNewInvoiceTypeSheet(context, ref) : soon,
+      ),
+      (LucideIcons.banknote, s('quickActions.collection'), soon),
+      (LucideIcons.receipt, s('quickActions.expense'), soon),
+      (LucideIcons.folderPlus, s('quickActions.project'), soon),
     ];
 
     return Scaffold(
@@ -56,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
             childAspectRatio: 0.82,
             children: [
               for (final a in actions)
-                _QuickAction(icon: a.$1, label: a.$2, onTap: soon),
+                _QuickAction(icon: a.$1, label: a.$2, onTap: a.$3),
             ],
           ),
           SizedBox(height: t.spacing('xl')),
