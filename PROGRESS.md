@@ -51,7 +51,7 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.4 · Branch'ler: `hesap1-cekirde
 | W2 | Windows: para/tarih yardımcıları + `invoiceCalculator` (04 §2) | Ajan 1 (yardım) | bitti (doğrulandı) | `src/core/money.ts`, `src/core/calc/invoiceCalculator.ts`; `npm test` 51 vektörün hepsini geçiyor (v1.0.2 KDV dahil iskonto dahil). |
 | W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 1 (yardım) | bitti (derlenmedi) | Cari (liste+detay+ekstre, 08 §5), ürün, depo ekranları; `src/data/{models,repositories}.ts`, `core/hooks/useSnapshot.ts`, ortak bileşenler (`components/`). Tip kontrolü yalnız stub ile yapıldı; gerçek `npm run typecheck` Windows makinede çalıştırılmalı. |
 | W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 1 (yardım) | bitti (derlenmedi) | Fatura listesi (sekmeler, arama, daha fazla), form (kalem editörü, toplam kutusu, taslak/kes, çakışma diyaloğu, sabit txId), detay (iptal), `invoiceService.ts`. Tip kontrolü yalnız stub ile; gerçek derleme Windows makinede. |
-| W5 | Windows: stok ekranları ve işlemleri | Ajan 1 (yardım) | devam ediyor | giriş/çıkış/sayım/transfer + hareketler sekmesi |
+| W5 | Windows: stok ekranları ve işlemleri | Ajan 1 (yardım) | bitti (derlenmedi) | `stockService.ts` (giriş/çıkış/sayım/transfer, Android ile aynı), `StockActionDialog`, Hareketler sekmesi. |
 | A6 | Android: tahsilat/ödeme, kasa/banka hesapları, transfer, cari ekstre (04 §5-§7, 08 §5) | — | — | |
 | A7 | Android: gider, projeler, proje detay/disiplin bütçesi (08 §4) | — | — | |
 | A8 | Android: Ana Sayfa paneli, raporlar (08 §1-§3,§6), PDF paylaş | — | — | |

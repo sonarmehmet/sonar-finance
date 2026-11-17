@@ -122,3 +122,27 @@ export function ledgerFromDoc(d: QueryDocumentSnapshot<DocumentData>): LedgerEnt
 
 /** Kritik: stok takipli, kritik seviye tanımlı ve toplam miktar seviyenin altında/eşit. */
 export const isCritical = (p: Product): boolean => p.trackStock && p.minStockMilli > 0 && p.totalQtyMilli <= p.minStockMilli;
+
+export interface StockMovement {
+  id: string;
+  txId: string;
+  productId: string;
+  warehouseId: string;
+  deltaMilli: number;
+  type: string;
+  unitCostMinor: number;
+  refType: string;
+  note: string;
+  date: string;
+  createdAtMs: number;
+}
+
+export function stockMovementFromDoc(d: QueryDocumentSnapshot<DocumentData>): StockMovement {
+  const x = d.data();
+  const ts = x.createdAt as { toMillis?: () => number } | undefined;
+  return {
+    id: d.id, txId: str(x.txId), productId: str(x.productId), warehouseId: str(x.warehouseId), deltaMilli: int(x.deltaMilli),
+    type: str(x.type), unitCostMinor: int(x.unitCostMinor), refType: str(x.refType), note: str(x.note), date: str(x.date),
+    createdAtMs: ts?.toMillis ? ts.toMillis() : 0,
+  };
+}

@@ -86,3 +86,7 @@ export function invoicesQuery(cid: string, tab: InvoiceTab, max: number): Query<
   }
 }
 export const invoiceRef = (cid: string, id: string) => ref(cid, 'invoices', id);
+
+/** Son stok hareketleri (tek alan sıralama: ek index gerekmez). */
+export const stockMovementsQuery = (cid: string, max: number): Query<DocumentData> =>
+  query(col(cid, 'stock_movements'), orderBy('date', 'desc'), limit(max));

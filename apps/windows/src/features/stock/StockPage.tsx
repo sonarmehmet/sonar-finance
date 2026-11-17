@@ -10,6 +10,8 @@ import {
 import { productsQuery, stockLevelsQuery, warehousesQuery } from '@/data/repositories';
 import { Chip, EmptyState, ErrorState, Kpi, LoadingState, Tabs } from '@/components/ui';
 import { ProductForm } from './ProductForm';
+import { MovementsTab } from './MovementsTab';
+import { StockActionDialog, type StockAction } from './StockActionDialog';
 import { WarehouseForm } from './WarehouseForm';
 
 type Tab = 'products' | 'warehouses' | 'movements';
@@ -41,12 +43,13 @@ export function StockPage() {
       <Tabs<Tab> value={tab} onChange={setTab} tabs={[
         { key: 'products', label: t('stock.products') },
         { key: 'warehouses', label: t('stock.warehouses') },
-        { key: 'movements', label: t('stock.movements'), disabled: true },
+        { key: 'movements', label: t('stock.movements') },
       ]} />
       {tab === 'products' && (
         <ProductsTab products={products.data} loading={products.loading} error={products.error}
           levels={levels.data} warehouses={warehouses.data} canWrite={can('stock.write')} />
       )}
+      {tab === 'movements' && <MovementsTab products={products.data} warehouses={warehouses.data} />}
       {tab === 'warehouses' && (
         <WarehousesTab warehouses={warehouses.data} loading={warehouses.loading} error={warehouses.error}
           levelCounts={levels.data} canWrite={can('stock.write')} />
@@ -62,6 +65,7 @@ function ProductsTab({ products, loading, error, levels, warehouses, canWrite }:
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
   const [dialog, setDialog] = useState<{ product?: Product } | null>(null);
+  const [action, setAction] = useState<StockAction | null>(null);
   const whName = useMemo(() => new Map(warehouses.map((w) => [w.id, w.name])), [warehouses]);
   const byProduct = useMemo(() => {
     const m = new Map<string, string>();
@@ -94,6 +98,8 @@ function ProductsTab({ products, loading, error, levels, warehouses, canWrite }:
           </button>
         ))}
         <div className="spacer" />
+        {canWrite && (['in', 'out', 'adjust', 'transfer'] as StockAction[]).map((a) => (
+          <button key={a} className="btn secondary sm" onClick={() => setAction(a)}>{t(`stock.${a === 'in' ? 'stockIn' : a === 'out' ? 'stockOut' : a}`)}</button>))}
         {canWrite && <button className="btn sm" onClick={() => setDialog({})}><Plus size={14} />{t('stock.newProduct')}</button>}
       </div>
       {loading ? <LoadingState /> : error ? <ErrorState error={error} /> : rows.length === 0 ? <EmptyState /> : (
@@ -120,6 +126,7 @@ function ProductsTab({ products, loading, error, levels, warehouses, canWrite }:
           </table>
         </div>
       )}
+      {action && <StockActionDialog action={action} products={products} warehouses={warehouses} levels={levels} onClose={() => setAction(null)} />}
       {dialog && <ProductForm product={dialog.product} products={products} levels={levels} warehouses={warehouses}
         readOnly={!canWrite} onClose={() => setDialog(null)} />}
     </div>
