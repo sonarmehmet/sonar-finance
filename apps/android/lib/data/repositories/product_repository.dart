@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../firestore_paths.dart';
 import '../models/product.dart';
+import '../models/stock_movement.dart';
 import '../models/stock_level.dart';
 import '../write_helpers.dart';
 
@@ -31,6 +32,15 @@ class ProductRepository {
       .where('productId', isEqualTo: productId)
       .snapshots()
       .map((s) => s.docs.map(StockLevel.fromDoc).toList());
+
+  /// Bir urunun son hareketleri (index: productId + date desc).
+  Stream<List<StockMovement>> watchMovements(String productId, {int limit = 30}) => _p
+      .col('stock_movements')
+      .where('productId', isEqualTo: productId)
+      .orderBy('date', descending: true)
+      .limit(limit)
+      .snapshots()
+      .map((s) => s.docs.map(StockMovement.fromDoc).toList());
 
   /// Tum depo stoklari (stok listesi/rapor icin).
   Stream<List<StockLevel>> watchAllLevels() => _p
@@ -82,4 +92,10 @@ final productLevelsProvider =
 
 final allStockLevelsProvider = StreamProvider.autoDispose<List<StockLevel>>(
   (ref) => ref.watch(productRepositoryProvider).watchAllLevels(),
+);
+
+final productMovementsProvider =
+    StreamProvider.autoDispose.family<List<StockMovement>, String>(
+  (ref, productId) =>
+      ref.watch(productRepositoryProvider).watchMovements(productId),
 );
