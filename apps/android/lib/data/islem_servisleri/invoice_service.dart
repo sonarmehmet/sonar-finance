@@ -171,7 +171,7 @@ class InvoiceService {
     final invoiceId = draft.id ?? newId();
     final totals = c.totals;
 
-    return _withAbortRetry(() => _db.runTransaction<IssueResult>((tx) async {
+    return withAbortRetry(() => _db.runTransaction<IssueResult>((tx) async {
       // ======================= OKUMALAR (yazmadan once) =====================
       final txRef = _p.doc('txns', txId);
       if ((await tx.get(txRef)).exists) {
@@ -454,7 +454,7 @@ class InvoiceService {
     _requirePermission();
     final uid = _uid();
 
-    await _withAbortRetry(() => _db.runTransaction<void>((tx) async {
+    await withAbortRetry(() => _db.runTransaction<void>((tx) async {
       // ======================= OKUMALAR =====================================
       final txRef = _p.doc('txns', txId);
       if ((await tx.get(txRef)).exists) {
@@ -658,27 +658,6 @@ class InvoiceService {
   }
 
   // ------------------------------------------------------------- yardimcilar
-
-  /// docs/05: `aborted` (yaris) -> 3 kez ustel gecikmeyle (300/900/2700 ms),
-  /// AYNI `txId` ile yeniden dene; cift kayit olmaz. Diger hatalar aninda yukari.
-  static Future<T> _withAbortRetry<T>(Future<T> Function() run) async {
-    const delays = [300, 900, 2700];
-    for (var i = 0;; i++) {
-      try {
-        return await run();
-      } on FirebaseException catch (e) {
-        if (e.code != 'aborted' || i >= delays.length) rethrow;
-        await Future<void>.delayed(Duration(milliseconds: delays[i]));
-      }
-    }
-  }
-
-  static String _defaultPrefix(String type) => switch (type) {
-        'sales' => 'SF',
-        'purchase' => 'AF',
-        'sales_return' => 'SI',
-        _ => 'AI',
-      };
 
   /// Aylik gelir / proje geliri katkisi: sales +, sales_return - (KDV haric).
   static int _revenueDelta(String type, int taxable) => switch (type) {

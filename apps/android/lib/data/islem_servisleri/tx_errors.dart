@@ -44,3 +44,17 @@ String describeTxError(Object error, Strings s) {
   }
   return s('errors.generic');
 }
+
+/// docs/05: `aborted` (yaris) -> 3 kez ustel gecikmeyle (300/900/2700 ms),
+/// AYNI `txId` ile yeniden dene; cift kayit olmaz. Diger hatalar aninda yukari.
+Future<T> withAbortRetry<T>(Future<T> Function() run) async {
+  const delays = [300, 900, 2700];
+  for (var i = 0;; i++) {
+    try {
+      return await run();
+    } on FirebaseException catch (e) {
+      if (e.code != 'aborted' || i >= delays.length) rethrow;
+      await Future<void>.delayed(Duration(milliseconds: delays[i]));
+    }
+  }
+}
