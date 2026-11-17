@@ -28,7 +28,7 @@ Yetki anahtarları: `invoice.write`, `party.write`, `stock.write`, `finance.writ
 | `products/{productId}` | `companyId, code, name, category, unit, vatBp, trackStock, buyPriceMinor, sellPriceMinor, avgCostMinor, totalQtyMilli, minStockMilli, barcode, active, createdAt, updatedAt` |
 | `warehouses/{whId}` | `companyId, name, location, isDefault, active` |
 | `stock_levels/{productId}_{whId}` | `companyId, productId, warehouseId, qtyMilli, lastTxId` |
-| `stock_movements/{txId}_{levelId}` | `companyId, txId, productId, warehouseId, deltaMilli, type('opening'\|'purchase_in'\|'sale_out'\|'return_in'\|'return_out'\|'adjust'\|'transfer_in'\|'transfer_out'), unitCostMinor, refType, refId, date, createdBy, createdAt` |
+| `stock_movements/{txId}_{levelId}` | `companyId, txId, productId, warehouseId, deltaMilli, type('opening'\|'purchase_in'\|'sale_out'\|'return_in'\|'return_out'\|'adjust'\|'transfer_in'\|'transfer_out'), unitCostMinor, refType, refId, date, note?, createdBy, createdAt` (`note`: isteğe bağlı, manuel stok işleminin nedeni) |
 | `invoices/{invoiceId}` | bkz. aşağı |
 | `payments/{paymentId}` | `companyId, txId, direction('in'\|'out'), partyId, accountId, amountMinor, date, method('cash'\|'bank_transfer'\|'cheque'\|'card'), allocations[{invoiceId, amountMinor}], unallocatedMinor, projectId?, note, status('active'\|'cancelled'), cancelTxId?, createdBy, createdAt` |
 | `accounts/{accountId}` (kasa+banka) | `companyId, type('cash'\|'bank'), name, bankName, iban, currency, balanceMinor, lastTxId, active` |
