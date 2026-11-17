@@ -7,6 +7,9 @@ import { NAV } from './nav';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { ComingSoon } from '@/features/placeholder/ComingSoon';
 import { PartiesPage } from '@/features/parties/PartiesPage';
+import { InvoicesPage } from '@/features/invoices/InvoicesPage';
+import { InvoiceFormPage } from '@/features/invoices/InvoiceFormPage';
+import { InvoiceDetailPage } from '@/features/invoices/InvoiceDetailPage';
 import { StockPage } from '@/features/stock/StockPage';
 
 export function App() {
@@ -28,8 +31,12 @@ export function App() {
       <Route element={<AppShell />}>
         <Route index element={<Navigate to="/overview" replace />} />
         <Route path="/parties/:id?" element={<PartiesPage />} />
+        <Route path="/invoices" element={<InvoicesPage />} />
+        <Route path="/invoices/new" element={<InvoiceFormPage />} />
+        <Route path="/invoices/:id/edit" element={<InvoiceFormPage />} />
+        <Route path="/invoices/:id" element={<InvoiceDetailPage />} />
         <Route path="/stock/*" element={<StockPage />} />
-        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock').map((n) => (
+        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock' && n.key !== 'invoices').map((n) => (
           <Route key={n.key} path={`${n.path}/*`} element={<ComingSoon menuKey={n.key} />} />
         ))}
         <Route path="*" element={<Navigate to="/overview" replace />} />

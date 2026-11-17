@@ -72,3 +72,17 @@ export const warehouseRepo = {
     return { id: wid, synced };
   },
 };
+
+// ---- Faturalar (index: type+issueDate, status+issueDate) ----
+export type InvoiceTab = 'all' | 'sales' | 'purchase' | 'returns' | 'drafts';
+export function invoicesQuery(cid: string, tab: InvoiceTab, max: number): Query<DocumentData> {
+  const c = col(cid, 'invoices');
+  switch (tab) {
+    case 'sales': return query(c, where('type', '==', 'sales'), orderBy('issueDate', 'desc'), limit(max));
+    case 'purchase': return query(c, where('type', '==', 'purchase'), orderBy('issueDate', 'desc'), limit(max));
+    case 'returns': return query(c, where('type', 'in', ['sales_return', 'purchase_return']), orderBy('issueDate', 'desc'), limit(max));
+    case 'drafts': return query(c, where('status', '==', 'draft'), orderBy('issueDate', 'desc'), limit(max));
+    default: return query(c, orderBy('issueDate', 'desc'), limit(max));
+  }
+}
+export const invoiceRef = (cid: string, id: string) => ref(cid, 'invoices', id);
