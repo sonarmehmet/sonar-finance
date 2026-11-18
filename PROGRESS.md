@@ -57,7 +57,7 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.4 · Branch'ler: `hesap1-cekirde
 | A8 | Android: Ana Sayfa paneli, raporlar (08 §1-§3,§6), PDF paylaş | — | — | |
 | A9 | Android: çevrimdışı/senkron durumu, kuyruk ekranı (05) | — | — | |
 | W6 | Windows: tahsilat/ödeme, kasa/banka, transfer, cari ekstre | Ajan 1 (yardım) | bitti (derlenmedi) | `paymentService.ts` (tahsilat/ödeme, iptal, hesap, transfer), Kasa-Banka sayfası, ödeme penceresi (FIFO dağıtım), cari detayında fatura/tahsilat/ödeme sekmeleri. l10n: `payment.*`, `cashBank.*`, `errors.*` eklendi. |
-| W7 | Windows: gider/gelir, projeler, proje detay (08 §4) | — | — | |
+| W7 | Windows: gider/gelir, projeler, proje detay (08 §4) | Ajan 1 (yardım) | bitti (derlenmedi) | `expenseService.ts` (gider kaydı/iptal), Gelir-Gider sayfası (aylık KPI, giderler, tahsilatlar), Projeler (liste, form+disiplin bütçeleri, detay kârlılık/kalan bütçe). Faturaya proje seçimi henüz yok (W4 formuna eklenecek). |
 | W8 | Windows: Genel Bakış, raporlar, PDF/Excel (08) | — | — | |
 | W9 | Windows: çevrimdışı/senkron, kuyruk ekranı, kullanıcı yönetimi, ayarlar, yedekleme ekranı | — | — | |
 | C5 | Ajan 1: `firebase/tools/recalc.js` tutarlılık/düzeltme aracı | Ajan 1 | bitti | |

@@ -103,3 +103,27 @@ export const partyPaymentsQuery = (cid: string, partyId: string): Query<Document
 /** Index: partyId + issueDate desc. */
 export const partyInvoicesQuery = (cid: string, partyId: string): Query<DocumentData> =>
   query(col(cid, 'invoices'), where('partyId', '==', partyId), orderBy('issueDate', 'desc'), limit(300));
+
+// ---- Gider, proje ----
+export const expensesQuery = (cid: string, max: number): Query<DocumentData> => query(col(cid, 'expenses'), orderBy('date', 'desc'), limit(max));
+export const projectsQuery = (cid: string): Query<DocumentData> => query(col(cid, 'projects'), orderBy('name'), limit(300));
+export const projectStatsQuery = (cid: string): Query<DocumentData> => query(col(cid, 'project_stats'), limit(300));
+export const statsRef = (cid: string) => ref(cid, 'stats', 'summary');
+/** Index: projectId + issueDate desc. */
+export const projectInvoicesQuery = (cid: string, projectId: string): Query<DocumentData> =>
+  query(col(cid, 'invoices'), where('projectId', '==', projectId), orderBy('issueDate', 'desc'), limit(300));
+
+export const projectRepo = {
+  async save(cid: string, id: string | null, m: Record<string, unknown>): Promise<{ id: string; synced: boolean }> {
+    const pid = id ?? newId();
+    const write = id
+      ? updateDoc(ref(cid, 'projects', pid), { ...m, updatedAt: serverTimestamp() })
+      : (async () => {
+        const b = writeBatch(db);
+        b.set(ref(cid, 'projects', pid), { companyId: cid, ...m, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+        b.set(ref(cid, 'project_stats', pid), { companyId: cid, revenueMinor: 0, costMinor: 0, collectedMinor: 0, paidOutMinor: 0, byDiscipline: {}, lastTxId: '' });
+        await b.commit();
+      })();
+    return { id: pid, synced: await writeOrQueue(write) };
+  },
+};

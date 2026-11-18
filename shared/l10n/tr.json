@@ -376,7 +376,8 @@
     "sameAccount": "Kaynak ve hedef hesap farklı olmalı",
     "accountRequired": "Hesap seçin",
     "amountRequired": "Tutar sıfırdan büyük olmalı",
-    "nameRequired": "Ad zorunlu"
+    "nameRequired": "Ad zorunlu",
+    "validation": "Zorunlu alanları doldurun"
   },
   "invoice": {
     "newInvoice": "Yeni Fatura",
@@ -437,5 +438,40 @@
     "note": "Not",
     "transferDone": "Transfer yapıldı",
     "accountSaved": "Hesap kaydedildi"
+  },
+  "expense": {
+    "expenses": "Giderler",
+    "collections": "Tahsilatlar",
+    "new": "Yeni Gider",
+    "category": "Gider Kategorisi",
+    "amountGross": "Tutar (KDV dahil)",
+    "discipline": "Disiplin",
+    "net": "Net"
+  },
+  "project": {
+    "new": "Yeni Proje",
+    "edit": "Projeyi Düzenle",
+    "select": "Bir proje seçin",
+    "contract": "Sözleşme Bedeli (KDV hariç)",
+    "revenue": "Gelir (KDV hariç)",
+    "cost": "Gerçekleşen Maliyet",
+    "collected": "Tahsilat",
+    "estProfit": "Tahmini Kâr",
+    "actualProfit": "Gerçekleşen Kâr",
+    "margin": "Kâr Marjı",
+    "remainingReceivable": "Kalan Alacak",
+    "remainingPayable": "Kalan Borç",
+    "disciplines": "Disiplin Bütçeleri",
+    "budget": "Bütçe",
+    "actual": "Gerçekleşen",
+    "remainingBudget": "Kalan Bütçe",
+    "budgets": "Disiplin Bütçeleri (KDV hariç)",
+    "start": "Başlangıç",
+    "end": "Bitiş",
+    "status": {
+      "active": "Aktif",
+      "paused": "Durduruldu",
+      "done": "Tamamlandı"
+    }
   }
 }
