@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -52,6 +53,14 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ),
             ),
+          SizedBox(height: t.spacing('md')),
+          Card(
+            child: ListTile(
+              leading: const Icon(LucideIcons.refreshCw),
+              title: Text(s('sync.open')),
+              onTap: () => context.push('/sync'),
+            ),
+          ),
           SizedBox(height: t.spacing('xl')),
           OutlinedButton.icon(
             onPressed: () => ref.read(firebaseAuthProvider).signOut(),

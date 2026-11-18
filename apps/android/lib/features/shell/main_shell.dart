@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../sync/connection_banner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -16,7 +17,7 @@ class MainShell extends ConsumerWidget {
     final s = ref.watch(stringsProvider);
 
     return Scaffold(
-      body: shell,
+      body: Column(children: [const ConnectionBanner(), Expanded(child: shell)]),
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
         onDestinationSelected: (i) => shell.goBranch(

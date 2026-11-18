@@ -8,6 +8,7 @@ import '../../features/auth/login_screen.dart';
 import '../../features/expenses/expense_form_screen.dart';
 import '../../features/expenses/expenses_list_screen.dart';
 import '../../features/projects/project_detail_screen.dart';
+import '../../features/sync/sync_queue_screen.dart';
 import '../../features/reports/report_screen.dart';
 import '../../features/projects/project_form_screen.dart';
 import '../../features/invoices/invoices_list_screen.dart';
@@ -165,6 +166,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reports/:kind',
         builder: (_, st) => ReportScreen(kind: st.pathParameters['kind']!),
       ),
+      GoRoute(path: '/sync', builder: (_, __) => const SyncQueueScreen()),
       GoRoute(
         path: '/accounts',
         builder: (_, __) => const AccountsScreen(),
