@@ -1,0 +1,37 @@
+name: sonar_finance
+description: SONAR FINANCE - on muhasebe ve finans yonetimi (Android).
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  cloud_firestore: ^5.2.1
+  lucide_icons: ^0.257.0
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
+  uuid: ^4.4.2
+  connectivity_plus: ^6.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    # shared/ klasorunun kopyasi: tool/sync_shared.bat ile guncellenir.
+    - assets/shared/design-tokens.json
+    - assets/shared/constants.json
+    - assets/shared/l10n/tr.json

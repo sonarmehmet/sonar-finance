@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "invoiceTypes": ["sales", "purchase", "sales_return", "purchase_return"],
+  "invoiceStatuses": ["draft", "issued", "cancelled"],
+  "paymentStatuses": ["none", "unpaid", "partial", "paid", "void"],
+  "paymentDirections": ["in", "out"],
+  "paymentMethods": ["cash", "bank_transfer", "cheque", "card"],
+  "accountTypes": ["cash", "bank"],
+  "stockMovementTypes": ["opening", "purchase_in", "sale_out", "return_in", "return_out", "adjust", "transfer_in", "transfer_out"],
+  "roles": ["admin", "employee"],
+  "permissions": ["invoice.write", "party.write", "stock.write", "finance.write", "project.write"],
+  "units": ["adet", "metre", "kg", "lt", "m2", "m3", "takim", "paket", "saat", "gun"],
+  "vatRatesBp": [0, 100, 1000, 2000],
+  "invoiceNumberFormat": "{prefix}-{year}-{last:6}",
+  "disciplines": [
+    "heating", "cooling", "ventilation", "fire_protection", "plumbing", "natural_gas",
+    "steam", "chiller", "floor_heating", "electrical_automation",
+    "labor", "transport", "equipment", "subcontractor", "general"
+  ],
+  "defaultExpenseCategories": ["material", "labor", "transport", "subcontractor", "fuel", "rent", "electricity", "tax", "general", "other"],
+  "defaultIncomeCategories": ["material_sales", "labor_income", "project_collection", "service_income", "other_income"]
+}
