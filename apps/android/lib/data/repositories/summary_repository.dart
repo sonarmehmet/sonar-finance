@@ -22,6 +22,28 @@ class SummaryRepository {
       .snapshots()
       .map((s) => s.docs.map(Invoice.fromDoc).toList());
 
+  /// Rapor: [from, to] (dahil) tarih araligi, tek alan araligi (index gerekmez).
+  Stream<List<Invoice>> watchInvoicesBetween(String from, String to) => _p
+      .col('invoices')
+      .where('issueDate', isGreaterThanOrEqualTo: from)
+      .where('issueDate', isLessThanOrEqualTo: to)
+      .snapshots()
+      .map((s) => s.docs.map(Invoice.fromDoc).toList());
+
+  Stream<List<Expense>> watchExpensesBetween(String from, String to) => _p
+      .col('expenses')
+      .where('date', isGreaterThanOrEqualTo: from)
+      .where('date', isLessThanOrEqualTo: to)
+      .snapshots()
+      .map((s) => s.docs.map(Expense.fromDoc).toList());
+
+  Stream<List<Payment>> watchPaymentsBetween(String from, String to) => _p
+      .col('payments')
+      .where('date', isGreaterThanOrEqualTo: from)
+      .where('date', isLessThanOrEqualTo: to)
+      .snapshots()
+      .map((s) => s.docs.map(Payment.fromDoc).toList());
+
   Stream<List<Invoice>> watchRecentInvoices() => _p
       .col('invoices')
       .orderBy('createdAt', descending: true)
@@ -66,4 +88,21 @@ final recentPaymentsProvider = StreamProvider.autoDispose<List<Payment>>(
 
 final recentExpensesProvider = StreamProvider.autoDispose<List<Expense>>(
   (ref) => ref.watch(summaryRepositoryProvider).watchRecentExpenses(),
+);
+
+typedef DateRange = ({String from, String to});
+
+final invoicesBetweenProvider =
+    StreamProvider.autoDispose.family<List<Invoice>, DateRange>(
+  (ref, r) => ref.watch(summaryRepositoryProvider).watchInvoicesBetween(r.from, r.to),
+);
+
+final expensesBetweenProvider =
+    StreamProvider.autoDispose.family<List<Expense>, DateRange>(
+  (ref, r) => ref.watch(summaryRepositoryProvider).watchExpensesBetween(r.from, r.to),
+);
+
+final paymentsBetweenProvider =
+    StreamProvider.autoDispose.family<List<Payment>, DateRange>(
+  (ref, r) => ref.watch(summaryRepositoryProvider).watchPaymentsBetween(r.from, r.to),
 );
