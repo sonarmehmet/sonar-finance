@@ -37,7 +37,7 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.4 · Branch'ler: `hesap1-cekirde
 | F4 Gider, proje, şantiye maliyeti | başlamadı |
 | F5 Genel Bakış, raporlar, PDF/Excel, yeniden hesapla | başlamadı |
 | F6 Çevrimdışı, senkron kuyruğu | başlamadı |
-| F7 Testler, rules testleri, paketleme | başlamadı |
+| F7 Testler, rules testleri, paketleme | Android birim testleri yazıldı (`apps/android/test/`: resmi vektörler + para biçimleri), **çalıştırılmadı** (`flutter test`). Rules testleri ve paketleme başlamadı |
 
 ## Görevler
 | # | Görev | Sahip | Durum | Not |
