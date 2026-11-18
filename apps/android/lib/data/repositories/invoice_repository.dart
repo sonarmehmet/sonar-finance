@@ -40,6 +40,13 @@ class InvoiceRepository {
       .snapshots()
       .map((s) => s.exists ? Invoice.fromDoc(s) : null);
 
+  /// Bir projenin faturalari (tek alan filtresi; kesilmis olanlar istemcide ayiklanir).
+  Stream<List<Invoice>> watchForProject(String projectId) => _p
+      .col('invoices')
+      .where('projectId', isEqualTo: projectId)
+      .snapshots()
+      .map((s) => s.docs.map(Invoice.fromDoc).toList());
+
   /// Bir carinin faturalari (index: partyId + issueDate desc).
   Stream<List<Invoice>> watchForParty(String partyId, {int limit = 50}) => _p
       .col('invoices')
@@ -66,4 +73,9 @@ final invoiceProvider = StreamProvider.autoDispose.family<Invoice?, String>(
 final partyInvoicesProvider =
     StreamProvider.autoDispose.family<List<Invoice>, String>(
   (ref, partyId) => ref.watch(invoiceRepositoryProvider).watchForParty(partyId),
+);
+
+final projectInvoicesProvider =
+    StreamProvider.autoDispose.family<List<Invoice>, String>(
+  (ref, projectId) => ref.watch(invoiceRepositoryProvider).watchForProject(projectId),
 );

@@ -18,6 +18,7 @@ class TransactionsScreen extends ConsumerWidget {
       (LucideIcons.users, s('menu.parties'), '/parties'),
       (LucideIcons.landmark, s('menu.cashBank'), '/accounts'),
       (LucideIcons.banknote, s('payment.list'), '/payments'),
+      (LucideIcons.receipt, s('expense.title'), '/expenses'),
       (LucideIcons.package, s('menu.stock'), '/products'),
       (LucideIcons.warehouse, s('stock.warehouses'), '/warehouses'),
     ];

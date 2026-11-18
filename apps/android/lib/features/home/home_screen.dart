@@ -39,8 +39,16 @@ class HomeScreen extends ConsumerWidget {
             ? () => context.push('/payments/new?direction=in')
             : soon,
       ),
-      (LucideIcons.receipt, s('quickActions.expense'), soon),
-      (LucideIcons.folderPlus, s('quickActions.project'), soon),
+      (
+        LucideIcons.receipt,
+        s('quickActions.expense'),
+        (profile?.can('finance.write') ?? false) ? () => context.push('/expenses/new') : soon,
+      ),
+      (
+        LucideIcons.folderPlus,
+        s('quickActions.project'),
+        (profile?.can('project.write') ?? false) ? () => context.push('/projects/new') : soon,
+      ),
     ];
 
     return Scaffold(

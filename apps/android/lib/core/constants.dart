@@ -19,6 +19,7 @@ class SonarConstants {
   List<String> get paymentMethods => _list('paymentMethods');
   List<String> get units => _list('units');
   List<String> get disciplines => _list('disciplines');
+  List<String> get expenseCategories => _list('defaultExpenseCategories');
   List<String> get permissions => _list('permissions');
 
   List<int> get vatRatesBp =>

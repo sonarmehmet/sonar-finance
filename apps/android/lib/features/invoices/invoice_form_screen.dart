@@ -13,6 +13,8 @@ import '../../data/invoice_calculator.dart';
 import '../../data/islem_servisleri/invoice_service.dart';
 import '../../data/islem_servisleri/tx_errors.dart';
 import '../../data/models/invoice.dart';
+import '../../data/models/project.dart';
+import '../../data/repositories/project_repository.dart';
 import '../../data/repositories/invoice_repository.dart';
 import '../../data/write_helpers.dart';
 import 'line_editor_sheet.dart';
@@ -321,6 +323,17 @@ class _InvoiceFormState extends ConsumerState<_InvoiceForm> {
                 ),
               ),
             ),
+          ),
+          gap,
+          DropdownButtonFormField<String?>(
+            value: _projectId,
+            items: [
+              DropdownMenuItem<String?>(value: null, child: Text(s('expense.none'))),
+              for (final p in ref.watch(projectsProvider).valueOrNull ?? const <Project>[])
+                DropdownMenuItem<String?>(value: p.id, child: Text(p.name)),
+            ],
+            decoration: InputDecoration(labelText: s('invoiceColumns.project')),
+            onChanged: canWrite ? (v) => setState(() => _projectId = v) : null,
           ),
           gap,
           Row(

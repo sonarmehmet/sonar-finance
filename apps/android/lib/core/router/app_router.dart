@@ -5,6 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../features/accounts/account_detail_screen.dart';
 import '../../features/accounts/accounts_screen.dart';
 import '../../features/auth/login_screen.dart';
+import '../../features/expenses/expense_form_screen.dart';
+import '../../features/expenses/expenses_list_screen.dart';
+import '../../features/projects/project_detail_screen.dart';
+import '../../features/projects/project_form_screen.dart';
 import '../../features/invoices/invoices_list_screen.dart';
 import '../../features/payments/payment_detail_screen.dart';
 import '../../features/payments/payment_form_screen.dart';
@@ -147,6 +151,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
       GoRoute(
+        path: '/expenses',
+        builder: (_, st) => ExpensesListScreen(projectId: st.uri.queryParameters['projectId']),
+        routes: [
+          GoRoute(
+            path: 'new',
+            builder: (_, st) => ExpenseFormScreen(projectId: st.uri.queryParameters['projectId']),
+          ),
+        ],
+      ),
+      GoRoute(
         path: '/accounts',
         builder: (_, __) => const AccountsScreen(),
         routes: [
@@ -196,6 +210,19 @@ final routerProvider = Provider<GoRouter>((ref) {
             GoRoute(
               path: AppRoutes.projects,
               builder: (_, __) => const ProjectsScreen(),
+            routes: [
+              GoRoute(path: 'new', builder: (_, __) => const ProjectFormScreen()),
+              GoRoute(
+                path: ':id',
+                builder: (_, st) => ProjectDetailScreen(projectId: st.pathParameters['id']!),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (_, st) => ProjectFormScreen(projectId: st.pathParameters['id']),
+                  ),
+                ],
+              ),
+            ],
             ),
           ]),
           StatefulShellBranch(routes: [
