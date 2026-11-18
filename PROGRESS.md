@@ -51,7 +51,7 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 | W5 | Windows: stok ekranları ve işlemleri | Ajan 3 | — | |
 | A6 | Android: tahsilat/ödeme, kasa/banka hesapları, transfer, cari ekstre (04 §5-§7, 08 §5) | Ajan 2 | kod yazıldı, **derlenmedi** | Servis + ekranlar: hesaplar, transfer, tahsilat/ödeme formu (otomatik/elle dağıtım), liste/detay/iptal, cari sekmeleri, İşlemler merkezi |
 | A7 | Android: gider, projeler, proje detay/disiplin bütçesi (08 §4) | Ajan 2 | kod yazıldı, **derlenmedi** | `expense_service.dart` (recordExpense/cancelExpense, docs/04 §7), gider formu/listesi, proje listesi/formu/detay (tahmini-gerçekleşen kâr, disiplin bütçesi, kalan alacak/borç sorguyla), faturaya proje seçimi |
-| A8 | Android: Ana Sayfa paneli, raporlar (08 §1-§3,§6), PDF paylaş | — | — | |
+| A8 | Android: Ana Sayfa paneli, raporlar (08 §1-§3,§6), PDF paylaş | Ajan 2 | kısmen: kod yazıldı, **derlenmedi** | Panel: 6 kart (% değişim), net pozisyon, 12 ay gelir-gider grafiği, yaklaşan/gecikmiş/son işlemler. Raporlar: yıllık, aylık+karşılaştırma, borç-alacak, kasa/banka, proje kârlılık (tablo + CSV panoya kopyala). **Eksik:** PDF/Excel dışa aktarma (pdf/printing paketleri pub.dev erişimi olmadan eklenemedi), cari ekstre, KDV özeti, stok değer, tahsilat/ödeme raporu |
 | A9 | Android: çevrimdışı/senkron durumu, kuyruk ekranı (05) | — | — | |
 | W6 | Windows: tahsilat/ödeme, kasa/banka, transfer, cari ekstre | — | — | |
 | W7 | Windows: gider/gelir, projeler, proje detay (08 §4) | — | — | |

@@ -8,6 +8,7 @@ import '../../features/auth/login_screen.dart';
 import '../../features/expenses/expense_form_screen.dart';
 import '../../features/expenses/expenses_list_screen.dart';
 import '../../features/projects/project_detail_screen.dart';
+import '../../features/reports/report_screen.dart';
 import '../../features/projects/project_form_screen.dart';
 import '../../features/invoices/invoices_list_screen.dart';
 import '../../features/payments/payment_detail_screen.dart';
@@ -159,6 +160,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, st) => ExpenseFormScreen(projectId: st.uri.queryParameters['projectId']),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/reports/:kind',
+        builder: (_, st) => ReportScreen(kind: st.pathParameters['kind']!),
       ),
       GoRoute(
         path: '/accounts',

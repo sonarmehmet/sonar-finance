@@ -18,6 +18,7 @@ class Expense {
     this.description = '',
     this.status = 'active',
     this.cancelTxId,
+    this.createdAt,
   });
 
   final String id;
@@ -33,6 +34,7 @@ class Expense {
   final String description;
   final String status;
   final String? cancelTxId;
+  final DateTime? createdAt;
 
   bool get isCancelled => status == 'cancelled';
   int get netMinor => amountMinor - vatMinor;
@@ -53,6 +55,7 @@ class Expense {
       description: asStr(d['description']),
       status: asStr(d['status']).isEmpty ? 'active' : asStr(d['status']),
       cancelTxId: asStrOrNull(d['cancelTxId']),
+      createdAt: asDateTime(d['createdAt']),
     );
   }
 }

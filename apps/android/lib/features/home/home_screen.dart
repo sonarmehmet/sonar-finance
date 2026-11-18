@@ -6,6 +6,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../core/auth/auth_providers.dart';
 import '../../core/providers.dart';
 import '../invoices/invoice_widgets.dart';
+import 'dashboard_section.dart';
 
 /// Ana Sayfa. Ozet kartlari (stats/summary) F5'te eklenecek;
 /// simdilik hizli islem kisayollari.
@@ -79,6 +80,8 @@ class HomeScreen extends ConsumerWidget {
                 _QuickAction(icon: a.$1, label: a.$2, onTap: a.$3),
             ],
           ),
+          SizedBox(height: t.spacing('xl')),
+          const DashboardSection(),
           SizedBox(height: t.spacing('xl')),
           Text(
             s('common.modules'),
