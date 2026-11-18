@@ -20,6 +20,11 @@ class ReportsScreen extends ConsumerWidget {
       (LucideIcons.scale, 'balances'),
       (LucideIcons.landmark, 'cashbank'),
       (LucideIcons.folderKanban, 'projects'),
+      (LucideIcons.fileSpreadsheet, 'ledger'),
+      (LucideIcons.percent, 'vat'),
+      (LucideIcons.package, 'stock'),
+      (LucideIcons.arrowDownLeft, 'collections'),
+      (LucideIcons.arrowUpRight, 'payments'),
     ];
     return Scaffold(
       appBar: AppBar(title: Text(s('mobileNav.reports'))),

@@ -7,6 +7,15 @@ import '../../core/money/money.dart';
 import '../../core/providers.dart';
 import '../../core/widgets/common.dart';
 import '../../data/models/account.dart';
+import '../../data/models/expense.dart';
+import '../../data/models/invoice.dart';
+import '../../data/models/ledger_entry.dart';
+import '../../data/models/payment.dart';
+import '../../data/models/product.dart';
+import '../../data/models/stock_level.dart';
+import '../../data/models/warehouse.dart';
+import '../../data/repositories/product_repository.dart';
+import '../../data/repositories/warehouse_repository.dart';
 import '../../data/models/party.dart';
 import '../../data/models/project.dart';
 import '../../data/models/summary.dart';
@@ -28,6 +37,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
   late int _year = int.parse(todayIso().substring(0, 4));
   late String _month = monthKey(todayIso());
   String? _accountId;
+  String? _partyId;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +52,16 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
         body = _balances();
       case 'cashbank':
         body = _cashbank();
+      case 'vat':
+        body = _vat();
+      case 'stock':
+        body = _stock();
+      case 'collections':
+        body = _payments('in');
+      case 'payments':
+        body = _payments('out');
+      case 'ledger':
+        body = _ledger();
       default:
         body = _projects();
     }
@@ -241,6 +261,157 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
           rows,
         );
       },
+    );
+  }
+
+  Widget _monthPicker() => Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        IconButton(
+            icon: const Icon(LucideIcons.chevronLeft),
+            onPressed: () => setState(() => _month = shiftMonth(_month, -1))),
+        Text(_month, style: const TextStyle(fontWeight: FontWeight.w700)),
+        IconButton(
+            icon: const Icon(LucideIcons.chevronRight),
+            onPressed: () => setState(() => _month = shiftMonth(_month, 1))),
+      ]);
+
+  DateRange get _range => (from: '$_month-01', to: '$_month-31');
+
+  // -- KDV ozeti (08 §6): hesaplanan - indirilecek, oran kirilimi ----------
+  Widget _vat() {
+    final s = ref.watch(stringsProvider);
+    final inv = ref.watch(invoicesBetweenProvider(_range)).valueOrNull ?? const <Invoice>[];
+    final exp = ref.watch(expensesBetweenProvider(_range)).valueOrNull ?? const <Expense>[];
+    // oran (bp) -> [hesaplanan, indirilecek]
+    final byRate = <int, List<int>>{};
+    void add(int bp, int calc, int deduct) {
+      final r = byRate.putIfAbsent(bp, () => [0, 0]);
+      r[0] += calc;
+      r[1] += deduct;
+    }
+
+    for (final i in inv.where((i) => i.isIssued)) {
+      final sign = (i.type == 'sales' || i.type == 'purchase') ? 1 : -1;
+      final sales = i.type == 'sales' || i.type == 'sales_return';
+      for (final l in i.lines) {
+        add(l.vatBp, sales ? sign * l.vatMinor : 0, sales ? 0 : sign * l.vatMinor);
+      }
+    }
+    for (final e in exp.where((e) => !e.isCancelled)) {
+      add(-1, 0, e.vatMinor); // gider KDV'si oran bilgisi tasimaz
+    }
+    var calc = 0, ded = 0;
+    final rows = <List<String>>[];
+    for (final k in byRate.keys.toList()..sort()) {
+      final v = byRate[k]!;
+      calc += v[0];
+      ded += v[1];
+      rows.add([k < 0 ? s('report.expense') : formatBp(k), formatMinor(v[0]), formatMinor(v[1])]);
+    }
+    return _table(
+      [s('report.rate'), s('report.vatCalculated'), s('report.vatDeductible')],
+      rows,
+      total: [s('report.total'), formatMinor(calc), formatMinor(ded)],
+      top: Column(children: [
+        _monthPicker(),
+        ListTile(
+          title: Text(calc - ded >= 0 ? s('report.vatPayable') : s('report.vatCarry')),
+          trailing: Text(formatMinor((calc - ded).abs()),
+              style: const TextStyle(fontWeight: FontWeight.w700)),
+        ),
+      ]),
+    );
+  }
+
+  // -- Stok deger: miktar x ortalama maliyet / 1000 (yuvarli) --------------
+  Widget _stock() {
+    final s = ref.watch(stringsProvider);
+    final products = ref.watch(productsProvider).valueOrNull ?? const <Product>[];
+    final levels = ref.watch(allStockLevelsProvider).valueOrNull ?? const <StockLevel>[];
+    final whs = ref.watch(warehousesProvider).valueOrNull ?? const <Warehouse>[];
+    final pById = {for (final p in products) p.id: p};
+    final wById = {for (final w in whs) w.id: w.name};
+    var total = 0;
+    final rows = <List<String>>[];
+    for (final l in levels.where((l) => l.qtyMilli != 0)) {
+      final p = pById[l.productId];
+      if (p == null) continue;
+      final value = roundHalfUp(l.qtyMilli * p.avgCostMinor, 1000);
+      total += value;
+      rows.add([
+        '${p.name} · ${wById[l.warehouseId] ?? ''}',
+        formatMilli(l.qtyMilli),
+        formatMinor(p.avgCostMinor),
+        formatMinor(value),
+      ]);
+    }
+    return _table(
+      [s('report.product'), s('report.qty'), s('report.avgCost'), s('report.value')],
+      rows,
+      total: [s('report.total'), '', '', formatMinor(total)],
+    );
+  }
+
+  // -- Tahsilat / Odeme raporu ---------------------------------------------
+  Widget _payments(String direction) {
+    final s = ref.watch(stringsProvider);
+    final list = (ref.watch(paymentsBetweenProvider(_range)).valueOrNull ?? const <Payment>[])
+        .where((p) => p.direction == direction && !p.isCancelled)
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+    var total = 0;
+    final rows = [
+      for (final p in list)
+        () {
+          total += p.amountMinor;
+          return [
+            p.date,
+            p.partyName,
+            s('paymentMethod.${p.method}'),
+            formatMinor(p.amountMinor),
+          ];
+        }(),
+    ];
+    return _table(
+      [s('report.date'), s('report.party'), s('payment.method'), s('payment.amount')],
+      rows,
+      total: [s('report.total'), '', '', formatMinor(total)],
+      top: _monthPicker(),
+    );
+  }
+
+  // -- Cari ekstre (08 §5): borc / alacak / yuruyen bakiye -------------------
+  Widget _ledger() {
+    final s = ref.watch(stringsProvider);
+    final t = ref.watch(tokensProvider);
+    final parties = ref.watch(partiesProvider).valueOrNull ?? const <Party>[];
+    if (parties.isEmpty) return EmptyView(message: s('common.empty'));
+    final party = parties.firstWhere((p) => p.id == _partyId, orElse: () => parties.first);
+    final entries = ref.watch(partyLedgerProvider(party.id)).valueOrNull ?? const <LedgerEntry>[];
+    // Liste yeniden eskiye gelir; kapanis = guncel bakiye, geriye dogru yuruyen bakiye.
+    var bal = party.balanceMinor;
+    final rows = <List<String>>[];
+    for (final e in entries) {
+      rows.add([
+        e.date,
+        e.description.isEmpty ? e.refType : e.description,
+        e.deltaMinor > 0 ? formatMinor(e.deltaMinor) : '',
+        e.deltaMinor < 0 ? formatMinor(-e.deltaMinor) : '',
+        formatMinor(bal),
+      ]);
+      bal -= e.deltaMinor;
+    }
+    return _table(
+      [s('report.date'), s('report.description'), s('report.debit'), s('report.credit'), s('report.balance')],
+      rows,
+      total: [s('report.closing'), '', '', '', formatMinor(party.balanceMinor)],
+      top: Padding(
+        padding: EdgeInsets.only(bottom: t.spacing('md')),
+        child: DropdownButtonFormField<String>(
+          value: party.id,
+          items: [for (final p in parties) DropdownMenuItem(value: p.id, child: Text(p.name))],
+          onChanged: (v) => setState(() => _partyId = v),
+        ),
+      ),
     );
   }
 }
