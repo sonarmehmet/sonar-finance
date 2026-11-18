@@ -473,5 +473,12 @@
       "paused": "Durduruldu",
       "done": "Tamamlandı"
     }
+  },
+  "overview": {
+    "netPosition": "Net Finansal Pozisyon",
+    "incomeExpense": "Aylık Gelir - Gider",
+    "cashFlow": "Nakit Akışı",
+    "in": "Giren",
+    "out": "Çıkan"
   }
 }

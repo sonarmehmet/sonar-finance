@@ -127,3 +127,12 @@ export const projectRepo = {
     return { id: pid, synced: await writeOrQueue(write) };
   },
 };
+
+// ---- Genel Bakış listeleri (docs/08 §3) ----
+const recent = (cid: string, coll: string) => query(col(cid, coll), orderBy('createdAt', 'desc'), limit(20));
+export const recentInvoicesQuery = (cid: string) => recent(cid, 'invoices');
+export const recentPaymentsQuery = (cid: string) => recent(cid, 'payments');
+export const recentExpensesQuery = (cid: string) => recent(cid, 'expenses');
+/** Index: paymentStatus + dueDate. */
+export const dueInvoicesQuery = (cid: string): Query<DocumentData> =>
+  query(col(cid, 'invoices'), where('paymentStatus', 'in', ['unpaid', 'partial']), orderBy('dueDate', 'asc'), limit(100));
