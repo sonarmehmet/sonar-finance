@@ -6,12 +6,13 @@ import {
 
 const useEmulator = import.meta.env.VITE_USE_EMULATOR === 'true';
 
-const app = initializeApp({
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'demo-key',
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'demo-sonar-finance.firebaseapp.com',
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'demo-sonar-finance',
   appId: import.meta.env.VITE_FIREBASE_APP_ID || 'demo-app-id',
-});
+};
+const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 void setPersistence(auth, browserLocalPersistence);
