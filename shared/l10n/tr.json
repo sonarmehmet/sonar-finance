@@ -377,7 +377,9 @@
     "accountRequired": "Hesap seçin",
     "amountRequired": "Tutar sıfırdan büyük olmalı",
     "nameRequired": "Ad zorunlu",
-    "validation": "Zorunlu alanları doldurun"
+    "validation": "Zorunlu alanları doldurun",
+    "weakPassword": "Şifre en az 6 karakter olmalı",
+    "selfLockout": "Kendi yönetici yetkinizi veya aktifliğinizi kaldıramazsınız"
   },
   "invoice": {
     "newInvoice": "Yeni Fatura",
@@ -515,5 +517,54 @@
     "pdf": "PDF / Yazdır",
     "includeCancelled": "İptalleri dahil et",
     "generated": "Oluşturma"
+  },
+  "users": {
+    "new": "Yeni Kullanıcı",
+    "edit": "Kullanıcıyı Düzenle",
+    "name": "Ad Soyad",
+    "role": "Rol",
+    "permissions": "Yetkiler",
+    "all": "Tümü",
+    "emailInUse": "Bu e-posta zaten kayıtlı",
+    "invalidEmail": "E-posta geçersiz",
+    "perm": {
+      "invoice.write": "Fatura",
+      "party.write": "Cari",
+      "stock.write": "Stok",
+      "finance.write": "Finans (kasa/ödeme/gider)",
+      "project.write": "Proje"
+    }
+  },
+  "settings": {
+    "company": "Şirket ve Fatura",
+    "sync": "Senkronizasyon",
+    "backup": "Yedekleme",
+    "check": "Tutarlılık Denetimi",
+    "companyName": "Şirket Adı",
+    "invoicing": "Faturalama",
+    "prefix": "Ön ek",
+    "allowNegative": "Negatif stoğa izin ver",
+    "noPending": "Bekleyen kayıt yok",
+    "waiting": "Bekliyor",
+    "syncDone": "Bekleyen kayıtlar gönderildi",
+    "syncStill": "Hâlâ bekleyen kayıt var; bağlantıyı kontrol edin",
+    "backupHelp": "Tüm şirket verisi tek bir JSON dosyasına aktarılır (okunan belge sayısı kadar Firestore okuması harcanır). Dosyayı bulut sürücü veya harici diske de kopyalayın.",
+    "backupNow": "Yedek Al",
+    "backupHistory": "Son Yedekler",
+    "restoreHelp": "Geri yükleme uygulamadan yapılmaz; firebase/tools/restore.js kullanılır (bkz. docs/06).",
+    "checkHelp": "Cari, hesap, stok ve fatura ödeme toplamlarını hareket kayıtlarıyla karşılaştırır. Salt okunurdur; hiçbir şeyi değiştirmez.",
+    "checkRun": "Denetimi Başlat",
+    "checkOk": "Fark bulunamadı.",
+    "checkKind": "Tür",
+    "stored": "Kayıtlı",
+    "computed": "Hesaplanan",
+    "fixHelp": "Düzeltme için firebase/tools/recalc.js --fix çalıştırılır (yönetici servis anahtarı gerekir).",
+    "kind": {
+      "party": "Cari bakiye",
+      "account": "Hesap bakiye",
+      "stockLevel": "Depo stoğu",
+      "productTotal": "Ürün toplam stok",
+      "invoicePaid": "Fatura ödenen"
+    }
   }
 }

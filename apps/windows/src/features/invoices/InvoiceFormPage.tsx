@@ -14,7 +14,8 @@ import {
   INVOICE_TYPES, invoiceFromData, partyKindFor, toDraft, defaultDueDate, lineInput,
   type InvoiceDraft, type InvoiceLine, type InvoiceType,
 } from '@/data/invoice';
-import { invoiceRef, partiesQuery, productsQuery, warehousesQuery } from '@/data/repositories';
+import { invoiceRef, partiesQuery, productsQuery, projectsQuery, warehousesQuery } from '@/data/repositories';
+import { projectFromDoc } from '@/data/projects';
 import { partyFromDoc, productFromDoc, warehouseFromDoc } from '@/data/models';
 import { deleteDraft, issueInvoice, saveDraft } from '@/services/invoiceService';
 import { TxError, txErrorMessage } from '@/services/txErrors';
@@ -50,6 +51,7 @@ function InvoiceForm({ initial }: { initial: InvoiceDraft | null }) {
   const defaultVat = (state.status === 'ready' && state.company.settings?.defaultVatBp) || 2000;
   const parties = useQuerySnapshot(() => (companyId ? partiesQuery(companyId) : null), [companyId], partyFromDoc);
   const products = useQuerySnapshot(() => (companyId ? productsQuery(companyId) : null), [companyId], productFromDoc);
+  const projects = useQuerySnapshot(() => (companyId ? projectsQuery(companyId) : null), [companyId], projectFromDoc);
   const warehouses = useQuerySnapshot(() => (companyId ? warehousesQuery(companyId) : null), [companyId], warehouseFromDoc);
 
   const base = useMemo(() => initial ?? blankDraft('sales'), [initial, defaultVat]);
@@ -59,6 +61,8 @@ function InvoiceForm({ initial }: { initial: InvoiceDraft | null }) {
   const [dueDate, setDueDate] = useState(base.dueDate);
   const [inclVat, setInclVat] = useState(base.priceIncludesVat);
   const [note, setNote] = useState(base.note);
+  const [projectId, setProjectId] = useState(base.projectId ?? '');
+  const [costCategory, setCostCategory] = useState(base.costCategory ?? '');
   const [rows, setRows] = useState<Row[]>(base.lines.map(toRow));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,7 +87,7 @@ function InvoiceForm({ initial }: { initial: InvoiceDraft | null }) {
 
   const draft = (): InvoiceDraft => ({
     id: initial?.id, type, partyId, partyName: party?.name ?? initial?.partyName ?? '', issueDate, dueDate,
-    projectId: initial?.projectId, costCategory: initial?.costCategory, priceIncludesVat: inclVat, note,
+    projectId: projectId || undefined, costCategory: projectId && costCategory ? costCategory : undefined, priceIncludesVat: inclVat, note,
     lines: parsed.map((p) => p.line), rev: rev.current,
   });
 
@@ -161,6 +165,13 @@ function InvoiceForm({ initial }: { initial: InvoiceDraft | null }) {
             </select></div>
           <div className="field"><label>{t('invoiceForm.invoiceDate')}</label><input type="date" value={issueDate} onChange={(e) => setIssueDate(e.target.value)} /></div>
           <div className="field"><label>{t('invoiceForm.dueDate')}</label><input type="date" value={dueDate} min={issueDate} onChange={(e) => setDueDate(e.target.value)} /></div>
+        </div>
+        <div className="grid2">
+          <div className="field"><label>{t('menu.projects')}</label><select value={projectId} onChange={(e) => setProjectId(e.target.value)}>
+            <option value="" />{projects.data.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
+          {projectId && (type === 'purchase' || type === 'purchase_return') && (
+            <div className="field"><label>{t('expense.discipline')}</label><select value={costCategory} onChange={(e) => setCostCategory(e.target.value)}>
+              <option value="" />{constants.disciplines.map((d) => <option key={d} value={d}>{t(`disciplines.${d}`)}</option>)}</select></div>)}
         </div>
         <label className="check"><input type="checkbox" checked={inclVat} onChange={(e) => setInclVat(e.target.checked)} />{t('invoiceForm.priceIncludesVat')}</label>
         <div className="field"><label>{t('invoice.note')}</label><textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} /></div>

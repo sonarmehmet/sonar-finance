@@ -15,6 +15,8 @@ import { ExpensesPage } from '@/features/expenses/ExpensesPage';
 import { ProjectsPage } from '@/features/projects/ProjectsPage';
 import { OverviewPage } from '@/features/overview/OverviewPage';
 import { ReportsPage } from '@/features/reports/ReportsPage';
+import { UsersPage } from '@/features/users/UsersPage';
+import { SettingsPage } from '@/features/settings/SettingsPage';
 import { StockPage } from '@/features/stock/StockPage';
 
 export function App() {
@@ -45,8 +47,10 @@ export function App() {
         <Route path="/projects/:id?" element={<ProjectsPage />} />
         <Route path="/overview" element={<OverviewPage />} />
         <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/users" element={<UsersPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="/stock/*" element={<StockPage />} />
-        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock' && n.key !== 'invoices' && n.key !== 'cashBank' && n.key !== 'incomeExpense' && n.key !== 'overview' && n.key !== 'reports' && n.key !== 'projects').map((n) => (
+        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock' && n.key !== 'invoices' && n.key !== 'cashBank' && n.key !== 'incomeExpense' && n.key !== 'overview' && n.key !== 'reports' && n.key !== 'users' && n.key !== 'settings' && n.key !== 'projects').map((n) => (
           <Route key={n.key} path={`${n.path}/*`} element={<ComingSoon menuKey={n.key} />} />
         ))}
         <Route path="*" element={<Navigate to="/overview" replace />} />
