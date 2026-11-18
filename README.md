@@ -9,3 +9,5 @@
 - Tasarım: `shared/design-tokens.json`, `shared/l10n/tr.json`
 - Scriptler: `scripts/*.bat` (Windows)
 - Ajan promptları: `docs/AJAN_PROMPTLARI.md`
+- **Kurulum rehberi (A'dan Z'ye):** `docs/09-kurulum-rehberi.md`
+- **Kalan işler ve ajan görev dağılımı:** `docs/10-kalan-isler-ve-gorev-dagilimi.md`
