@@ -10,6 +10,7 @@ import { PartiesPage } from '@/features/parties/PartiesPage';
 import { InvoicesPage } from '@/features/invoices/InvoicesPage';
 import { InvoiceFormPage } from '@/features/invoices/InvoiceFormPage';
 import { InvoiceDetailPage } from '@/features/invoices/InvoiceDetailPage';
+import { CashBankPage } from '@/features/cashbank/CashBankPage';
 import { StockPage } from '@/features/stock/StockPage';
 
 export function App() {
@@ -35,8 +36,9 @@ export function App() {
         <Route path="/invoices/new" element={<InvoiceFormPage />} />
         <Route path="/invoices/:id/edit" element={<InvoiceFormPage />} />
         <Route path="/invoices/:id" element={<InvoiceDetailPage />} />
+        <Route path="/cash-bank" element={<CashBankPage />} />
         <Route path="/stock/*" element={<StockPage />} />
-        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock' && n.key !== 'invoices').map((n) => (
+        {NAV.filter((n) => !n.disabled && n.key !== 'parties' && n.key !== 'stock' && n.key !== 'invoices' && n.key !== 'cashBank').map((n) => (
           <Route key={n.key} path={`${n.path}/*`} element={<ComingSoon menuKey={n.key} />} />
         ))}
         <Route path="*" element={<Navigate to="/overview" replace />} />

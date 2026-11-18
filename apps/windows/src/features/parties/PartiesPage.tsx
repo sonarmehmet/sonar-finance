@@ -9,6 +9,12 @@ import { ledgerFromDoc, partyFromDoc, type LedgerEntry, type Party } from '@/dat
 import { ledgerQuery, partiesQuery } from '@/data/repositories';
 import { Balance, Chip, EmptyState, ErrorState, LoadingState, Tabs } from '@/components/ui';
 import { PartyForm } from './PartyForm';
+import { accountFromDoc } from '@/data/finance';
+import { accountsQuery, partyInvoicesQuery } from '@/data/repositories';
+import { invoiceFromDoc, remainingMinor } from '@/data/invoice';
+import { PaymentDialog } from '@/features/cashbank/PaymentDialog';
+import { PaymentsTab } from '@/features/cashbank/CashBankPage';
+import { StatusChip } from '@/features/invoices/InvoicesPage';
 
 type KindFilter = 'all' | 'customer' | 'supplier';
 type DetailTab = 'overview' | 'movements' | 'invoices' | 'collections' | 'payments';
@@ -58,7 +64,7 @@ export function PartiesPage() {
       </div>
 
       <div className="card detail">
-        {selected ? <PartyDetail party={selected} canWrite={canWrite} onEdit={() => setForm({ party: selected })} /> : <EmptyState text={t('party.statement')} />}
+        {selected ? <PartyDetail party={selected} allParties={parties.data} canWrite={canWrite} onEdit={() => setForm({ party: selected })} /> : <EmptyState text={t('party.statement')} />}
       </div>
 
       {form && <PartyForm party={form.party} onClose={() => setForm(null)} onSaved={(pid) => navigate(`/parties/${pid}`)} />}
@@ -66,8 +72,12 @@ export function PartiesPage() {
   );
 }
 
-function PartyDetail({ party, canWrite, onEdit }: { party: Party; canWrite: boolean; onEdit(): void }) {
+function PartyDetail({ party, allParties, canWrite, onEdit }: { party: Party; allParties: Party[]; canWrite: boolean; onEdit(): void }) {
   const [tab, setTab] = useState<DetailTab>('overview');
+  const { companyId, can } = useAuth();
+  const navigate = useNavigate();
+  const accounts = useQuerySnapshot(() => (companyId ? accountsQuery(companyId) : null), [companyId], accountFromDoc);
+  const [pay, setPay] = useState<'in' | 'out' | null>(null);
   const label = party.balanceMinor > 0 ? t('party.balanceReceivable') : party.balanceMinor < 0 ? t('party.balanceDebt') : t('party.balanceZero');
   return (
     <>
@@ -80,14 +90,17 @@ function PartyDetail({ party, canWrite, onEdit }: { party: Party; canWrite: bool
           <div className="big-balance"><Balance minor={party.balanceMinor} /></div>
           <div className="sub">{label}</div>
         </div>
+        {can('finance.write') && <>
+          <button className="btn sm" onClick={() => setPay('in')}>{t('payment.newCollection')}</button>
+          <button className="btn secondary sm" onClick={() => setPay('out')}>{t('payment.newPayment')}</button></>}
         {canWrite && <button className="btn secondary" onClick={onEdit}><Pencil size={14} />{t('common.edit')}</button>}
       </div>
       <Tabs<DetailTab> value={tab} onChange={setTab} tabs={[
         { key: 'overview', label: t('party.tabs.overview') },
         { key: 'movements', label: t('party.tabs.movements') },
-        { key: 'invoices', label: t('party.tabs.invoices'), disabled: true },
-        { key: 'collections', label: t('party.tabs.collections'), disabled: true },
-        { key: 'payments', label: t('party.tabs.payments'), disabled: true },
+        { key: 'invoices', label: t('party.tabs.invoices')},
+        { key: 'collections', label: t('party.tabs.collections')},
+        { key: 'payments', label: t('party.tabs.payments')},
       ]} />
       {tab === 'overview' && (
         <dl className="kv">
@@ -100,6 +113,10 @@ function PartyDetail({ party, canWrite, onEdit }: { party: Party; canWrite: bool
         </dl>
       )}
       {tab === 'movements' && <PartyLedger party={party} />}
+      {tab === 'invoices' && <PartyInvoices partyId={party.id} onOpen={(id) => navigate(`/invoices/${id}`)} />}
+      {tab === 'collections' && <PaymentsTab parties={allParties} accounts={accounts.data} canWrite={can('finance.write')} partyId={party.id} direction="in" />}
+      {tab === 'payments' && <PaymentsTab parties={allParties} accounts={accounts.data} canWrite={can('finance.write')} partyId={party.id} direction="out" />}
+      {pay && <PaymentDialog direction={pay} parties={allParties} accounts={accounts.data} partyId={party.id} onClose={() => setPay(null)} />}
     </>
   );
 }
@@ -139,5 +156,21 @@ function PartyLedger({ party }: { party: Party }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function PartyInvoices({ partyId, onOpen }: { partyId: string; onOpen(id: string): void }) {
+  const { companyId } = useAuth();
+  const q = useQuerySnapshot(() => (companyId ? partyInvoicesQuery(companyId, partyId) : null), [companyId, partyId], invoiceFromDoc);
+  if (q.loading) return <LoadingState />;
+  if (q.error) return <ErrorState error={q.error} />;
+  if (q.data.length === 0) return <EmptyState />;
+  return (
+    <div className="table-wrap"><table className="tbl">
+      <thead><tr><th>{t('invoiceColumns.number')}</th><th>{t('invoiceColumns.date')}</th><th>{t('invoiceColumns.type')}</th><th className="num">{t('invoiceColumns.total')}</th><th className="num">{t('invoiceColumns.remaining')}</th><th>{t('invoiceColumns.status')}</th></tr></thead>
+      <tbody>{q.data.map((i) => (
+        <tr key={i.id} className="row" onClick={() => onOpen(i.id)}><td>{i.number ?? '—'}</td><td>{i.issueDate}</td><td>{t(`invoiceType.${i.type}`)}</td>
+          <td className="num money">{formatMinorTry(i.totalMinor)}</td><td className="num money">{i.status === 'issued' ? formatMinorTry(remainingMinor(i)) : '—'}</td><td><StatusChip inv={i} /></td></tr>))}</tbody>
+    </table></div>
   );
 }

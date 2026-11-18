@@ -90,3 +90,16 @@ export const invoiceRef = (cid: string, id: string) => ref(cid, 'invoices', id);
 /** Son stok hareketleri (tek alan sıralama: ek index gerekmez). */
 export const stockMovementsQuery = (cid: string, max: number): Query<DocumentData> =>
   query(col(cid, 'stock_movements'), orderBy('date', 'desc'), limit(max));
+
+// ---- Kasa/banka, tahsilat/ödeme ----
+export const accountsQuery = (cid: string): Query<DocumentData> => query(col(cid, 'accounts'), orderBy('name'), limit(200));
+/** Index: accountId + date desc. */
+export const accountMovementsQuery = (cid: string, accountId: string, max: number): Query<DocumentData> =>
+  query(col(cid, 'account_movements'), where('accountId', '==', accountId), orderBy('date', 'desc'), limit(max));
+export const paymentsQuery = (cid: string, max: number): Query<DocumentData> => query(col(cid, 'payments'), orderBy('date', 'desc'), limit(max));
+/** Index: partyId + date desc. */
+export const partyPaymentsQuery = (cid: string, partyId: string): Query<DocumentData> =>
+  query(col(cid, 'payments'), where('partyId', '==', partyId), orderBy('date', 'desc'), limit(200));
+/** Index: partyId + issueDate desc. */
+export const partyInvoicesQuery = (cid: string, partyId: string): Query<DocumentData> =>
+  query(col(cid, 'invoices'), where('partyId', '==', partyId), orderBy('issueDate', 'desc'), limit(300));

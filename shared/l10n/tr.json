@@ -170,7 +170,24 @@
     "newCash": "Yeni Kasa",
     "newBank": "Yeni Banka Hesabı",
     "balance": "Güncel Bakiye",
-    "lastMovement": "Son Hareket"
+    "lastMovement": "Son Hareket",
+    "accounts": "Hesaplar",
+    "payments": "Tahsilat ve Ödemeler",
+    "cash": "Kasa",
+    "bank": "Banka",
+    "totalCash": "Toplam Kasa",
+    "totalBank": "Toplam Banka",
+    "noAccounts": "Henüz hesap yok",
+    "account": "Hesap",
+    "selectAccount": "Hesap seçin",
+    "bankName": "Banka Adı",
+    "iban": "IBAN",
+    "openingBalance": "Açılış Bakiyesi",
+    "editAccount": "Hesabı Düzenle",
+    "fromAccount": "Kaynak Hesap",
+    "toAccount": "Hedef Hesap",
+    "movements": "Hesap Hareketleri",
+    "noMovements": "Hareket yok"
   },
   "dashboard": {
     "totalCash": "Toplam Kasa",
@@ -350,7 +367,16 @@
     "noChange": "Sayılan miktar mevcut stokla aynı, değişiklik yok",
     "stockNotTracked": "Bu ürün için stok takibi kapalı: {product}",
     "warehouseNotFound": "Depo bulunamadı",
-    "sameWarehouse": "Kaynak ve hedef depo farklı olmalı"
+    "sameWarehouse": "Kaynak ve hedef depo farklı olmalı",
+    "accountNotFound": "Hesap bulunamadı",
+    "paymentNotFound": "Ödeme kaydı bulunamadı",
+    "allocationExceeds": "Dağıtılan tutar ödeme tutarını aşıyor",
+    "invoiceNotAllocatable": "Seçilen fatura bu ödeme için uygun değil: {number}",
+    "allocationTooHigh": "Dağıtım fatura kalanını aşıyor: {number}",
+    "sameAccount": "Kaynak ve hedef hesap farklı olmalı",
+    "accountRequired": "Hesap seçin",
+    "amountRequired": "Tutar sıfırdan büyük olmalı",
+    "nameRequired": "Ad zorunlu"
   },
   "invoice": {
     "newInvoice": "Yeni Fatura",
@@ -380,5 +406,36 @@
     "keepMine": "Benimkini koru (üzerine yaz)",
     "offlineDraftOnly": "Çevrimdışısınız, taslak olarak kaydedebilirsiniz",
     "discountPct": "İskonto %"
+  },
+  "payment": {
+    "collection": "Tahsilat",
+    "payment": "Ödeme",
+    "newCollection": "Tahsilat Al",
+    "newPayment": "Ödeme Yap",
+    "amount": "Tutar",
+    "method": "Ödeme Yöntemi",
+    "methods": {
+      "cash": "Nakit",
+      "bank_transfer": "Havale/EFT",
+      "cheque": "Çek",
+      "card": "Kart"
+    },
+    "allocations": "Fatura Dağıtımı",
+    "autoAllocate": "Otomatik Dağıt",
+    "unallocated": "Dağıtılmayan (avans)",
+    "noOpenInvoices": "Açık fatura yok",
+    "cancel": "Ödemeyi İptal Et",
+    "cancelled": "İptal",
+    "active": "Aktif",
+    "saved": "Kaydedildi",
+    "cancelledMsg": "Ödeme iptal edildi",
+    "confirmCancel": "Bu işlem iptal edilsin mi? Hesap, cari ve fatura kayıtları geri alınacak.",
+    "date": "Tarih",
+    "direction": "Yön",
+    "in": "Tahsilat",
+    "out": "Ödeme",
+    "note": "Not",
+    "transferDone": "Transfer yapıldı",
+    "accountSaved": "Hesap kaydedildi"
   }
 }
