@@ -1,6 +1,6 @@
 # CONTRACTS — Sözleşme Sürümü
 
-**Güncel: v1.0.3** (2026-11-16)
+**Güncel: v1.0.4** (2026-11-16)
 
 Sözleşme = `docs/02-firestore-modeli.md` + `docs/04-islem-akislari.md` + `firebase/firestore.rules` + `shared/*.json`.
 Yalnız **Ajan 1** değiştirir. Değişirse buraya kayıt düşülür; Android ve Windows uygulamaları bu sürüme uyar.
@@ -8,6 +8,7 @@ Yalnız **Ajan 1** değiştirir. Değişirse buraya kayıt düşülür; Android 
 ## Değişiklik kaydı
 | Sürüm | Tarih | Değişiklik | Etkilenen |
 |---|---|---|---|
+| 1.0.4 | 2026-11-17 | `stock_movements.note?` (isteğe bağlı string, manuel işlem nedeni; Ajan 2 talebi). Geriye uyumlu. 67 yeni l10n anahtarı (errors.*, invoice.*, stock.*) | stock_movements |
 | 1.0.3 | 2026-11-16 | `paymentStatus` değerleri: `none` (taslak), `void` (iptal) eklendi; `stats.months[].inMinor/outMinor`; `ledger_entries`/`account_movements` `createdAt`; panel/rapor/proje/ekstre tanımları `docs/08` | invoices, stats, issue/cancel/payment/expense akışları, dashboard/raporlar |
 | 1.0.2 | 2026-11-16 | 04 §2: KDV dahil fiyatta iskonto/net artık KDV hariç tanımlı (`discount = net - taxable`); referans hesaplayıcı + test vektörleri eklendi (`shared/reference`, `shared/test-vectors`) | invoiceCalculator |
 | 1.0.1 | 2026-11-16 | Faturaya `rev` alanı (taslak çakışma sayacı); sayaç ilk oluşturma kuralı (04 §3); yerel önbellek = Firestore kalıcı önbelleği (SQLite yok, 05) | invoices, issueInvoice |

@@ -1,6 +1,6 @@
 # PROGRESS — Görev Tahtası
 
-Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirdek`, `hesap2-android`, `hesap3-windows`
+Son güncelleme: 2026-11-16 · Sözleşme: v1.0.4 · Branch'ler: `hesap1-cekirdek`, `hesap2-android`, `hesap3-windows`
 
 ## Çalışma kuralları (3 ajan için)
 1. Sohbet başında: `PROGRESS.md`, `CONTRACTS.md`, `docs/02`, `docs/04` oku. Kullanıcıya soru sorma, onay isteme; makul varsayımla ilerle, varsayımı bu dosyaya yaz.
@@ -23,6 +23,9 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 6. **Ajan 2'nin l10n talebi (2026-11-16) uygulandı:** 72 anahtar `shared/l10n/tr.json`'a eklendi. `apps/android/tool/sync_shared` çalıştırın, `pending_strings.dart` içindeki satırları silebilirsiniz.
 7. **Görev sırası:** A6..A9 ve W6..W9 görev tablosunda; sahibi boş olanı alın. F7 testleri (T1-T4) en sonda.
 8. **Ajan 3:** henüz branch yok. `hesap3-windows` oluşturup W1'den başlayın; boşta kalan Android görevlerini (A6+) Ajan 2 ile çakışmadan almadan önce tabloda sahibini yazın.
+9. **v1.0.4 (2026-11-17):** Ajan 2'nin `stock_movements.note?` talebi işlendi (docs/02). Android'in `pending_strings.dart` dosyasındaki 67 yeni metin `shared/l10n/tr.json`'a taşındı (`errors.*`, `invoice.*`, `stock.*`); Ajan 3 aynı anahtarları kullanır.
+10. **Çapraz denetim (Ajan 1 → Ajan 2):** `invoice_service.dart` (kes/iptal) docs/04 ve `firestore.rules` ile satır satır karşılaştırıldı: belge ID'leri, okuma-sonra-yazma sırası, `rev` kontrolü, sayaç, hareket belgeleri, iptal kuralları uyumlu; sözleşme ihlali bulunmadı. Windows `issueInvoice`/`cancelInvoice` aynı davranışla yazılıyor.
+11. **Windows durumu:** W1-W3 (iskelet, hesap katmanı, cari/ürün/depo) `hesap3-windows` branch'inde (Ajan 1 yardım). Ajan 3 başlarsa W4'ten devam eder; W4'ü ben alıyorum, tabloda sahip yazılı.
 
 ## Faz durumu
 | Faz | Durum |
@@ -47,13 +50,13 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.3 · Branch'ler: `hesap1-cekirde
 | W1 | Windows iskelet: Vite+React+TS, Tauri 2, tema (tokens), router, sidebar+topbar, giriş | Ajan 1 (yardım) | bitti (derlenmedi) | `hesap3-windows` branch. Vite+React+TS+Tauri 2 iskeleti, tema (tokens→CSS değişkenleri), HashRouter, sidebar+topbar, giriş, bağlantı rozeti. Ağ yok: `npm install`/`tauri build` bu ortamda çalıştırılamadı, ilk derleme Windows makinede denenmeli. |
 | W2 | Windows: para/tarih yardımcıları + `invoiceCalculator` (04 §2) | Ajan 1 (yardım) | bitti (doğrulandı) | `src/core/money.ts`, `src/core/calc/invoiceCalculator.ts`; `npm test` 51 vektörün hepsini geçiyor (v1.0.2 KDV dahil iskonto dahil). |
 | W3 | Windows: cari, ürün, depo ekranları + repository | Ajan 1 (yardım) | bitti (derlenmedi) | Cari (liste+detay+ekstre, 08 §5), ürün, depo ekranları; `src/data/{models,repositories}.ts`, `core/hooks/useSnapshot.ts`, ortak bileşenler (`components/`). Tip kontrolü yalnız stub ile yapıldı; gerçek `npm run typecheck` Windows makinede çalıştırılmalı. |
-| W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 3 | — | |
-| W5 | Windows: stok ekranları ve işlemleri | Ajan 3 | — | |
+| W4 | Windows: fatura listesi/formu, `issueInvoice/cancelInvoice` servisleri | Ajan 1 (yardım) | bitti (derlenmedi) | Fatura listesi (sekmeler, arama, daha fazla), form (kalem editörü, toplam kutusu, taslak/kes, çakışma diyaloğu, sabit txId), detay (iptal), `invoiceService.ts`. Tip kontrolü yalnız stub ile; gerçek derleme Windows makinede. |
+| W5 | Windows: stok ekranları ve işlemleri | Ajan 1 (yardım) | bitti (derlenmedi) | `stockService.ts` (giriş/çıkış/sayım/transfer, Android ile aynı), `StockActionDialog`, Hareketler sekmesi. |
 | A6 | Android: tahsilat/ödeme, kasa/banka hesapları, transfer, cari ekstre (04 §5-§7, 08 §5) | Ajan 2 | kod yazıldı, **derlenmedi** | Servis + ekranlar: hesaplar, transfer, tahsilat/ödeme formu (otomatik/elle dağıtım), liste/detay/iptal, cari sekmeleri, İşlemler merkezi |
 | A7 | Android: gider, projeler, proje detay/disiplin bütçesi (08 §4) | Ajan 2 | kod yazıldı, **derlenmedi** | `expense_service.dart` (recordExpense/cancelExpense, docs/04 §7), gider formu/listesi, proje listesi/formu/detay (tahmini-gerçekleşen kâr, disiplin bütçesi, kalan alacak/borç sorguyla), faturaya proje seçimi |
 | A8 | Android: Ana Sayfa paneli, raporlar (08 §1-§3,§6), PDF paylaş | Ajan 2 | kısmen: kod yazıldı, **derlenmedi** | Panel: 6 kart (% değişim), net pozisyon, 12 ay gelir-gider grafiği, yaklaşan/gecikmiş/son işlemler. Raporlar: yıllık, aylık+karşılaştırma, borç-alacak, kasa/banka, proje kârlılık (tablo + CSV panoya kopyala). **Eksik:** PDF/Excel dışa aktarma (pdf/printing paketleri pub.dev erişimi olmadan eklenemedi), cari ekstre, KDV özeti, stok değer, tahsilat/ödeme raporu |
 | A9 | Android: çevrimdışı/senkron durumu, kuyruk ekranı (05) | Ajan 2 | kod yazıldı, **derlenmedi** | `core/sync/sync_status.dart` (connectivity_plus + `hasPendingWrites` + dinleyici hataları), her ekranda bağlantı şeridi, `/sync` kuyruk ekranı (bekleyen belgeler, hata, yeniden dene, yerel kopya JSON). **Not:** Firestore SDK tek tek yazma iptalini desteklemediği için "Vazgeç" yok; `pubspec.yaml`'a `connectivity_plus` eklendi (`flutter pub get` gerekir). Kapanışta bekleyen yazma uyarısı yok |
-| W6 | Windows: tahsilat/ödeme, kasa/banka, transfer, cari ekstre | — | — | |
+| W6 | Windows: tahsilat/ödeme, kasa/banka, transfer, cari ekstre | Ajan 1 (yardım) | bitti (derlenmedi) | `paymentService.ts` (tahsilat/ödeme, iptal, hesap, transfer), Kasa-Banka sayfası, ödeme penceresi (FIFO dağıtım), cari detayında fatura/tahsilat/ödeme sekmeleri. l10n: `payment.*`, `cashBank.*`, `errors.*` eklendi. |
 | W7 | Windows: gider/gelir, projeler, proje detay (08 §4) | — | — | |
 | W8 | Windows: Genel Bakış, raporlar, PDF/Excel (08) | — | — | |
 | W9 | Windows: çevrimdışı/senkron, kuyruk ekranı, kullanıcı yönetimi, ayarlar, yedekleme ekranı | — | — | |
