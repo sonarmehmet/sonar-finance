@@ -19,6 +19,8 @@ Komutlar siyah pencereye (**Komut İstemi / PowerShell**) yazılır. `>` işaret
 10. Android APK üret ve telefona kur
 11. Yedek al ve geri yükle
 12. Sorun çıkarsa
+13. İlk kullanım sırası (hangi veriyi ne zaman gir)
+14. Güvenlik, kota ve günlük kullanım notları
 
 ---
 
@@ -109,6 +111,15 @@ Bir sürü yazı akar; sonunda "All emulators ready" görürsün. Bu pencereyi *
 ```
 3. İlk seferde **10–20 dakika** sürebilir (Rust her şeyi derler). Sonunda bir pencere açılır.
 4. Giriş: `admin@sonar.local` / `Test1234!`.
+
+**Derleme öncesi kontrol (önerilir, 1-2 dk):**
+```
+> cd apps\windows
+> npm install
+> npm run typecheck
+> npm test
+```
+`typecheck` hata verirse yazıyı ajana yapıştır. `npm test` "pass 51" benzeri bir sonuç vermeli (fatura hesabı vektörleri).
 
 Tarayıcıda hızlı bakmak istersen (Rust gerekmez): `cd apps\windows` → `npm install` → `npm run dev` → yazılan adresi (genelde http://localhost:5173) tarayıcıda aç.
 
@@ -207,7 +218,7 @@ Uygulama giriş için hem bir Auth kullanıcısı hem de bir `users/{uid}` belge
      - `role` (string) = `admin`
      - `permissions` (map) = boş
      - `active` (boolean) = `true`
-3. Uygulamayı aç, bu e-posta/şifre ile gir. Diğer kullanıcıları artık **Windows uygulamasında Ayarlar → Kullanıcılar** ekranından eklersin.
+3. Uygulamayı aç, bu e-posta/şifre ile gir. Diğer kullanıcıları artık **Windows uygulamasında soldaki Kullanıcı Yönetimi** ekranından eklersin (ad, e-posta, şifre, rol ve yetkiler; yönetici oturumu kapanmaz).
 
 > İpucu: Hangi alanların tam olarak gerektiğini görmek için `firebase\seed\seed.js` dosyasındaki `companies/sonar` ve `users/` örneğine bak.
 
@@ -244,3 +255,27 @@ Bittiğinde `build\windows\SONAR-FINANCE-Setup.exe` oluşur. Bunu çift tıklay�
 | Telefonda "çevrimdışı" şeridi | İnternet yok; yazılanlar kuyruğa alınır, bağlanınca gönderilir (Ayarlar/Profil → Senkronizasyon) |
 
 **Ajana hata nasıl iletilir?** Siyah penceredeki hata yazısının **tamamını** (ilk kırmızı satırdan itibaren) kopyala, hangi komutu çalıştırdığını yaz. Ekran görüntüsü de olur.
+
+
+## 13) İlk kullanım sırası (gerçek veriyle başlarken)
+Sırayı bozma; çünkü her adım bir sonrakinin ihtiyacıdır.
+1. **Ayarlar → Şirket ve Fatura:** şirket adı, vergi bilgileri, fatura ön ekleri (SF/AF/SI/AI), varsayılan KDV. "Negatif stoğa izin ver" kapalı kalsın (stok eksiye düşemez).
+2. **Kasa ve Banka → Yeni Kasa / Yeni Banka Hesabı:** hesapları aç; **Açılış Bakiyesi** kutusuna bugünkü gerçek bakiyeyi yaz (bu bir kez yapılır, sonra değiştirilemez; düzeltme için hesaplar arası transfer/gider/tahsilat kullanılır).
+3. **Stok Yönetimi → Depolar:** en az bir depo (biri "varsayılan").
+4. **Stok Yönetimi → Ürünler:** ürünleri gir (KDV oranı, birim, "stok takibi yap"). Mevcut stok için **Stok Girişi** işlemini kullan (miktar + birim maliyet): ortalama maliyet buradan oluşur.
+5. **Cari Hesaplar:** müşteri/tedarikçileri ekle. Eski borç/alacak bakiyesi taşıyorsan her cari için bir **açılış faturası** (veya tahsilat/ödeme) girerek başla; bakiye alanı elle yazılamaz (bilerek böyle tasarlandı).
+6. **Projeler:** sözleşme bedeli (KDV hariç) ve disiplin bütçeleri.
+7. **Faturalar → Yeni Fatura:** önce **Taslak Kaydet**, kontrol et, sonra **Faturayı Kaydet** (keser: stok ve cari bakiye değişir). Kesilen fatura düzenlenmez; hata varsa **İptal Et** (ters kayıt) ve yenisini gir.
+8. **Tahsilat/Ödeme:** cari sayfasından veya Kasa ve Banka'dan; faturalara otomatik (en eski vadeden) ya da elle dağıt.
+9. **Gelir ve Gider:** masrafları (varsa proje + disiplin ile) gir; KDV dahil tutar yazılır.
+10. **Genel Bakış ve Raporlar:** rakamlar `stats/summary` belgesinden okunur. Şüphe olursa Ayarlar → Tutarlılık Denetimi (yönetici) çalıştır; fark çıkarsa `firebase\tools\recalc.js --fix` (docs/06).
+
+## 14) Güvenlik, kota ve günlük kullanım notları
+- **Firebase `apiKey` gizli değildir**; asıl koruma `firestore.rules` ve giriş yapmış kullanıcıdır. Kuralları yüklemeden (7.3) canlıya **geçme**. Kimseye yönetici rolü verme; çalışanlara yalnız gereken yetkileri işaretle.
+- **Kayıt silinmez:** finansal belge iptal edilir (ters kayıt oluşur). Bu, muhasebe izi için bilerek böyledir.
+- **Çevrimdışı:** internet yokken yalnız taslak fatura, cari, ürün, depo kaydedilir. Fatura kesme, tahsilat/ödeme, gider, transfer, stok işlemi ve iptaller **bağlantı ister**.
+- **Spark (ücretsiz) kotaları:** günde yaklaşık 50.000 okuma / 20.000 yazma. Tek şirket günlük kullanım için yeterli; Yedek Al ve Tutarlılık Denetimi tüm belgeleri okur, günde birkaç kezden fazla çalıştırma.
+- **Bir faturada çok kalem:** `firestore.rules` bir işlemde en fazla 20 farklı belgeye bakabilir; farklı stok seviyesi (ürün+depo) sayısı yaklaşık 15'i aşan tek fatura reddedilebilir. Böyle büyük faturaları ikiye böl (bu sınır docs/10 P0-4'te test edilecek).
+- **Güncelleme:** `git pull` → Windows için `scripts\build_windows.bat`, Android için `scripts\build_android.bat` → yeni dosyayı tekrar kur. Veriler Firebase'de olduğu için kaybolmaz. Kurallar/dizinler değiştiyse ayrıca `firebase deploy --only firestore:rules,firestore:indexes`.
+- **Yedek:** haftada bir + toplu iş öncesi (Bölüm 11). Yedeği bilgisayar dışına kopyala.
+- **Şifre unutulursa:** Firebase konsolu → Authentication → kullanıcının yanındaki ⋮ → Reset password.
