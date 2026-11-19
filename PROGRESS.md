@@ -31,12 +31,12 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.4 · Branch'ler: `hesap1-cekirde
 | Faz | Durum |
 |---|---|
 | F0 Sözleşme (Ajan 1) | **bitti** (model, kurallar, akışlar, token'lar, scriptler) |
-| F1 Giriş, ayarlar, cari, ürün, depo | başlamadı |
-| F2 Alış/Satış faturası + stok hareketi + depo | başlamadı |
-| F3 Tahsilat/ödeme, kasa/banka, ekstre | başlamadı |
-| F4 Gider, proje, şantiye maliyeti | başlamadı |
-| F5 Genel Bakış, raporlar, PDF/Excel, yeniden hesapla | başlamadı |
-| F6 Çevrimdışı, senkron kuyruğu | başlamadı |
+| F1 Giriş, ayarlar, cari, ürün, depo | kod yazıldı (Android+Windows), **doğrulanmadı** |
+| F2 Alış/Satış faturası + stok hareketi + depo | kod yazıldı, **doğrulanmadı** |
+| F3 Tahsilat/ödeme, kasa/banka, ekstre | kod yazıldı, **doğrulanmadı** |
+| F4 Gider, proje, şantiye maliyeti | kod yazıldı, **doğrulanmadı** |
+| F5 Genel Bakış, raporlar, PDF/Excel, yeniden hesapla | Windows tam; Android PDF/Excel eksik; **doğrulanmadı** |
+| F6 Çevrimdışı, senkron kuyruğu | kuyruk ekranları yazıldı (iki uygulama), çevrimdışı akış **denenmedi** |
 | F7 Testler, rules testleri, paketleme | Android birim testleri yazıldı (`apps/android/test/`: resmi vektörler + para biçimleri), **çalıştırılmadı** (`flutter test`). Rules testleri ve paketleme başlamadı |
 
 ## Görevler
@@ -88,5 +88,9 @@ Son güncelleme: 2026-11-16 · Sözleşme: v1.0.4 · Branch'ler: `hesap1-cekirde
 - **Kural çağrı sınırı riski (Ajan 1'e)**: bir `runTransaction` içinde `firestore.rules` `get/exists/getAfter` çağrıları işlem başına 20 ile sınırlıdır. Çok depolu / çok kalemli fatura (her stok seviyesi için hareket + `existsAfter`) bu sınırı aşabilir. F7 emülatör testinde 1, 3 ve 6 stoklu kalemli faturalar denenmeli; aşılırsa kuralların çağrı sayısı azaltılmalı.
 - Android taslak fatura: `paymentStatus='none'`, `rev` ilk kayıtta 1, sonraki her kayıtta `FieldValue.increment(1)`; kesmede `rev = serverRev+1`. `aborted` hatasında 3 deneme (300/900/2700 ms) aynı `txId` ile.
 - **Stok işlemi varsayımları (Ajan 2; Ajan 3 aynısını uygulamalı)**: Stok Girişi → `opening` (+), ortalama maliyet ağırlıklı ortalama (stok yoksa giriş maliyeti); Stok Çıkışı ve Sayım → `adjust`, neden zorunlu, `unitCostMinor = avgCostMinor`, ortalama değişmez; Transfer → `transfer_out` + `transfer_in`, ürün toplamı/ortalama değişmez. Manuel hareketlerde `refType='manual'`, `refId=''`, neden `note` alanında. `audit_logs` kimliği `a_{txId}`.
-- **Android derlenmedi**: Flutter/Dart SDK ve pub.dev bu ortamda erişilemiyor. `lucide_icons ^0.257.0` simge adları (`barChart3`, `alertCircle`, `packagePlus`, `warehouse` …) doğrulanamadı; ilk `flutter analyze`'da hata çıkarsa yalnız ad düzeltilir.
+- **Android derlenmedi**: Flutter/Dart SDK ve pub.dev bu ortamda erişilemiyor. `lucide_icons ^0.257.0` simge adları (`barChart3`, `alertCircle`, `packagePlus`, `warehouse` …) npm `lucide-static@0.257.0` ile karşılaştırıldı: kullanılan 51 simgenin hepsi mevcut (Dart paketiyle birebir eşleşme varsayımı); ilk `flutter analyze`'da hata çıkarsa yalnız ad düzeltilir. Platform dosyaları (`android/`) depoda yok: `apps/android/tool/setup_android.bat` tek komutla üretir (flutter create + manifest/INTERNET + minSdk 23 + simge); `run_android.bat`/`build_android.bat` yoksa otomatik çağırır.
 - Ertelenenler: çek-senet, e-fatura/e-arşiv, e-defter, banka entegrasyonu, belge arşivi, teklif.
+
+
+## Sonraki turlar
+Kalan işler, ajan görev dağılımı (R1–R5, A10–A13, W10–W13) ve kabul senaryoları: `docs/10-kalan-isler-ve-gorev-dagilimi.md`. Kurulum rehberi: `docs/09-kurulum-rehberi.md`.

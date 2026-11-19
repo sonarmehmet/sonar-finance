@@ -3,16 +3,14 @@
 Ajan 2 klasörü. Sözleşme: `../../CONTRACTS.md` (v1.0.0). İşlem mantığı: `../../docs/04-islem-akislari.md`.
 
 ## İlk kurulum (bir kez)
-Bu klasörde `android/` platform dosyaları henüz yok (Flutter SDK olmayan ortamda yazıldı). Windows'ta:
+Flutter SDK (3.22+) kurulu olmalı. `android/` platform klasörü depoda yok; tek komutla üretilir:
 
 ```bat
 cd apps\android
-flutter create . --platforms=android --project-name sonar_finance --org com.sonar
-flutter pub get
+tool\setup_android.bat
 ```
-`flutter create` mevcut `lib/` ve `pubspec.yaml` dosyalarının üzerine yazmaz; çıktıda `lib/main.dart` değişirse `git checkout -- lib pubspec.yaml` ile geri alın.
-
-Android `minSdkVersion` en az 23 olmalı (Firebase). `android/app/build.gradle` içinde `minSdkVersion 23` yapın.
+Script: `flutter create` (yoksa) → `AndroidManifest.xml` (INTERNET, ağ durumu, debug'da http emülatör izni) → `minSdk 23` (Firebase) → uygulama simgesi → `flutter pub get`.
+Sonra doğrulama: `flutter analyze` ve `flutter test`.
 
 ## Çalıştırma
 ```bat
