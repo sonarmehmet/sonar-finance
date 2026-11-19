@@ -19,7 +19,7 @@ export interface UserRow extends UserInput { uid: string }
 export async function listUsers(c: AdminCtx): Promise<UserRow[]> {
   guard(c);
   const snap = await getDocs(query(collection(db, 'users'), where('companyId', '==', c.companyId)));
-  return snap.docs.map((d) => { const x = d.data(); return { uid: d.id, displayName: String(x.displayName ?? ''), email: String(x.email ?? ''), role: x.role === 'admin' ? 'admin' : 'employee', permissions: (x.permissions ?? {}) as UserRow['permissions'], active: x.active !== false }; })
+  return snap.docs.map((d): UserRow => { const x = d.data(); return { uid: d.id, displayName: String(x.displayName ?? ''), email: String(x.email ?? ''), role: x.role === 'admin' ? 'admin' : 'employee', permissions: (x.permissions ?? {}) as UserRow['permissions'], active: x.active !== false }; })
     .sort((a, b) => a.displayName.localeCompare(b.displayName, 'tr'));
 }
 

@@ -81,6 +81,13 @@ class InvoiceService {
 
   String get _cid => _p.cid;
 
+  static String _defaultPrefix(String type) => switch (type) {
+        'sales' => 'SF',
+        'purchase' => 'AF',
+        'sales_return' => 'SI',
+        _ => 'AI',
+      };
+
   String _uid() {
     final uid = _auth.currentUser?.uid;
     if (uid == null) throw const TxException('noPermission');
