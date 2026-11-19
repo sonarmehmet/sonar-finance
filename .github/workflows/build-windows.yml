@@ -1,0 +1,40 @@
+name: Windows EXE
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['apps/windows/**', 'shared/**', '.github/workflows/build-windows.yml']
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Firebase ayarlari (.env)
+        shell: bash
+        working-directory: apps/windows
+        run: |
+          {
+            echo "VITE_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}"
+            echo "VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}"
+            echo "VITE_FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}"
+            echo "VITE_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}"
+            echo "VITE_USE_EMULATOR=false"
+          } > .env
+      - name: Bagimliliklar
+        working-directory: apps/windows
+        run: npm install
+      - name: Tip kontrolu ve test
+        working-directory: apps/windows
+        run: |
+          npm run typecheck
+          npm test
+      - name: EXE uret (Tauri)
+        working-directory: apps/windows
+        run: npm run tauri build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SONAR-FINANCE-Windows-Setup
+          path: apps/windows/src-tauri/target/release/bundle/nsis/*.exe

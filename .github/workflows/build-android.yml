@@ -1,0 +1,36 @@
+name: Android APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['apps/android/**', 'shared/**', '.github/workflows/build-android.yml']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable }
+      - name: Platform dosyalari
+        working-directory: apps/android
+        run: |
+          flutter create . --platforms=android --project-name sonar_finance --org com.sonar
+          git checkout -- lib pubspec.yaml test
+          cp tool/android_overlay/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+          mkdir -p android/app/src/debug && cp tool/android_overlay/AndroidManifest.debug.xml android/app/src/debug/AndroidManifest.xml
+          sed -i -E 's/minSdk\s*=\s*flutter\.minSdkVersion/minSdk = 23/; s/minSdkVersion\s+flutter\.minSdkVersion/minSdkVersion 23/' android/app/build.gradle* || true
+          flutter pub get
+      - name: Analiz ve test
+        working-directory: apps/android
+        run: |
+          flutter analyze --no-fatal-infos --no-fatal-warnings
+          flutter test
+      - name: APK uret
+        working-directory: apps/android
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SONAR-FINANCE-Android-APK
+          path: apps/android/build/app/outputs/flutter-apk/app-release.apk
