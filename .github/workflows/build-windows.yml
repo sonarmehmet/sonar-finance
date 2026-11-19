@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths: ['apps/windows/**', 'shared/**', '.github/workflows/build-windows.yml']
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: windows-latest
@@ -38,3 +40,8 @@ jobs:
         with:
           name: SONAR-FINANCE-Windows-Setup
           path: apps/windows/src-tauri/target/release/bundle/nsis/*.exe
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: windows-build-${{ github.run_number }}
+          name: SONAR FINANCE Windows (build ${{ github.run_number }})
+          files: apps/windows/src-tauri/target/release/bundle/nsis/*.exe

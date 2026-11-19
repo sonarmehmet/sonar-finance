@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths: ['apps/android/**', 'shared/**', '.github/workflows/build-android.yml']
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,3 +37,8 @@ jobs:
         with:
           name: SONAR-FINANCE-Android-APK
           path: apps/android/build/app/outputs/flutter-apk/app-release.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: android-build-${{ github.run_number }}
+          name: SONAR FINANCE Android (build ${{ github.run_number }})
+          files: apps/android/build/app/outputs/flutter-apk/app-release.apk
