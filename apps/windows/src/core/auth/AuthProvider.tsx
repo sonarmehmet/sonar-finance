@@ -19,6 +19,12 @@ interface AuthApi {
   companyId: string | null;
 }
 
+/** Kullanıcı adı girildiyse ("@" yok) iç alan adı eklenir: sonar -> sonar@sonar.local */
+export function toEmail(input: string): string {
+  const v = input.trim().toLowerCase();
+  return v.includes('@') ? v : `${v}@sonar.local`;
+}
+
 const Ctx = createContext<AuthApi | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -44,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const api = useMemo<AuthApi>(() => ({
     state,
-    async signIn(email, password) { await signInWithEmailAndPassword(auth, email.trim(), password); },
+    async signIn(email, password) { await signInWithEmailAndPassword(auth, toEmail(email), password); },
     async signOut() { await fbSignOut(auth); },
     can(permission) {
       if (state.status !== 'ready') return false;

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/providers.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/starfield.dart';
 
 class SonarApp extends ConsumerWidget {
   const SonarApp({super.key});
@@ -29,6 +30,12 @@ class SonarApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       routerConfig: router,
+      builder: (context, child) => Starfield(
+        bg: tokens.color('bg'),
+        accent: tokens.color('accent'),
+        accent2: tokens.color('accent2'),
+        child: child ?? const SizedBox.shrink(),
+      ),
     );
   }
 }

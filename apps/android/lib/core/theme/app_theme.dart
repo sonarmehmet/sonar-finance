@@ -26,7 +26,8 @@ ThemeData buildTheme(SonarTokens t) {
     useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: scheme,
-    scaffoldBackgroundColor: bg,
+    scaffoldBackgroundColor: Colors.transparent,
+    canvasColor: card,
   );
 
   final textTheme = GoogleFonts.interTextTheme(base.textTheme).apply(
@@ -42,7 +43,7 @@ ThemeData buildTheme(SonarTokens t) {
   return base.copyWith(
     textTheme: textTheme,
     appBarTheme: AppBarTheme(
-      backgroundColor: bg,
+      backgroundColor: Colors.transparent,
       foregroundColor: textPrimary,
       elevation: 0,
       scrolledUnderElevation: 0,

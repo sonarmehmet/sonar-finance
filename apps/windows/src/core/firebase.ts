@@ -28,3 +28,6 @@ if (useEmulator) {
 }
 
 export const isEmulator = useEmulator;
+
+/** Gerçek Firebase anahtarı verilmedi mi? (demo değerleriyle giriş yapılamaz) */
+export const firebaseConfigured = useEmulator || !!import.meta.env.VITE_FIREBASE_API_KEY;

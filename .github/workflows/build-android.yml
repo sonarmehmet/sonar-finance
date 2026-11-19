@@ -24,6 +24,11 @@ jobs:
           cp tool/android_overlay/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           mkdir -p android/app/src/debug && cp tool/android_overlay/AndroidManifest.debug.xml android/app/src/debug/AndroidManifest.xml
           sed -i -E 's/minSdk\s*=\s*flutter\.minSdkVersion/minSdk = 23/; s/minSdkVersion\s+flutter\.minSdkVersion/minSdkVersion 23/' android/app/build.gradle* || true
+          P=../../shared/assets/png
+          for D in mdpi:48 hdpi:96 xhdpi:96 xxhdpi:192 xxxhdpi:192; do
+            mkdir -p android/app/src/main/res/mipmap-${D%%:*}
+            cp $P/app-icon-${D##*:}.png android/app/src/main/res/mipmap-${D%%:*}/ic_launcher.png
+          done
           flutter pub get
       - name: Analiz ve test
         working-directory: apps/android

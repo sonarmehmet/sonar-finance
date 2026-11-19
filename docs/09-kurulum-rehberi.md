@@ -279,3 +279,10 @@ Sırayı bozma; çünkü her adım bir sonrakinin ihtiyacıdır.
 - **Güncelleme:** `git pull` → Windows için `scripts\build_windows.bat`, Android için `scripts\build_android.bat` → yeni dosyayı tekrar kur. Veriler Firebase'de olduğu için kaybolmaz. Kurallar/dizinler değiştiyse ayrıca `firebase deploy --only firestore:rules,firestore:indexes`.
 - **Yedek:** haftada bir + toplu iş öncesi (Bölüm 11). Yedeği bilgisayar dışına kopyala.
 - **Şifre unutulursa:** Firebase konsolu → Authentication → kullanıcının yanındaki ⋮ → Reset password.
+
+## Giriş (kullanıcı adı / şifre) nasıl çalışır
+- Veri Firebase'de durduğu için giriş zorunlu; şifre koda **gömülmez** (repo herkese açık, .exe içinden okunabilir).
+- Giriş ekranına `sonar` yazarsan arka planda `sonar@sonar.local` kullanılır. E-posta yazarsan olduğu gibi kullanılır.
+- Oturum bu cihazda açık kalır; bir kez girersin, sonra sormaz (Çıkış Yap'a basmadıkça).
+- Tek seferlik kurulum: Firebase Console → Authentication → Kullanıcı ekle → e-posta `sonar@sonar.local`, şifreni sen belirle. Sonra Firestore'da `users/{uid}` belgesini docs/03'teki gibi (role: admin, active: true) oluştur.
+- Firebase henüz bağlı değilse giriş ekranı bunu kırmızı uyarıyla söyler.

@@ -19,7 +19,7 @@ export function AppShell() {
     <div className={`shell ${collapsed ? 'collapsed' : ''}`}>
       <aside className="sidebar">
         <div className="brand">
-          <img src="/app-icon.svg" alt="" />
+          <img src="/app-icon.png" alt="" />
           <span>{t('app.name')}</span>
         </div>
         <nav className="nav">

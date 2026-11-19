@@ -35,3 +35,4 @@ flutter:
     - assets/shared/design-tokens.json
     - assets/shared/constants.json
     - assets/shared/l10n/tr.json
+    - assets/brand/logo-mark.png

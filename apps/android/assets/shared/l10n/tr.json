@@ -281,15 +281,18 @@
     "saveFailed": "Kaydedilemedi"
   },
   "auth": {
-    "title": "Giriş Yap",
-    "subtitle": "Hesabınızla devam edin",
-    "email": "E-posta",
+    "title": "Kimlik Doğrulama",
+    "subtitle": "Komuta merkezine girmeden önce kim olduğunu kanıtla.",
+    "email": "Kullanıcı adı veya e-posta",
+    "remember": "Bu cihazda oturumu açık tut",
+    "notConfigured": "Firebase henüz bağlı değil. Bu sürüm sunucuya bağlanamaz; kurulum rehberindeki Firebase adımlarını tamamla.",
+    "tagline": "Para uzayda da sayılır.",
     "password": "Şifre",
     "signIn": "Giriş Yap",
     "signOut": "Çıkış Yap",
     "required": "Bu alan zorunlu",
     "errors": {
-      "invalidCredential": "E-posta veya şifre hatalı",
+      "invalidCredential": "Kullanıcı adı veya şifre hatalı. Evren kararlı, sen değil.",
       "network": "Bağlantı kurulamadı. İnternetinizi kontrol edin.",
       "tooManyRequests": "Çok fazla deneme yapıldı. Lütfen biraz sonra tekrar deneyin.",
       "generic": "Giriş yapılamadı",

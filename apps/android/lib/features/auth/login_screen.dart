@@ -29,6 +29,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
+  /// Kullanici adi girildiyse ("@" yok) ic alan adi eklenir: sonar -> sonar@sonar.local
+  String _toEmail(String input) {
+    final v = input.trim().toLowerCase();
+    return v.contains('@') ? v : '$v@sonar.local';
+  }
+
   String _messageFor(FirebaseAuthException e, Strings s) {
     switch (e.code) {
       case 'invalid-credential':
@@ -55,7 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
     try {
       await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
-            email: _email.text.trim(),
+            email: _toEmail(_email.text),
             password: _password.text,
           );
       // Yonlendirmeyi router yapar (authStateChanges).
@@ -86,6 +92,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Center(
+                      child: Image.asset('assets/brand/logo-mark.png', height: 120),
+                    ),
+                    SizedBox(height: t.spacing('md')),
                     Text(
                       s('app.name'),
                       textAlign: TextAlign.center,
@@ -93,7 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontSize: t.fontSize('headline'),
                         fontWeight: t.fontWeight('bold'),
                         color: t.color('accent'),
-                        letterSpacing: 1.4,
+                        letterSpacing: 4,
                       ),
                     ),
                     SizedBox(height: t.spacing('sm')),
@@ -109,12 +119,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     TextFormField(
                       controller: _email,
                       enabled: !_busy,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.text,
+                      autocorrect: false,
+                      textCapitalization: TextCapitalization.none,
                       autofillHints: const [AutofillHints.username],
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         labelText: s('auth.email'),
-                        prefixIcon: const Icon(LucideIcons.mail, size: 20),
+                        prefixIcon: const Icon(LucideIcons.user, size: 20),
                       ),
                       validator: (v) => (v == null || v.trim().isEmpty)
                           ? s('auth.required')
@@ -162,6 +174,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
                           : Text(s('auth.signIn')),
+                    ),
+                    SizedBox(height: t.spacing('lg')),
+                    Text(
+                      s('auth.tagline'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: t.fontSize('caption'),
+                        fontStyle: FontStyle.italic,
+                        color: t.color('textSecondary'),
+                        letterSpacing: 1,
+                      ),
                     ),
                   ],
                 ),

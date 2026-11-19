@@ -13,6 +13,7 @@ export function applyTokens(root: HTMLElement = document.documentElement): void 
   set('--sidebar-w-collapsed', `${d.sidebarCollapsedWidth}px`);
   set('--topbar-h', `${d.topbarHeight}px`);
   set('--shadow-card', tokens.shadow.card);
+  set('--c-glass', tokens.theme.glass);
   for (const [k, v] of Object.entries(tokens.status)) set(`--st-${k}`, v.color);
 }
 

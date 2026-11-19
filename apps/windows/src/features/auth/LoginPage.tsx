@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { t } from '@/core/i18n';
 import { useAuth } from '@/core/auth/AuthProvider';
+import { firebaseConfigured } from '@/core/firebase';
 
 function errorKey(code: string): string {
   switch (code) {
@@ -33,12 +34,13 @@ export function LoginPage({ initialError }: { initialError?: string }) {
   return (
     <div className="login-wrap">
       <form className="card login" onSubmit={submit}>
-        <img src="/app-icon.svg" alt="" width={48} height={48} />
+        <img className="login-logo" src="/logo-mark.png" alt="SM" />
         <h2>{t('auth.title')}</h2>
         <div className="sub">{t('auth.subtitle')}</div>
+        {!firebaseConfigured && <div className="error" role="alert">{t('auth.notConfigured')}</div>}
         <div className="field">
           <label htmlFor="email">{t('auth.email')}</label>
-          <input id="email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input id="email" type="text" autoCapitalize="none" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className="field">
           <label htmlFor="pw">{t('auth.password')}</label>
@@ -46,6 +48,7 @@ export function LoginPage({ initialError }: { initialError?: string }) {
         </div>
         {error && <div className="error" role="alert">{error}</div>}
         <button className="btn" style={{ width: '100%', justifyContent: 'center' }} disabled={busy}>{t('auth.signIn')}</button>
+        <div className="tagline">{t('auth.tagline')}</div>
       </form>
     </div>
   );

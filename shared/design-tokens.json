@@ -1,43 +1,115 @@
 {
   "version": "1.0.0",
-  "brand": { "name": "SONAR FINANCE", "short": "SONAR" },
+  "brand": {
+    "name": "SONAR FINANCE",
+    "short": "SONAR"
+  },
   "color": {
-    "bg": "#101827",
-    "sidebar": "#0B1220",
-    "card": "#1B2738",
-    "cardAlt": "#243247",
-    "accent": "#16C7B5",
+    "bg": "#05070F",
+    "sidebar": "#03050B",
+    "card": "#0B1222",
+    "cardAlt": "#111B33",
+    "accent": "#4DE3FF",
     "positive": "#22C55E",
     "negative": "#EF4444",
     "warning": "#F59E0B",
-    "info": "#3B82F6",
+    "info": "#5AA2FF",
     "neutral": "#64748B",
-    "textPrimary": "#F8FAFC",
-    "textSecondary": "#94A3B8",
-    "border": "#334155"
+    "textPrimary": "#EAF2FF",
+    "textSecondary": "#8EA2C4",
+    "border": "#1B2A47",
+    "accent2": "#8B7CFF"
   },
   "status": {
-    "paid": { "label": "Ödendi", "color": "#22C55E" },
-    "partial": { "label": "Kısmi Ödendi", "color": "#F59E0B" },
-    "pending": { "label": "Bekliyor", "color": "#3B82F6" },
-    "overdue": { "label": "Gecikmiş", "color": "#EF4444" },
-    "draft": { "label": "Taslak", "color": "#64748B" },
-    "cancelled": { "label": "İptal", "color": "#64748B" }
+    "paid": {
+      "label": "Ödendi",
+      "color": "#22C55E"
+    },
+    "partial": {
+      "label": "Kısmi Ödendi",
+      "color": "#F59E0B"
+    },
+    "pending": {
+      "label": "Bekliyor",
+      "color": "#3B82F6"
+    },
+    "overdue": {
+      "label": "Gecikmiş",
+      "color": "#EF4444"
+    },
+    "draft": {
+      "label": "Taslak",
+      "color": "#64748B"
+    },
+    "cancelled": {
+      "label": "İptal",
+      "color": "#64748B"
+    }
   },
-  "radius": { "card": 12, "button": 10, "input": 10, "chip": 999 },
-  "spacing": { "xs": 4, "sm": 8, "md": 12, "lg": 16, "xl": 24, "xxl": 32 },
+  "radius": {
+    "card": 12,
+    "button": 10,
+    "input": 10,
+    "chip": 999
+  },
+  "spacing": {
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "xxl": 32
+  },
   "typography": {
     "fontFamily": "Inter",
     "fallback": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
     "tabularNumbers": true,
-    "size": { "caption": 12, "body": 14, "bodyLg": 16, "title": 20, "headline": 28, "display": 36 },
-    "weight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700 }
+    "size": {
+      "caption": 12,
+      "body": 14,
+      "bodyLg": 16,
+      "title": 20,
+      "headline": 28,
+      "display": 36
+    },
+    "weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
   },
-  "shadow": { "card": "0 1px 2px rgba(0,0,0,0.25)" },
+  "shadow": {
+    "card": "0 0 0 1px rgba(77,227,255,0.06), 0 8px 24px rgba(0,0,0,0.45)"
+  },
   "layout": {
-    "desktop": { "sidebarWidth": 250, "sidebarCollapsedWidth": 72, "topbarHeight": 64, "minWidth": 1280, "minHeight": 720 },
-    "mobile": { "bottomNavHeight": 64, "minTouchTarget": 48, "screenPadding": 16 }
+    "desktop": {
+      "sidebarWidth": 250,
+      "sidebarCollapsedWidth": 72,
+      "topbarHeight": 64,
+      "minWidth": 1280,
+      "minHeight": 720
+    },
+    "mobile": {
+      "bottomNavHeight": 64,
+      "minTouchTarget": 48,
+      "screenPadding": 16
+    }
   },
-  "icons": { "family": "lucide", "strokeWidth": 1.75 },
-  "money": { "locale": "tr-TR", "currency": "TRY", "positiveColor": "positive", "negativeColor": "negative" }
+  "icons": {
+    "family": "lucide",
+    "strokeWidth": 1.75
+  },
+  "money": {
+    "locale": "tr-TR",
+    "currency": "TRY",
+    "positiveColor": "positive",
+    "negativeColor": "negative"
+  },
+  "theme": {
+    "name": "space",
+    "starfield": true,
+    "glow": "rgba(77,227,255,0.35)",
+    "glass": "rgba(11,18,34,0.72)"
+  }
 }
