@@ -18,6 +18,7 @@ jobs:
         run: |
           flutter create . --platforms=android --project-name sonar_finance --org com.sonar
           git checkout -- lib pubspec.yaml test
+          rm -f test/widget_test.dart
           cp tool/android_overlay/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           mkdir -p android/app/src/debug && cp tool/android_overlay/AndroidManifest.debug.xml android/app/src/debug/AndroidManifest.xml
           sed -i -E 's/minSdk\s*=\s*flutter\.minSdkVersion/minSdk = 23/; s/minSdkVersion\s+flutter\.minSdkVersion/minSdkVersion 23/' android/app/build.gradle* || true
